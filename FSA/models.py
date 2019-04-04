@@ -138,17 +138,19 @@ class Account(models.Model):
 
         # should return false if not set otherwise true
 
-    def editPassword(self, newPassword):
+    def editPassword(self):
         # Validate permissions before being able to call this function
+        print("type new password: ")
+        newPassword = getpass.getpass()
         print("confirm new password: ")
-        if newPassword == input():
+        if newPassword == getpass.getpass():
             if not self.user.has_usable_password():
                 self.user.set_password(newPassword)
                 self.user.save()
                 print("new password set")
             else:
-                print("type current password for " + self.user.username)
-                if self.user.check_password(input()):
+                print("type current password for " + self.user.userid)
+                if self.user.check_password(getpass.getpass()):
                     self.user.set_password(newPassword)
                     self.user.save()
                     print("new password set")
