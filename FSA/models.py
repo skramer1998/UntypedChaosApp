@@ -46,10 +46,10 @@ class Account(models.Model):
     user = models.user # does this work? should be for the actual user part
 
     @classmethod
-    def create(Account, userid, first, middle, last, email, phone, address):
-        return Account(userid, first, middle, last, email, phone, address)
+    def create(cls, userid, first, middle, last, email, phone, address):
+        return cls(userid=userid, first=first, middle=middle, last=last, email=email, phone=phone, address=address)
 
-    def Account(self, userid, first, middle, last, email, phone, address):
+    def cls(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
         self.userName = first + " " + middle + " " + last
         self.userEmail = email
