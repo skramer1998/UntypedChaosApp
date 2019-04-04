@@ -11,17 +11,50 @@ class Terminal(models.Model):
     def command(self, inStr):
         return inStr
 
+    def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
+        if not user.has_usable_password():
+            while True:
+                print("your account currently has no password. You'll have to set it by typing it in twice")
+                passwordAttempt1 = getpass.getpass()
+                passwordAttempt2 = getpass.getpass()
+                if passwordAttempt1 == passwordAttempt2:
+                    print("good, you typed the same thing twice. your password is set and good to go")
+                    user.set_password(passwordAttempt1)
+                    user.save()
+                    return
+                else:
+                    print("those didn't match. Try again")
+        else:
+            print("user has a usable password, \
+            can't set new password with this function. use the account(.) something or other")
+            return
+
     def login(self, username):
         if self.user is not None:
             print("you're already signed in. you have to logout before you can re-sign in.")
         else:
-
+            almostuser = Account.user.filter(userid = 'username')
+            if almostuser is None:
+                print("no user with that username.")
+                return
+            else:
+                almostuser = almostuser[1]
+                if not almostuser.has_usable_password():
+                    print("you'll have to set a password before you can login")
+                    setNewPassword(almostuser)
+                    return
+                elif almostuser.check_password(getpass.getpass()):
+                    print(username+" is logged in")
+                    self.user = almostuser
+                    return
+                else:
+                    print("passwords don't match")
+                    return
             # look up username
             # if username is real, get password
             # validate password
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
-            password = getpass.getpass()
 
 
     def logout(self):
