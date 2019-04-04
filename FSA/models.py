@@ -35,8 +35,8 @@ class CoursesModel(models.Model):
 
 
 class Account(models.Model):
-    def __init__(self, id, first, middle, last, email, phone, address):
-        self.userID = id
+    def __init__(self, userid, first, middle, last, email, phone, address):
+        self.userID = userid
         self.userName = first + " " + middle + " " + last
         self.userEmail = email
         self.userPhone = phone
