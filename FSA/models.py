@@ -12,22 +12,27 @@ class Terminal(models.Model):
         return self.parseCommand(inStr)
 
     def parseCommand(self, cmdStr):
-        if self.user is None:
-            return "You are not logged in, you must login before entering commands."
+        parseCmd = cmdStr.split()
+        print(parseCmd[0].lower())
+        if parseCmd[0].lower() == 'login':
+            return self.login(parseCmd[1])
         else:
-            return "You are logged in, cool."
+            if self.user is None:
+                return "You are not logged in, you must login before entering commands."
+            else:
+                return "You are logged in, cool."
 
     def login(self, username):
         if self.user is not None:
             print("you're already signed in. you have to logout before you can re-sign in.")
         else:
-
+            return "You're trying to login!"
             # look up username
             # if username is real, get password
             # validate password
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
-            password = getpass.getpass()
+            #password = getpass.getpass()
 
     def logout(self):
         if self.user is None:
@@ -73,7 +78,7 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    user = models.user # does this work? should be for the actual user part
+    #user = models.user # does this work? should be for the actual user part
 
     @classmethod
     def create(cls, userid, username, email, phone, address):
