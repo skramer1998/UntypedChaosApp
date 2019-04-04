@@ -1,6 +1,7 @@
 from django.test import TestCase
 from FSA.models import Account
 from FSA.models import CoursesModel
+from FSA.models import Terminal
 
 class TestAccount(TestCase):
     def setUp(self):
@@ -8,6 +9,7 @@ class TestAccount(TestCase):
         self.i = "Instructor"
         self.a = "Admin"
         self.s = "Supervisor"
+        # 4 ID's
 
         self.a1 = Account.objects.create(userID = self.t, userName = "Nate", userEmail = "glasses@gmail.com",
                                          userAddress = "22 Middleton rd", userPhone = 1234567890)
@@ -17,12 +19,23 @@ class TestAccount(TestCase):
                                          userAddress="13 Brogdon ave", userPhone = 4145554444)
         self.a4 = Account.objects.create(userID=self.s, userName="Tyler", userEmail="jersey@gmail.com",
                                          userAddress="11 Lopez ct", userPhone = 4207106969)
+        # creates 4 accounts with each level of ID
 
     def test_editAccount(self):
         self.a1.create(self.a1.userID, self.a1.userName, self.a1.userEmail, self.a1.userPhone, self.a1.userAddress)
         self.a2.create(self.a2.userID, self.a2.userName, self.a2.userEmail, self.a2.userPhone, self.a2.userAddress)
         self.a3.create(self.a3.userID, self.a3.userName, self.a3.userEmail, self.a3.userPhone, self.a3.userAddress)
         self.a4.create(self.a4.userID, self.a4.userName, self.a4.userEmail, self.a4.userPhone, self.a4.userAddress)
+        # creates user classes
+
+        self.assertFalse(self.a1.editSelf())
+        self.assertFalse(self.a1.editSelf("Howdy yall, I'm Towly!"))
+        self.assertFalse(self.a1.editSelf('a', self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
+        self.assertFalse(self.a1.editSelf("NateDog", "iNstRectAr", "Natedog@gmail.com", "The Trap House", 1010101010))
+        self.assertFalse(self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", 42, 1010101010))
+        self.assertFalse(self.a1.editSelf("NateDog", self.I, "NAT@", "The Trap House", 1010101010))
+        self.assertFalse(self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1))
+        # bad parameters for editSelf
 
         self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010)
         self.assertEqual(self.a1.user.username, "NateDog")
@@ -32,4 +45,18 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userEmail, "Natedog@gmail.com")
         self.assertEqual(self.a1.userPhone, 1010101010)
         self.assertEqual(self.a1.userAddress, "The Trap House")
+        # checks if editSelf worked correctly with correct parameters
+
+        self.assertTrue(self.a1.is_TA() | self.a1.is_Instructor() | self.a1.is_Admin() | self.a1.is_Supervisor())
+        self.assertFalse(self.a1.is_TA() & self.a1.is_Instructor())
+        self.assertFalse(self.a1.is_TA() & self.a1.is_Admin())
+        self.assertFalse(self.a1.is_TA() & self.a1.is_Supervisor())
+        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Admin())
+        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Supervisor())
+        self.assertFalse(self.a1.is_Admin() & self.a1.is_Supervisor())
+        # makes ure user has an ID, and that it does not have more than 1 ID.
+
+
+
+
 
