@@ -39,10 +39,7 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    user = models.user # does this work? should be for the actual user
-
-
-
+    user = models.user # does this work? should be for the actual user part
 
     def __init__(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
