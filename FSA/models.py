@@ -67,7 +67,7 @@ class Terminal(models.Model):
             print("you aren't logged in, so you can't log out")
             return
         else:
-            user = None
+            self.user = None
             print("logged out")
             return
 
