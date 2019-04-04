@@ -4,6 +4,9 @@ from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
+class Terminal(models.Model):
+    def command(self, inStr):
+        return inStr
 
 class MyModel(models.Model):
     fieldOne = models.CharField(max_length=20)
@@ -34,6 +37,12 @@ class CoursesModel(models.Model):
 
 
 class Account(models.Model):
+    userID = models.CharField(max_length=30)
+    userName = models.CharField(max_length=50)
+    userEmail = models.CharField(max_length=30)
+    userAddress = models.CharField(max_length=120)
+    user = models.user # does this work? should be for the actual user part
+
     def __init__(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
         self.userName = first + " " + middle + " " + last
