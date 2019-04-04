@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import getpass
 
 
 # Create your models here.
@@ -9,6 +10,28 @@ class Terminal(models.Model):
 
     def command(self, inStr):
         return inStr
+
+    def login(self, username):
+        if self.user is not None:
+            print("you're already signed in. you have to logout before you can re-sign in.")
+        else:
+
+            # look up username
+            # if username is real, get password
+            # validate password
+            # if correct, set user equal to the account
+            # if incorrect, print "wrong password" and end the function call
+            password = getpass.getpass()
+
+
+    def logout(self):
+        if self.user is None:
+            print("you aren't logged in, so you can't log out")
+            return
+        else:
+            user = None
+            print("logged out")
+            return
 
 class MyModel(models.Model):
     fieldOne = models.CharField(max_length=20)
@@ -43,7 +66,6 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    userPhone = models.CharField(max_length=30)
     user = models.user # does this work? should be for the actual user part
 
     @classmethod
