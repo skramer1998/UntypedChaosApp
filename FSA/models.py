@@ -158,7 +158,7 @@ class Account(models.Model):
             print("the new passwords don't match, start again from the begining.")
 
     def editSelf(self, name, id, email, phone, address):
-        self.user.username = name
+        self.user.username = id
         self.user.userEmail = email
         self.userName = name
         self.userID = id
