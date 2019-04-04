@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Terminal(models.Model):
+    user = None
+
     def command(self, inStr):
         return inStr
 
