@@ -9,7 +9,13 @@ class Terminal(models.Model):
     user = None
 
     def command(self, inStr):
-        return inStr
+        return self.parseCommand(inStr)
+
+    def parseCommand(self, cmdStr):
+        if self.user is None:
+            return "You are not logged in, you must login before entering commands."
+        else:
+            return "You are logged in, cool."
 
     def login(self, username):
         if self.user is not None:
@@ -23,7 +29,6 @@ class Terminal(models.Model):
             # if incorrect, print "wrong password" and end the function call
             password = getpass.getpass()
 
-
     def logout(self):
         if self.user is None:
             print("you aren't logged in, so you can't log out")
@@ -32,6 +37,7 @@ class Terminal(models.Model):
             user = None
             print("logged out")
             return
+
 
 class MyModel(models.Model):
     fieldOne = models.CharField(max_length=20)
@@ -48,6 +54,7 @@ class AccountModel(models.Model):
     userName = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
 """
+
 
 class CoursesModel(models.Model):
     name = models.CharField(max_length=30)
