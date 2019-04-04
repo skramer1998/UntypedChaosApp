@@ -100,7 +100,7 @@ class AccountModel(models.Model):
 """
 
 
-class CoursesModel(models.Model):
+class Course(models.Model):
     name = models.CharField(max_length=30)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)

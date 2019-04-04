@@ -1,7 +1,6 @@
 from django.test import TestCase
 from FSA.models import Account
-from FSA.models import CoursesModel
-from FSA.models import Terminal
+from FSA.models import Course
 
 class TestAccount(TestCase):
     def setUp(self):
@@ -18,7 +17,7 @@ class TestAccount(TestCase):
         self.a3 = Account.objects.create(userID=self.a, userName="Sean", userEmail="tshirt@gmail.com",
                                          userAddress="13 Brogdon ave", userPhone = 4145554444)
         self.a4 = Account.objects.create(userID=self.s, userName="Tyler", userEmail="jersey@gmail.com",
-                                         userAddress="11 Lopez ct", userPhone = 4207106969)
+                                         userAddress="11 Bledsoe ct", userPhone = 4207106969)
         # creates 4 accounts with each level of ID
 
     def test_editAccount(self):
