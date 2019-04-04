@@ -14,7 +14,7 @@ class MyModel(models.Model):
     fieldTwo = models.IntegerField(default=0)
     color = models.CharField(max_length=7)
 
-
+"""
 class AccountModel(models.Model):
     role = models.CharField(max_length=12)
     name = models.CharField(max_length=30)
@@ -23,7 +23,7 @@ class AccountModel(models.Model):
     address = models.CharField(max_length=30)
     userName = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
-
+"""
 
 class CoursesModel(models.Model):
     name = models.CharField(max_length=30)
