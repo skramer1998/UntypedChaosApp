@@ -43,6 +43,7 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
+    userPhone = models.CharField(max_length=30)
     user = models.user # does this work? should be for the actual user part
 
     @classmethod
@@ -55,7 +56,7 @@ class Account(models.Model):
         self.userEmail = email
         self.userPhone = phone
         self.userAddress = address
-        self.user = User.objects.create_user(self.userID, self.userEmail)
+        self.user = models.user.objects.create_user(self.userID, self.userEmail)
         self.user.first_name = first
         self.user.last_name = last
         self.user.groups = None
