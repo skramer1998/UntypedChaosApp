@@ -11,11 +11,21 @@ class Terminal(models.Model):
     def command(self, inStr):
         return self.parseCommand(inStr)
 
+    # Parse the given input string based on whitespace
+    # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
+    # they are already logged in.  If they are not then tell them to login.  If they are, continue on processing
+    # the parsed command.
     def parseCommand(self, cmdStr):
-        if self.user is None:
-            return "You are not logged in, you must login before entering commands."
+        parseCmd = cmdStr.split()
+        print(parseCmd[0].lower())
+        if parseCmd[0].lower() == 'login':
+            return self.login(parseCmd[1])
         else:
-            return "You are logged in, cool."
+            if self.user is None:
+                return "You are not logged in, you must login before entering commands."
+            else:
+                # The rest of command parsing will occur here.
+                return "You are logged in, cool."
 
     def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
         if not user.has_usable_password():
@@ -61,13 +71,14 @@ class Terminal(models.Model):
             # validate password
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
+            #password = getpass.getpass()
 
     def logout(self):
         if self.user is None:
             print("you aren't logged in, so you can't log out")
             return
         else:
-            user = None
+            self.user = None
             print("logged out")
             return
 
@@ -100,41 +111,13 @@ class CoursesModel(models.Model):
     ta = models.CharField(max_length=30)
     labs = models.IntegerField(default=0)
 
-    @classmethod
-    def create(cls, name, number, place, days, time, semester, professor, ta, labs):
-        has_course = cls.search(name)
-        if has_course:
-            return "Course already exist"
-        else:
-            cls(name=name, number=number, place=place, days=days, time=time, semester=semester, professor=professor, ta=ta, labs=labs)
-            return "Course was created"
-
-
-    def cls(self, name, number, place, days, time, semester, professor, ta, labs):
-        self.name = name
-        self.number = number
-        self.place = place
-        self.days = days
-        self.time = time
-        self.semester = semester
-        self.professor = professor
-        self.ta = ta
-        self.labs = labs
-        self.save()
-
-    def search(name):
-        if CoursesModel.objects.get(name__contains=name):
-            return True
-        else:
-            return False
-
 
 class Account(models.Model):
     userID = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    user = None # does this work? should be for the actual user part
+    #user = models.user # does this work? should be for the actual user part
 
     @classmethod
     def create(cls, userid, username, email, phone, address):
@@ -182,6 +165,7 @@ class Account(models.Model):
             print("the new passwords don't match, start again from the begining.")
 
     def editSelf(self, name, id, email, phone, address):
+        self.user.userid = id
         self.user.username = name
         self.user.userEmail = email
         self.userName = name
