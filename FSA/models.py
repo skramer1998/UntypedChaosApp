@@ -19,7 +19,10 @@ class Terminal(models.Model):
         parseCmd = cmdStr.split()
         print(parseCmd[0].lower())
         if parseCmd[0].lower() == 'login':
-            return self.login(parseCmd[1])
+            if len(parseCmd) > 1:
+                return self.login(parseCmd[1])
+            else:
+                return "You need to provide login arguments!"
         else:
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
