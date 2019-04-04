@@ -47,7 +47,7 @@ class Terminal(models.Model):
                 almostuser = almostuser[1]
                 if not almostuser.has_usable_password():
                     print("you'll have to set a password before you can login")
-                    setNewPassword(almostuser)
+                    self.setNewPassword(almostuser)
                     return
                 elif almostuser.check_password(getpass.getpass()):
                     print(username+" is logged in")
