@@ -47,8 +47,12 @@ class Account(models.Model):
     user = models.user # does this work? should be for the actual user part
 
     @classmethod
-    def create(cls, userid, first, middle, last, email, phone, address):
-        return cls(userid=userid, first=first, middle=middle, last=last, email=email, phone=phone, address=address)
+    def create(cls, userid, username, email, phone, address):
+        x = username.split()
+        if x.length() == 2:
+            return cls(userid=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
+        else:
+            return cls(userid=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
 
     def cls(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
