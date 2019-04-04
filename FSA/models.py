@@ -45,7 +45,11 @@ class Account(models.Model):
     userAddress = models.CharField(max_length=120)
     user = models.user # does this work? should be for the actual user part
 
-    def __init__(self, userid, first, middle, last, email, phone, address):
+    @classmethod
+    def create(Account, userid, first, middle, last, email, phone, address):
+        return Account(userid, first, middle, last, email, phone, address)
+
+    def Account(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
         self.userName = first + " " + middle + " " + last
         self.userEmail = email
