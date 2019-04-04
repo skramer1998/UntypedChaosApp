@@ -11,6 +11,10 @@ class Terminal(models.Model):
     def command(self, inStr):
         return self.parseCommand(inStr)
 
+    # Parse the given input string based on whitespace
+    # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
+    # they are already logged in.  If they are not then tell them to login.  If they are, continue on processing
+    # the parsed command.
     def parseCommand(self, cmdStr):
         parseCmd = cmdStr.split()
         print(parseCmd[0].lower())
@@ -20,6 +24,7 @@ class Terminal(models.Model):
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
             else:
+                # The rest of command parsing will occur here.
                 return "You are logged in, cool."
 
     def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
@@ -138,17 +143,19 @@ class Account(models.Model):
 
         # should return false if not set otherwise true
 
-    def editPassword(self, newPassword):
+    def editPassword(self):
         # Validate permissions before being able to call this function
+        print("type new password: ")
+        newPassword = getpass.getpass()
         print("confirm new password: ")
-        if newPassword == input():
+        if newPassword == getpass.getpass():
             if not self.user.has_usable_password():
                 self.user.set_password(newPassword)
                 self.user.save()
                 print("new password set")
             else:
-                print("type current password for " + self.user.username)
-                if self.user.check_password(input()):
+                print("type current password for " + self.user.userid)
+                if self.user.check_password(getpass.getpass()):
                     self.user.set_password(newPassword)
                     self.user.save()
                     print("new password set")
