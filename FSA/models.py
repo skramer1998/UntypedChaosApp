@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+class Terminal(models.Model):
+    def command(self, inStr):
+        return inStr
 
 class MyModel(models.Model):
     fieldOne = models.CharField(max_length=20)
