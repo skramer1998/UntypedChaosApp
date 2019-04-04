@@ -111,6 +111,34 @@ class CoursesModel(models.Model):
     ta = models.CharField(max_length=30)
     labs = models.IntegerField(default=0)
 
+    @classmethod
+    def create(cls, name, number, place, days, time, semester, professor, ta, labs):
+        has_course = cls.search(name)
+        if has_course:
+            return "Course already exist"
+        else:
+            cls(name=name, number=number, place=place, days=days, time=time, semester=semester, professor=professor,
+                ta=ta, labs=labs)
+            return "Course was created"
+
+    def cls(self, name, number, place, days, time, semester, professor, ta, labs):
+        self.name = name
+        self.number = number
+        self.place = place
+        self.days = days
+        self.time = time
+        self.semester = semester
+        self.professor = professor
+        self.ta = ta
+        self.labs = labs
+        self.save()
+
+    def search(name):
+        if CoursesModel.objects.get(name__contains=name):
+            return True
+        else:
+            return False
+
 
 class Account(models.Model):
     userID = models.CharField(max_length=30)
