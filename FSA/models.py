@@ -9,7 +9,13 @@ class Terminal(models.Model):
     user = None
 
     def command(self, inStr):
-        return inStr
+        return self.parseCommand(inStr)
+
+    def parseCommand(self, cmdStr):
+        if self.user is None:
+            return "You are not logged in, you must login before entering commands."
+        else:
+            return "You are logged in, cool."
 
     def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
         if not user.has_usable_password():
@@ -56,7 +62,6 @@ class Terminal(models.Model):
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
 
-
     def logout(self):
         if self.user is None:
             print("you aren't logged in, so you can't log out")
@@ -65,6 +70,7 @@ class Terminal(models.Model):
             user = None
             print("logged out")
             return
+
 
 class MyModel(models.Model):
     fieldOne = models.CharField(max_length=20)
@@ -81,6 +87,7 @@ class AccountModel(models.Model):
     userName = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
 """
+
 
 class CoursesModel(models.Model):
     name = models.CharField(max_length=30)
@@ -99,12 +106,15 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    userPhone = models.CharField(max_length=30)
     user = models.user # does this work? should be for the actual user part
 
     @classmethod
-    def create(cls, userid, first, middle, last, email, phone, address):
-        return cls(userid=userid, first=first, middle=middle, last=last, email=email, phone=phone, address=address)
+    def create(cls, userid, username, email, phone, address):
+        x = username.split()
+        if x.length() == 2:
+            return cls(userid=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
+        else:
+            return cls(userid=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
 
     def cls(self, userid, first, middle, last, email, phone, address):
         self.userID = userid
