@@ -9,7 +9,13 @@ class Terminal(models.Model):
     user = None
 
     def command(self, inStr):
-        return inStr
+        return self.parseCommand(inStr)
+
+    def parseCommand(self, cmdStr):
+        if self.user is None:
+            return "You are not logged in, you must login before entering commands."
+        else:
+            return "You are logged in, cool."
 
     def login(self, username):
         if self.user is not None:
