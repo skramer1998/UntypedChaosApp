@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -25,7 +24,7 @@ class AccountModel(models.Model):
     address = models.CharField(max_length=30)
     userName = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
-"""
+
 
 class CoursesModel(models.Model):
     name = models.CharField(max_length=30)
