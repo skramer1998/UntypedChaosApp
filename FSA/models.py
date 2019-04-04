@@ -12,29 +12,68 @@ class Terminal(models.Model):
         return self.parseCommand(inStr)
 
     def parseCommand(self, cmdStr):
-        if self.user is None:
-            return "You are not logged in, you must login before entering commands."
+        parseCmd = cmdStr.split()
+        print(parseCmd[0].lower())
+        if parseCmd[0].lower() == 'login':
+            return self.login(parseCmd[1])
         else:
-            return "You are logged in, cool."
+            if self.user is None:
+                return "You are not logged in, you must login before entering commands."
+            else:
+                return "You are logged in, cool."
+
+    def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
+        if not user.has_usable_password():
+            while True:
+                print("your account currently has no password. You'll have to set it by typing it in twice")
+                passwordAttempt1 = getpass.getpass()
+                passwordAttempt2 = getpass.getpass()
+                if passwordAttempt1 == passwordAttempt2:
+                    print("good, you typed the same thing twice. your password is set and good to go")
+                    user.set_password(passwordAttempt1)
+                    user.save()
+                    return
+                else:
+                    print("those didn't match. Try again")
+        else:
+            print("user has a usable password, \
+            can't set new password with this function. use the account(.) something or other")
+            return
 
     def login(self, username):
         if self.user is not None:
             print("you're already signed in. you have to logout before you can re-sign in.")
         else:
-
+            almostuser = Account.user.filter(userid = 'username')
+            if almostuser is None:
+                print("no user with that username.")
+                return
+            else:
+                almostuser = almostuser[1]
+                if not almostuser.has_usable_password():
+                    print("you'll have to set a password before you can login")
+                    self.setNewPassword(almostuser)
+                    return
+                elif almostuser.check_password(getpass.getpass()):
+                    print(username+" is logged in")
+                    self.user = almostuser
+                    return
+                else:
+                    print("passwords don't match")
+                    return
             # look up username
             # if username is real, get password
             # validate password
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
-            password = getpass.getpass()
+            #password = getpass.getpass()
 
     def logout(self):
         if self.user is None:
             print("you aren't logged in, so you can't log out")
             return
         else:
-            user = None
+            self.user = None
             print("logged out")
             return
 
@@ -73,7 +112,7 @@ class Account(models.Model):
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    user = models.user # does this work? should be for the actual user part
+    #user = models.user # does this work? should be for the actual user part
 
     @classmethod
     def create(cls, userid, username, email, phone, address):
@@ -119,6 +158,7 @@ class Account(models.Model):
             print("the new passwords don't match, start again from the begining.")
 
     def editSelf(self, name, id, email, phone, address):
+        self.user.userid = id
         self.user.username = name
         self.user.userEmail = email
         self.userName = name
