@@ -51,7 +51,7 @@ class Account(models.Model):
         self.userEmail = email
         self.userPhone = phone
         self.userAddress = address
-        self.user = User.objects.create_user(self.userID, self.userEmail)
+        self.user = models.user.objects.create_user(self.userID, self.userEmail)
         self.user.first_name = first
         self.user.last_name = last
         self.user.groups = None
