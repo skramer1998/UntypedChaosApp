@@ -283,9 +283,15 @@ class Account(models.Model):
         # pass shit to course edit method, if self has the permissions to do so.
 
     def publicInfo(self, user):
+        print("Name: " + user.username)
+        print("Email: " + user.userEmail)
+        print("User ID: " + user.userID)
+        if Account.is_Admin(self) or Account.is_Supervisor(self):
+            print("Phone Number:" + user.userPhone)
+            print("Address: " + user.userAddress)
         return 0
-        # big old string with whatever is actually public
-        # can include a permissions check ala other methods in this class
+        # prints the user's public information, and gives the extra private fields if permissions allow
+        # wasn't sure if the private info should be its own method or not, so I did it like this.
 
     def toString(self):
         return "User ID: "+self.userID+"\nUsername: "+self.user.username+"\nUserEmail: " + \
