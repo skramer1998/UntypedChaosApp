@@ -104,6 +104,7 @@ class AccountModel(models.Model):
 
 
 class Course(models.Model):
+    # need to change later. Lab class? courses can have more than one lab and more than one ta
     name = models.CharField(max_length=30)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
@@ -137,10 +138,47 @@ class Course(models.Model):
         self.save()
 
     def search(name):
-        if CoursesModel.objects.get(name__contains=name):
+        if Course.objects.get(name__contains=name):
             return True
         else:
             return False
+
+    def setname(self, new_name):
+        self.name = new_name
+
+    def setnumber(self, new_number):
+        self.number = new_number
+
+    def setplace(self, new_place):
+        self.place = new_place
+
+    def setdays(self, new_days):
+        self.days = new_days
+
+    def settime(self, new_time):
+        self.time = new_time
+
+    def setsemester(self, new_semester):
+        self.semester = new_semester
+
+    def setprofessor(self, new_professor):
+        self.professor = new_professor
+
+    def setta(self, new_ta):
+        self.ta = new_ta
+
+    def setlabs(self, new_labs):
+        self.labs = new_labs
+
+
+    # convert to string one course
+    def tostr(self):
+        return self.name + " " + self.number + " " + self.place + " " + self.days + " " + self.time + " " + self.semester + " " + self.professor + " " + self.ta + "" + self.labs
+
+    # call Course.objects.all() to get all courses to string
+    def __str__(self):
+        return self.name + " " + self.number + " " + self.place + " " + self.days + " " + self.time + " " + self.semester + " " + self.professor + " " + self.ta + "" + self.labs
+
 
 
 class Account(models.Model):
