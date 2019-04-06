@@ -42,7 +42,7 @@ class Terminal(models.Model):
                 return "You are logged in, cool."
 
     def setNewPassword(self, user):  # CAN'T BE CALLED DIRECTLY
-        if not user.user.has_usable_password():
+        if not user.has_usable_password():
             while True:
                 print("your account currently has no password. You'll have to set it by typing it in twice")
                 passwordAttempt1 = getpass.getpass()
@@ -67,14 +67,14 @@ class Terminal(models.Model):
         if self.user is not None:
             print("you're already signed in. you have to logout before you can re-sign in.")
         else:
-            almostuser = Account.objects.filter(SignInName='username').first()
+            almostuser = Account.objects.filter(SignInName=username).first()
             if almostuser is None:
                 print(len(Account.objects.all()))
-                print(Account.objects.filter(SignInName='username'))
+                print(Account.objects.filter(SignInName=username))
                 print("no user with that username.")
                 return
             else:
-                almostuser = Account.objects.filter(SignInName='username').first().user
+                almostuser = almostuser.user
                 if not almostuser.has_usable_password():
                     print("you'll have to set a password before you can login")
                     self.setNewPassword(almostuser)
@@ -219,16 +219,19 @@ class Account(models.Model):
 
     def cls(self, othernameforid, username, email, userPhone, address):
         print("ayyo let's create some shit")
-        account = Account.objects.create(user_id=len(User.objects.all())+1, SignInName=othernameforid, userName=username, userEmail=email, userPhone=userPhone, userAddress=address)
-        user = User.objects.create_user(user_id=len(User.objects.all())+1, username=othernameforid, email=email)
+        account = Account.objects.create(SignInName=othernameforid,
+                                         userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
+                                         user_id=hash(othernameforid))
+        #  user_id cannot be trusted to set itself. creating an accout where the username hashes to the same value as
+        #  an existing account will fail.
+        user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
         account.user = user
         print(account)
         print(account.user)
-        print(len(User.objects.all))
+        print(len(User.objects.all()))
         x = username.split()
         account.user.first_name = x[0]
         account.user.last_name = x[1] if len(x) == 2 else x[2]
-        account.user.groups = None
         account.user.save()
         account.save()
         return account
