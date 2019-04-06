@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 import getpass
 
 
@@ -23,6 +23,17 @@ class Terminal(models.Model):
                 return self.login(parseCmd[1])
             else:
                 return "You need to provide login arguments!"
+        elif parseCmd[0].lower() == 'createaccount':
+            if len(parseCmd) > 7:
+                print("branch 1")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
+                                          parseCmd[5], parseCmd[6], parseCmd[7])
+            elif len(parseCmd) > 6:
+                print("branch 2")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], + parseCmd[4],
+                                          parseCmd[5], parseCmd[6])
+            else:
+                return "not enough args to create account"
         else:
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
@@ -30,8 +41,8 @@ class Terminal(models.Model):
                 # The rest of command parsing will occur here.
                 return "You are logged in, cool."
 
-    def setNewPassword(self, user): # CAN'T BE CALLED DIRECTLY
-        if not user.has_usable_password():
+    def setNewPassword(self, user):  # CAN'T BE CALLED DIRECTLY
+        if not user.user.has_usable_password():
             while True:
                 print("your account currently has no password. You'll have to set it by typing it in twice")
                 passwordAttempt1 = getpass.getpass()
@@ -48,22 +59,28 @@ class Terminal(models.Model):
             can't set new password with this function. use the account(.) something or other")
             return
 
+    def createaccount(self, SignInName, name, email, phone, address):
+        print("called into createaccount")
+        return Account.create(SignInName, name, email, phone, address)
+
     def login(self, username):
         if self.user is not None:
             print("you're already signed in. you have to logout before you can re-sign in.")
         else:
-            almostuser = Account.user.filter(userid = 'username')
+            almostuser = Account.objects.filter(SignInName='username').first()
             if almostuser is None:
+                print(len(Account.objects.all()))
+                print(Account.objects.filter(SignInName='username'))
                 print("no user with that username.")
                 return
             else:
-                almostuser = almostuser[1]
+                almostuser = Account.objects.filter(SignInName='username').first().user
                 if not almostuser.has_usable_password():
                     print("you'll have to set a password before you can login")
                     self.setNewPassword(almostuser)
                     return
                 elif almostuser.check_password(getpass.getpass()):
-                    print(username+" is logged in")
+                    print(username + " is logged in")
                     self.user = almostuser
                     return
                 else:
@@ -74,7 +91,7 @@ class Terminal(models.Model):
             # validate password
             # if correct, set user equal to the account
             # if incorrect, print "wrong password" and end the function call
-            #password = getpass.getpass()
+            # password = getpass.getpass()
 
     def logout(self):
         if self.user is None:
@@ -182,31 +199,39 @@ class Course(models.Model):
 
 
 class Account(models.Model):
-    userID = models.CharField(max_length=30)
+    SignInName = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
+    userPhone = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    #user = models.user # does this work? should be for the actual user part
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Associated Auth User+")
 
     @classmethod
     def create(cls, userid, username, email, phone, address):
-        x = username.split()
-        if x.length() == 2:
-            return cls(userid=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
+        print("go t into create")
+        '''x = username.split()
+        if len(x) == 2:
+              return cls(SignInName=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
         else:
-            return cls(userid=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
+              return cls(SignInName=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
+        '''
+        return Account.cls(Account(cls), userid, username, email, phone, address)
 
-    def cls(self, userid, first, middle, last, email, phone, address):
-        self.userID = userid
-        self.userName = first + " " + middle + " " + last
-        self.userEmail = email
-        self.userPhone = phone
-        self.userAddress = address
-        self.user = models.user.objects.create_user(self.userID, self.userEmail)
-        self.user.first_name = first
-        self.user.last_name = last
-        self.user.groups = None
-        self.user.save()
+    def cls(self, othernameforid, username, email, userPhone, address):
+        print("ayyo let's create some shit")
+        account = Account.objects.create(user_id=len(User.objects.all())+1, SignInName=othernameforid, userName=username, userEmail=email, userPhone=userPhone, userAddress=address)
+        user = User.objects.create_user(user_id=len(User.objects.all())+1, username=othernameforid, email=email)
+        account.user = user
+        print(account)
+        print(account.user)
+        print(len(User.objects.all))
+        x = username.split()
+        account.user.first_name = x[0]
+        account.user.last_name = x[1] if len(x) == 2 else x[2]
+        account.user.groups = None
+        account.user.save()
+        account.save()
+        return account
         # create an account in the user DB. No password at first, default permissions for user are none, individual
         # group status should be set in a later step.
 
