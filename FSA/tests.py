@@ -2,7 +2,9 @@ from django.test import TestCase
 from FSA.models import Account
 from FSA.models import Course
 
+
 class TestAccount(TestCase):
+
     def setUp(self):
         self.t = "TA"
         self.i = "Instructor"
@@ -20,13 +22,13 @@ class TestAccount(TestCase):
                                          userAddress="11 Bledsoe ct", userPhone = 4207106969)
         # creates 4 accounts with each level of ID
 
-    def test_editAccount(self):
         self.a1.create(self.a1.userID, self.a1.userName, self.a1.userEmail, self.a1.userPhone, self.a1.userAddress)
         self.a2.create(self.a2.userID, self.a2.userName, self.a2.userEmail, self.a2.userPhone, self.a2.userAddress)
         self.a3.create(self.a3.userID, self.a3.userName, self.a3.userEmail, self.a3.userPhone, self.a3.userAddress)
         self.a4.create(self.a4.userID, self.a4.userName, self.a4.userEmail, self.a4.userPhone, self.a4.userAddress)
         # creates user classes
 
+    def test_editSelf(self):
         self.assertFalse(self.a1.editSelf())
         self.assertFalse(self.a1.editSelf("Howdy yall, I'm Towly!"))
         self.assertFalse(self.a1.editSelf('a', self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
@@ -47,6 +49,7 @@ class TestAccount(TestCase):
         self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
         # checks if editSelf worked correctly with correct parameters
 
+    def test_editOther(self):
         self.assertFalse(
             self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
         self.assertFalse(
@@ -78,6 +81,7 @@ class TestAccount(TestCase):
         self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
         # checks edit other successfully edits user info with correct parameters
 
+    def test_checkRole(self):
         self.assertTrue(self.a1.is_TA() | self.a1.is_Instructor() | self.a1.is_Admin() | self.a1.is_Supervisor())
         self.assertFalse(self.a1.is_TA() & self.a1.is_Instructor())
         self.assertFalse(self.a1.is_TA() & self.a1.is_Admin())
@@ -98,5 +102,89 @@ class TestAccount(TestCase):
         self.assertTrue(self.a3.createCourse())
         self.assertTrue(self.a4.createCourse())
         # checks only accounts with proper ID can create courses
+
+
+class TestCourse(TestCase):
+
+    def setUp(self):
+        self.c1 = Course.objects.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING", 4)
+        self.c2 = Course.objects.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING", 15)
+        # create our test courses
+
+        self.c2.create(self.c2.name, self.c2.number, self.c2.place, self.c2.days, self.c2.time, self.c2.semester,
+                       self.c2.professor, self.c2.ta, self.c2.labs)
+        # create user class for c2
+
+    def testCreate(self):
+        self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
+                       self.c1.professor, self.c1.ta, self.c1.labs), "Course was created")
+        # should return this if already exists
+
+        self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
+                       self.c1.professor, self.c1.ta, self.c1.labs)
+        self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
+                       self.c1.professor, self.c1.ta, self.c1.labs), "Course already exist")
+        # should return this if already exists
+
+    def testSearch(self):
+        self.assertTrue(self.c2.search("History of Baths"))
+        # should be true
+
+        self.assertFalse(self.c2.search("History"))
+        self.assertFalse(self.c2.search("Chinese Horse Energy"))
+        # should both be false
+
+    def testSet(self):
+        self.c2.setname("Shower Physics")
+        self.c2.setnumber(100)
+        self.c2.setplace("Physics Building")
+        self.c2.setdays("MW")
+        self.c2.settime("12:00 - 12:50")
+        self.c2.setsemester("SPRING")
+        self.c2.setprofessor("GLOCK")
+        self.c2.setta("PING")
+        self.c2.setlabs(1)
+        # sets new values
+
+        self.assertEqual(self.c2.name, "Shower Physics")
+        self.assertEqual(self.c2.number, 100)
+        self.assertEqual(self.c2.place, "Physics Building")
+        self.assertEqual(self.c2.days, "MW")
+        self.assertEqual(self.c2.time, "12:00 - 12:50")
+        self.assertEqual(self.c2.semester, "SPRING")
+        self.assertEqual(self.c2.professor, "GLOCK")
+        self.assertEqual(self.c2.ta, "PING")
+        self.assertEqual(self.c2.labs, 1)
+        # checks correctly set
+
+        self.assertFalse(self.c2.setname())
+        self.assertFalse(self.c2.setnumber())
+        self.assertFalse(self.c2.setplace())
+        self.assertFalse(self.c2.setdays())
+        self.assertFalse(self.c2.settime())
+        self.assertFalse(self.c2.setsemester())
+        self.assertFalse(self.c2.setprofessor())
+        self.assertFalse(self.c2.setta())
+        self.assertFalse(self.c2.setlabs())
+        # checks empty set
+
+        self.assertFalse(self.c2.setname(12))
+        self.assertFalse(self.c2.setnumber("hi"))
+        self.assertFalse(self.c2.setplace(12))
+        self.assertFalse(self.c2.setdays(12))
+        self.assertFalse(self.c2.settime(12))
+        self.assertFalse(self.c2.setsemester(12))
+        self.assertFalse(self.c2.setprofessor(12))
+        self.assertFalse(self.c2.setta(12))
+        self.assertFalse(self.c2.setlabs("hello"))
+        # checks incorrectly set
+
+        self.assertTrue(self.c2.search("Shower Physics"))
+        self.assertFalse(self.c2.search("History of Baths"))
+        # checks updated names in search
+
+    def testStr(self):
+        self.assertEqual(self.c2.tostr(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
+        # asserts toStr has correct format
 
 
