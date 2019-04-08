@@ -30,7 +30,7 @@ class Terminal(models.Model):
                                           parseCmd[5], parseCmd[6], parseCmd[7])
             elif len(parseCmd) > 6:
                 print("branch 2")
-                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], + parseCmd[4],
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
                                           parseCmd[5], parseCmd[6])
             else:
                 return "not enough args to create account"
