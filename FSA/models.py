@@ -18,6 +18,7 @@ class Terminal(models.Model):
     def parseCommand(self, cmdStr):
         parseCmd = cmdStr.split()
         print(parseCmd[0].lower())
+        print(self.user)
         if parseCmd[0].lower() == 'login':
             if len(parseCmd) > 1:
                 return self.login(parseCmd[1])
@@ -51,13 +52,13 @@ class Terminal(models.Model):
                     print("good, you typed the same thing twice. your password is set and good to go")
                     user.set_password(passwordAttempt1)
                     user.save()
-                    return
+                    return self
                 else:
                     print("those didn't match. Try again")
         else:
             print("user has a usable password, \
             can't set new password with this function. use the account(.) something or other")
-            return
+            return self
 
     def createaccount(self, SignInName, name, email, phone, address):
         print("called into createaccount")
@@ -72,20 +73,21 @@ class Terminal(models.Model):
                 print(len(Account.objects.all()))
                 print(Account.objects.filter(SignInName=username))
                 print("no user with that username.")
-                return
+                return self
             else:
                 almostuser = almostuser.user
                 if not almostuser.has_usable_password():
                     print("you'll have to set a password before you can login")
                     self.setNewPassword(almostuser)
-                    return
+                    return self
                 elif almostuser.check_password(getpass.getpass()):
                     print(username + " is logged in")
                     self.user = almostuser
-                    return
+                    print(self.user)
+                    return self
                 else:
                     print("passwords don't match")
-                    return
+                    return self
             # look up username
             # if username is real, get password
             # validate password
@@ -96,11 +98,12 @@ class Terminal(models.Model):
     def logout(self):
         if self.user is None:
             print("you aren't logged in, so you can't log out")
-            return
+            return self
         else:
             self.user = None
             print("logged out")
-            return
+            print(self.user)
+            return self
 
 
 class MyModel(models.Model):
@@ -218,6 +221,9 @@ class Account(models.Model):
         return Account.cls(Account(cls), userid, username, email, phone, address)
 
     def cls(self, othernameforid, username, email, userPhone, address):
+        if Account.objects.filter(SignInName=username).first() is None:
+            print("yo there's already an account with that SignInName. SignInNames must be unique")
+            return self
         print("ayyo let's create some shit")
         account = Account.objects.create(SignInName=othernameforid,
                                          userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
