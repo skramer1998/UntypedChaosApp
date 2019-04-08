@@ -9,7 +9,14 @@ class Terminal(models.Model):
     user = None
 
     def command(self, inStr):
-        return self.parseCommand(inStr)
+        cmdStr = inStr
+        #  would we want a loop here? break only when the cmd string is "exit?"
+        while cmdStr != "exit":
+            self.parseCommand(cmdStr)
+            print("enter next command")
+            cmdStr = raw_input() #fucc that is Not How to Do The Thing
+            print(cmdStr)
+        #  return self.parseCommand(inStr)
 
     # Parse the given input string based on whitespace
     # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
@@ -26,17 +33,19 @@ class Terminal(models.Model):
                 return "You need to provide login arguments!"
         elif parseCmd[0].lower() == 'createaccount':
             if len(parseCmd) > 7:
-                print("branch 1")
+                #  print("branch 1")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7])
             elif len(parseCmd) > 6:
-                print("branch 2")
+                #  print("branch 2")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
                                           parseCmd[5], parseCmd[6])
             else:
                 return "not enough args to create account"
         elif parseCmd[0].lower() == 'accountlist':
             return self.accountList()
+        elif parseCmd[0].lower() == 'logout':
+            return self.logout()
         else:
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
@@ -76,28 +85,26 @@ class Terminal(models.Model):
 
     def login(self, username):
         if self.user is not None:
-            print("you're already signed in. you have to logout before you can re-sign in.")
+            return "You're already signed in.  You must logout before you can re-sign in."
         else:
             almostuser = Account.objects.filter(SignInName=username).first()
             if almostuser is None:
-                print(len(Account.objects.all()))
-                print(Account.objects.filter(SignInName=username))
-                print("no user with that username.")
-                return self
+                #print(len(Account.objects.all()))
+                #print(Account.objects.filter(SignInName=username))
+                return "No user exists with that username."
             else:
                 almostuser = almostuser.user
                 if not almostuser.has_usable_password():
-                    print("you'll have to set a password before you can login")
-                    self.setNewPassword(almostuser)
-                    return self
+                    #print("you'll have to set a password before you can login")
+                    return self.setNewPassword(almostuser)
                 elif almostuser.check_password(getpass.getpass()):
-                    print(username + " is logged in")
+                    #print(username + " is logged in")
                     self.user = almostuser
-                    print(self.user)
-                    return self
+                    #print(self.user)
+                    return username + " successfully logged in."
                 else:
-                    print("passwords don't match")
-                    return self
+                    #print("passwords don't match")
+                    return "Incorrect password entered."
             # look up username
             # if username is real, get password
             # validate password
@@ -107,13 +114,13 @@ class Terminal(models.Model):
 
     def logout(self):
         if self.user is None:
-            print("you aren't logged in, so you can't log out")
-            return self
+            #print("you aren't logged in, so you can't log out")
+            return "You aren't logged in, so you can't log out."
         else:
             self.user = None
-            print("logged out")
-            print(self.user)
-            return self
+            #print("logged out")
+            #print(self.user)
+            return "You have been logged out."
 
 
 class Course(models.Model):
@@ -260,7 +267,7 @@ class Account(models.Model):
                 else:
                     print("wrong password for " + self.user.username)
         else:
-            print("the new passwords don't match, start again from the begining.")
+            print("the new passwords don't match, start again from the beginning.")
 
     def editSelf(self, name, id, email, phone, address):
         self.user.userid = id
