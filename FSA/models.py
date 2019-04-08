@@ -221,7 +221,7 @@ class Account(models.Model):
         return Account.cls(Account(cls), userid, username, email, phone, address)
 
     def cls(self, othernameforid, username, email, userPhone, address):
-        if Account.objects.filter(SignInName=username).first() is None:
+        if Account.objects.filter(SignInName=othernameforid).first() is not None:
             print("yo there's already an account with that SignInName. SignInNames must be unique")
             return self
         print("ayyo let's create some shit")
