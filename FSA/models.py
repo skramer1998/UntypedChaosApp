@@ -189,7 +189,6 @@ class Course(models.Model):
         return self.name + " " + self.number + " " + self.place + " " + self.days + " " + self.time + " " + self.semester + " " + self.professor + " " + self.ta + "" + self.labs
 
 
-
 class Account(models.Model):
     SignInName = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
