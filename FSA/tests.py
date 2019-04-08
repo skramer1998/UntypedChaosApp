@@ -132,15 +132,26 @@ class TestCourse(TestCase):
 
     def testSet(self):
         self.c2.setname("Shower Physics")
-        self.c2.setnumber()
-        self.c2.setplace()
-        self.c2.setdays()
-        self.c2.settime()
-        self.c2.setsemester()
-        self.c2.setprofessor()
-        self.c2.setta()
-        self.c2.labs()
+        self.c2.setnumber(100)
+        self.c2.setplace("Physics Building")
+        self.c2.setdays("MW")
+        self.c2.settime("12:00 - 12:50")
+        self.c2.setsemester("SPRING")
+        self.c2.setprofessor("GLOCK")
+        self.c2.setta("PING")
+        self.c2.setlabs(1)
+        # sets new values
 
+        self.assertEqual(self.c2.name, "Shower Physics")
+        self.assertEqual(self.c2.number, 100)
+        self.assertEqual(self.c2.place, "Physics Building")
+        self.assertEqual(self.c2.days, "MW")
+        self.assertEqual(self.c2.time, "12:00 - 12:50")
+        self.assertEqual(self.c2.semester, "SPRING")
+        self.assertEqual(self.c2.professor, "GLOCK")
+        self.assertEqual(self.c2.ta, "PING")
+        self.assertEqual(self.c2.labs, 1)
+        # checks set correctly
 
         self.assertTrue(self.c2.search("Shower Physics"))
         self.assertFalse(self.c2.search("History of Baths"))
