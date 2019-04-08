@@ -280,34 +280,35 @@ class Account(models.Model):
         # should return false if not set otherwise true
 
     def is_TA(self, user):
-        return user.user.groups.filter(name='TA').exists()
+        return user.user.groups.filter(name='ta').exists()
 
     def is_Instructor(self, user):
-        return user.user.groups.filter(name='Instructor').exists()
+        return user.user.groups.filter(name='instructor').exists()
 
     def is_Admin(self, user):
-        return user.user.groups.filter(name='Admin').exists()
+        return user.user.groups.filter(name='admin').exists()
 
     def is_Supervisor(self, user):
-        return user.user.groups.filter(name='Supervisor').exists()
+        return user.user.groups.filter(name='supervisor').exists()
 
     def grantGroupStatus(self, user, groupName):  # supervisors and admins can grant permissions
+        groupName = groupName.lower()
         if Account.is_Supervisor(self):
-            if groupName == "TA" or groupName == "Instructor" or groupName == "Admin" or groupName == "Supervisor":
+            if groupName == "ta" or groupName == "instructor" or groupName == "admin" or groupName == "supervisor":
                 user.user.group.add(groupName)
                 user.user.save()
-                print(user.userName + " has been added to "+ groupName)
+                print(user.userName + " has been added to "+ groupName +" role")
                 return True
             else:
                 print("that's not a group. the 4 groups are TA, Instructor, Admin, and Supervisor")
                 return False
         elif Account.is_Admin(self):
-            if groupName == "TA" or groupName == "Instructor" or groupName == "Admin":
+            if groupName == "ta" or groupName == "instructor" or groupName == "admin":
                 user.user.group.add(groupName)
                 user.user.save()
                 print(user.userName + " has been added to "+ groupName)
                 return True
-            elif groupName == "Supervisor":
+            elif groupName == "supervisor":
                 print("Admin accounts cannot add Supervisor status")
                 return False
             else:
