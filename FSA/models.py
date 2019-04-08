@@ -35,12 +35,18 @@ class Terminal(models.Model):
                                           parseCmd[5], parseCmd[6])
             else:
                 return "not enough args to create account"
+        elif parseCmd[0].lower() == 'accountlist':
+            return self.accountList()
         else:
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
             else:
                 # The rest of command parsing will occur here.
                 return "You are logged in, cool."
+
+    # DEBUGGING METHOD
+    def accountList(self):
+        return Account.objects.all()
 
     def setNewPassword(self, user):  # CAN'T BE CALLED DIRECTLY
         if not user.has_usable_password():
@@ -225,6 +231,7 @@ class Account(models.Model):
             return "That username is already in use, please select a different one."
             #return self
         print("ayyo let's create some shit")
+        print(hash(othernameforid))
         account = Account.objects.create(SignInName=othernameforid,
                                          userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
                                          user_id=hash(othernameforid))
