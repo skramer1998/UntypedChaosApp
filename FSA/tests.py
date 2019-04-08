@@ -155,7 +155,29 @@ class TestCourse(TestCase):
         self.assertEqual(self.c2.professor, "GLOCK")
         self.assertEqual(self.c2.ta, "PING")
         self.assertEqual(self.c2.labs, 1)
-        # checks set correctly
+        # checks correctly set
+
+        self.assertFalse(self.c2.setname())
+        self.assertFalse(self.c2.setnumber())
+        self.assertFalse(self.c2.setplace())
+        self.assertFalse(self.c2.setdays())
+        self.assertFalse(self.c2.settime())
+        self.assertFalse(self.c2.setsemester())
+        self.assertFalse(self.c2.setprofessor())
+        self.assertFalse(self.c2.setta())
+        self.assertFalse(self.c2.setlabs())
+        # checks empty set
+
+        self.assertFalse(self.c2.setname(12))
+        self.assertFalse(self.c2.setnumber("hi"))
+        self.assertFalse(self.c2.setplace(12))
+        self.assertFalse(self.c2.setdays(12))
+        self.assertFalse(self.c2.settime(12))
+        self.assertFalse(self.c2.setsemester(12))
+        self.assertFalse(self.c2.setprofessor(12))
+        self.assertFalse(self.c2.setta(12))
+        self.assertFalse(self.c2.setlabs("hello"))
+        # checks incorrectly set
 
         self.assertTrue(self.c2.search("Shower Physics"))
         self.assertFalse(self.c2.search("History of Baths"))
