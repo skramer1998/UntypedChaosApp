@@ -31,7 +31,7 @@ class Terminal(models.Model):
         print(parseCmd[0].lower())
         print(user)
         if parseCmd[0].lower() == 'login':
-            if len(parseCmd) > 1:
+            if len(parseCmd) > 2:
                 return self.login(parseCmd[1], parseCmd[2])
             else:
                 return "You need to provide login arguments!"
