@@ -361,7 +361,7 @@ class Account(models.Model):
             print("Only Admins and Supervisors can add new Courses")
             return False
 
-    def modifyCouse(self, course, otherargs):
+    def modifyCourse(self, course, otherargs):
         return False
         # pass shit to course edit method, if self has the permissions to do so.
 
