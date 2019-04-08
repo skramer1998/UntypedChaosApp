@@ -2,7 +2,9 @@ from django.test import TestCase
 from FSA.models import Account
 from FSA.models import Course
 
+
 class TestAccount(TestCase):
+
     def setUp(self):
         self.t = "TA"
         self.i = "Instructor"
@@ -101,7 +103,9 @@ class TestAccount(TestCase):
         self.assertTrue(self.a4.createCourse())
         # checks only accounts with proper ID can create courses
 
+
 class TestCourse(TestCase):
+
     def setUp(self):
         self.c1 = Course.objects.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING", 4)
         self.c2 = Course.objects.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING", 15)
@@ -160,4 +164,5 @@ class TestCourse(TestCase):
     def testStr(self):
         self.assertEqual(self.c2.tostr(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
         # asserts toStr has correct format
+
 
