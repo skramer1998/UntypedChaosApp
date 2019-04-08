@@ -269,7 +269,7 @@ class Account(models.Model):
                 else:
                     print("wrong password for " + self.user.username)
         else:
-            print("the new passwords don't match, start again from the begining.")
+            print("the new passwords don't match, start again from the beginning.")
 
     def editSelf(self, name, id, email, phone, address):
         self.user.userid = id
