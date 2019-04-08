@@ -112,23 +112,6 @@ class Terminal(models.Model):
             return self
 
 
-class MyModel(models.Model):
-    fieldOne = models.CharField(max_length=20)
-    fieldTwo = models.IntegerField(default=0)
-    color = models.CharField(max_length=7)
-
-"""
-class AccountModel(models.Model):
-    role = models.CharField(max_length=12)
-    name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=30)
-    phone = models.CharField(max_length=11)
-    address = models.CharField(max_length=30)
-    userName = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
-"""
-
-
 class Course(models.Model):
     # need to change later. Lab class? courses can have more than one lab and more than one ta
     name = models.CharField(max_length=30)
