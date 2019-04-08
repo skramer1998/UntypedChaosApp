@@ -371,7 +371,7 @@ class Account(models.Model):
             stringofinfo += "\nPhone Number:" + user.userPhone + "\nAddress: " + user.userAddress
         return stringofinfo
         # prints the user's public information, and gives the extra private fields if permissions allow
-        # wasn't sure if the private info should be its own method or not, so I did it like this.
+        # wasn't sure if the private info should be its own method or not, so I did it like this
 
     def toString(self):
         return "User ID: "+self.userID+"\nUsername: "+self.user.username+"\nUserEmail: " + \
