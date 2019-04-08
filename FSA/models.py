@@ -3,29 +3,33 @@ from django.db import models
 from django.contrib.auth.models import User
 import getpass
 
+# User object
+user = None
+
 
 # Create your models here.
 class Terminal(models.Model):
-    user = None
+    #termUser = user
 
     def command(self, inStr):
         cmdStr = inStr
         #  would we want a loop here? break only when the cmd string is "exit?"
-        while cmdStr != "exit":
-            self.parseCommand(cmdStr)
-            print("enter next command")
-            cmdStr = raw_input() #fucc that is Not How to Do The Thing
-            print(cmdStr)
-        #  return self.parseCommand(inStr)
+        #while cmdStr != "exit":
+        return self.parseCommand(cmdStr)
+            #print("enter next command")
+            #cmdStr = raw_input("") #fucc that is Not How to Do The Thing
+            #print(cmdStr)
+        #return self.parseCommand(inStr)
 
     # Parse the given input string based on whitespace
     # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
     # they are already logged in.  If they are not then tell them to login.  If they are, continue on processing
     # the parsed command.
     def parseCommand(self, cmdStr):
+        global user
         parseCmd = cmdStr.split()
         print(parseCmd[0].lower())
-        print(self.user)
+        print(user)
         if parseCmd[0].lower() == 'login':
             if len(parseCmd) > 1:
                 return self.login(parseCmd[1])
@@ -47,7 +51,7 @@ class Terminal(models.Model):
         elif parseCmd[0].lower() == 'logout':
             return self.logout()
         else:
-            if self.user is None:
+            if user is None:
                 return "You are not logged in, you must login before entering commands."
             else:
                 # The rest of command parsing will occur here.
@@ -61,16 +65,18 @@ class Terminal(models.Model):
         return retList
         #return Account.objects.filter(id__range=(1,len(Account.objects.all())))
 
-    def setNewPassword(self, user):  # CAN'T BE CALLED DIRECTLY
-        if not user.has_usable_password():
+    def setNewPassword(self, npuser):  # CAN'T BE CALLED DIRECTLY
+        global user
+        if not npuser.has_usable_password():
             while True:
                 print("your account currently has no password. You'll have to set it by typing it in twice")
                 passwordAttempt1 = getpass.getpass()
                 passwordAttempt2 = getpass.getpass()
                 if passwordAttempt1 == passwordAttempt2:
                     print("good, you typed the same thing twice. your password is set and good to go")
-                    user.set_password(passwordAttempt1)
-                    user.save()
+                    npuser.set_password(passwordAttempt1)
+                    npuser.save()
+                    user = npuser
                     return self
                 else:
                     print("those didn't match. Try again")
@@ -84,7 +90,8 @@ class Terminal(models.Model):
         return Account.create(SignInName, name, email, phone, address)
 
     def login(self, username):
-        if self.user is not None:
+        global user
+        if user is not None:
             return "You're already signed in.  You must logout before you can re-sign in."
         else:
             almostuser = Account.objects.filter(SignInName=username).first()
@@ -99,7 +106,7 @@ class Terminal(models.Model):
                     return self.setNewPassword(almostuser)
                 elif almostuser.check_password(getpass.getpass()):
                     #print(username + " is logged in")
-                    self.user = almostuser
+                    user = almostuser
                     #print(self.user)
                     return username + " successfully logged in."
                 else:
@@ -113,11 +120,12 @@ class Terminal(models.Model):
             # password = getpass.getpass()
 
     def logout(self):
-        if self.user is None:
+        global user
+        if user is None:
             #print("you aren't logged in, so you can't log out")
             return "You aren't logged in, so you can't log out."
         else:
-            self.user = None
+            user = None
             #print("logged out")
             #print(self.user)
             return "You have been logged out."
