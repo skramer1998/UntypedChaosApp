@@ -46,7 +46,11 @@ class Terminal(models.Model):
 
     # DEBUGGING METHOD
     def accountList(self):
-        return Account.objects.all()
+        retList = []
+        for i in range(1, len(Account.objects.all())):
+            retList.append(Account.objects.get(id=i).user.username)
+        return retList
+        #return Account.objects.filter(id__range=(1,len(Account.objects.all())))
 
     def setNewPassword(self, user):  # CAN'T BE CALLED DIRECTLY
         if not user.has_usable_password():
@@ -214,12 +218,14 @@ class Account(models.Model):
             #return self
         print("ayyo let's create some shit")
         print(hash(othernameforid))
+        user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
         account = Account.objects.create(SignInName=othernameforid,
                                          userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
-                                         user_id=hash(othernameforid))
+                                         user_id=user.id)
+        #user_id=hash(othernameforid)
         #  user_id cannot be trusted to set itself. creating an accout where the username hashes to the same value as
         #  an existing account will fail.
-        user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
+
         account.user = user
         print(account)
         print(account.user)
