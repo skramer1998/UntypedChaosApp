@@ -221,7 +221,7 @@ class Account(models.Model):
         return Account.cls(Account(cls), userid, username, email, phone, address)
 
     def cls(self, othernameforid, username, email, userPhone, address):
-        if Account.objects.filter(SignInName=username).first() is not None:
+        if Account.objects.filter(SignInName=othernameforid).first() is not None:
             return "That username is already in use, please select a different one."
             #return self
         print("ayyo let's create some shit")
