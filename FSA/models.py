@@ -32,18 +32,18 @@ class Terminal(models.Model):
         print(user)
         if parseCmd[0].lower() == 'login':
             if len(parseCmd) > 1:
-                return self.login(parseCmd[1])
+                return self.login(parseCmd[1], parseCmd[2])
             else:
                 return "You need to provide login arguments!"
         elif parseCmd[0].lower() == 'createaccount':
-            if len(parseCmd) > 7:
+            if len(parseCmd) > 9:
                 #  print("branch 1")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
-                                          parseCmd[5], parseCmd[6], parseCmd[7])
-            elif len(parseCmd) > 6:
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+            elif len(parseCmd) > 8:
                 #  print("branch 2")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
-                                          parseCmd[5], parseCmd[6])
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
             else:
                 return "not enough args to create account"
         elif parseCmd[0].lower() == 'accountlist':
@@ -65,31 +65,30 @@ class Terminal(models.Model):
         return retList
         #return Account.objects.filter(id__range=(1,len(Account.objects.all())))
 
-    def setNewPassword(self, npuser):  # CAN'T BE CALLED DIRECTLY
+    def setNewPassword(self, npuser, passwordAttempt1, passwordAttempt2 ):  # CAN'T BE CALLED DIRECTLY
         global user
         if not npuser.has_usable_password():
             while True:
-                print("your account currently has no password. You'll have to set it by typing it in twice")
-                passwordAttempt1 = getpass.getpass()
-                passwordAttempt2 = getpass.getpass()
+                #print("your account currently has no password. You'll have to set it by typing it in twice")
                 if passwordAttempt1 == passwordAttempt2:
-                    print("good, you typed the same thing twice. your password is set and good to go")
+                    # print("good, you typed the same thing twice. your password is set and good to go")
                     npuser.set_password(passwordAttempt1)
                     npuser.save()
                     user = npuser
                     return self
                 else:
                     print("those didn't match. Try again")
+                    return self
         else:
             print("user has a usable password, \
             can't set new password with this function. use the account(.) something or other")
             return self
 
-    def createaccount(self, SignInName, name, email, phone, address):
+    def createaccount(self, SignInName, name, email, phone, address, password1, password2):
         print("called into createaccount")
-        return Account.create(SignInName, name, email, phone, address)
+        return Account.create(SignInName, name, email, phone, address, password1, password2)
 
-    def login(self, username):
+    def login(self, username, password):
         global user
         if user is not None:
             return "You're already signed in.  You must logout before you can re-sign in."
@@ -104,7 +103,7 @@ class Terminal(models.Model):
                 if not almostuser.has_usable_password():
                     #print("you'll have to set a password before you can login")
                     return self.setNewPassword(almostuser)
-                elif almostuser.check_password(getpass.getpass()):
+                elif almostuser.check_password(password):
                     #print(username + " is logged in")
                     user = almostuser
                     #print(self.user)
@@ -217,7 +216,7 @@ class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Associated Auth User+")
 
     @classmethod
-    def create(cls, userid, username, email, phone, address):
+    def create(cls, userid, username, email, phone, address, password1, password2):
         print("go t into create")
         '''x = username.split()
         if len(x) == 2:
@@ -225,9 +224,9 @@ class Account(models.Model):
         else:
               return cls(SignInName=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
         '''
-        return Account.cls(Account(cls), userid, username, email, phone, address)
+        return Account.cls(Account(cls), userid, username, email, phone, address, password1, password2)
 
-    def cls(self, othernameforid, username, email, userPhone, address):
+    def cls(self, othernameforid, username, email, userPhone, address, password1, password2):
         if Account.objects.filter(SignInName=othernameforid).first() is not None:
             return "That username is already in use, please select a different one."
             #return self
@@ -240,7 +239,8 @@ class Account(models.Model):
         #user_id=hash(othernameforid)
         #  user_id cannot be trusted to set itself. creating an accout where the username hashes to the same value as
         #  an existing account will fail.
-
+        terminal = Terminal()
+        terminal.setNewPassword(npuser=user, passwordAttempt1=password1, passwordAttempt2=password2)
         account.user = user
         print(account)
         print(account.user)
