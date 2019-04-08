@@ -9,7 +9,14 @@ class Terminal(models.Model):
     user = None
 
     def command(self, inStr):
-        return self.parseCommand(inStr)
+        cmdStr = inStr
+        #  would we want a loop here? break only when the cmd string is "exit?"
+        while cmdStr != "exit":
+            self.parseCommand(cmdStr)
+            print("enter next command")
+            cmdStr = raw_input() #fucc that is Not How to Do The Thing
+            print(cmdStr)
+        #  return self.parseCommand(inStr)
 
     # Parse the given input string based on whitespace
     # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
@@ -26,17 +33,19 @@ class Terminal(models.Model):
                 return "You need to provide login arguments!"
         elif parseCmd[0].lower() == 'createaccount':
             if len(parseCmd) > 7:
-                print("branch 1")
+                #  print("branch 1")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7])
             elif len(parseCmd) > 6:
-                print("branch 2")
+                #  print("branch 2")
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
                                           parseCmd[5], parseCmd[6])
             else:
                 return "not enough args to create account"
         elif parseCmd[0].lower() == 'accountlist':
             return self.accountList()
+        elif parseCmd[0].lower() == 'logout':
+            return self.logout()
         else:
             if self.user is None:
                 return "You are not logged in, you must login before entering commands."
