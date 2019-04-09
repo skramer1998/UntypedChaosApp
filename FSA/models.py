@@ -50,6 +50,12 @@ class Terminal(models.Model):
             return self.accountList()
         elif parseCmd[0].lower() == 'logout':
             return self.logout()
+        elif parseCmd[0].lower() == 'createcourse':
+            if len(parseCmd) > 9:
+                return self.createCourse(parseCmd[1], parseCmd[2], parseCmd[3], parseCmd[4],
+                                         parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+            else:
+                return "not enough args to create a new course"
         else:
             if user is None:
                 return "You are not logged in, you must login before entering commands."
@@ -129,6 +135,9 @@ class Terminal(models.Model):
             #print(self.user)
             return "You have been logged out."
 
+    def createCourse(self, name, number, place, days, time, semester, professor, ta, labs):
+        print("called into create Course")
+        return Course.create(name, number, place, days, time, semester, professor, ta, labs)
 
 class Course(models.Model):
     # need to change later. Lab class? courses can have more than one lab and more than one ta
@@ -144,7 +153,7 @@ class Course(models.Model):
 
     @classmethod
     def create(cls, name, number, place, days, time, semester, professor, ta, labs):
-        has_course = cls.search(name)
+        has_course = cls.search(Course(Course), name)
         if has_course:
             return "Course already exist"
         else:
@@ -164,8 +173,8 @@ class Course(models.Model):
         self.labs = labs
         self.save()
 
-    def search(name):
-        if Course.objects.get(name__contains=name):
+    def search(self, name):
+        if Course.objects.filter(name__contains=name).first()
             return True
         else:
             return False
