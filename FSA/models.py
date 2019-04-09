@@ -231,6 +231,9 @@ class Course(models.Model):
     def __str__(self):
         return self.name + " " + self.number + " " + self.place + " " + self.days + " " + self.time + " " + self.semester + " " + self.professor + " " + self.ta + "" + self.labs
 
+    def listCourses(self):
+        return tostr(Courses.objects.values_list)
+    #probs doesn't work but I wrote a line of code so here ya go
 
 class Account(models.Model):
     SignInName = models.CharField(max_length=30)
