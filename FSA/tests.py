@@ -191,7 +191,7 @@ class TestCourse(TestCase):
 
         self.assertFalse(Course.search("History"))
         self.assertFalse(Course.search("Chinese Horse Energy"))
-        # should both be fals.
+        # should both be false.
 
     def test_assignin(self):
         self.assertEqual(Course.assignin("History of Math", self.a4.userName),
