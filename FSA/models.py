@@ -69,7 +69,7 @@ class Terminal(models.Model):
     Print out the list of user accounts by SignInName.
     """
     def accountList(self):
-        return Account.objects.values_list('SignInName', flat=True)
+        return Account.objects.values_list('userName', flat=True)
 
     """
     Create the password for new accounts.
@@ -136,6 +136,7 @@ class Terminal(models.Model):
         print("called into create Course")
         return Course.create(name, number, place, days, time, semester, professor, ta, labs)
 
+
 class Course(models.Model):
     # need to change later. Lab class? courses can have more than one lab and more than one ta
     name = models.CharField(max_length=30)
@@ -171,7 +172,7 @@ class Course(models.Model):
         self.save()
 
     def search(self, name):
-        if Course.objects.filter(name__contains=name).first()
+        if Course.objects.filter(name__contains=name).first():
             return True
         else:
             return False
