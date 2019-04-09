@@ -69,7 +69,7 @@ class Terminal(models.Model):
     Print out the list of user accounts by SignInName.
     """
     def accountList(self):
-        return list(Account.objects.values_list('SignInName', 'userName'))
+        return "Account List: " + ", ".join(list(Account.objects.values_list('userName', flat=True)))
 
     """
     Create the password for new accounts.
