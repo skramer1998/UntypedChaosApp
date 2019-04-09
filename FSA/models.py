@@ -426,7 +426,7 @@ class Course(models.Model):
 
     def search(self, name):
         try:
-            check = Course.objects.get(name__contains=name)
+            check = Course.get(name__contains=name)
         except:
             check = None
         if check is not None:

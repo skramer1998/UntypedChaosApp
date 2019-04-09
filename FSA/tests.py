@@ -60,9 +60,9 @@ class TestAccount(TestCase):
         # checks not blank
 
     def test_editSelf(self):
-        self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
-        self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
-        self.assertEqual(self.a1.editSelf(userid="NateDog"), "Incorrect parameters given.")
+        # self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
+        # self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
+        # self.assertEqual(self.a1.editSelf(userid="NateDog"), "Incorrect parameters given.")
         # bad parameters for editSelf, should only return the appropriate string
 
         self.assertEqual(self.a1.editSelf(userid="NateDog", username="Nate Y", email="x@gmail.com",
@@ -86,7 +86,6 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.user.password, "code")
         self.assertEqual(self.a1.user.id, self.i)
         # checks if editSelf worked correctly with correct parameters
-
 
         """
     def test_editOther(self):
@@ -151,37 +150,78 @@ class TestAccount(TestCase):
 class TestCourse(TestCase):
 
     def setUp(self):
+        self.a1 = Account.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
+                                 phone=1234567890, address="22 Middleton rd", password1="password",
+                                 password2="password", id=4)
+        self.a2 = Account.create(userid="Andres3", username="Andres Z", email="sweatshirt@gmail.com",
+                                 phone=2121212121, address="34 Giannis rd", password1="password",
+                                 password2="password", id=3)
+        self.a3 = Account.create(userid="Sean2", username="Sean Z", email="tshirt@gmail.com",
+                                 phone=4145554444, address="13 Brogdon ave", password1="password",
+                                 password2="password", id=2)
+        self.a4 = Account.create(userid="Tyler1", username="Tyler Z", email="jersey@gmail.com",
+                                 phone=4207106969, address="11 Bledsoe ct", password1="password",
+                                 password2="password", id=1)
+
+        # create 4 accounts for assign functions
+
         self.c1 = Course.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING")
         self.c2 = Course.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING")
         # create our test courses
 
-        pass
-
     def testCreate(self):
+        self.assertEqual(self.c1.name, "History of Math")
+        self.assertEqual(self.c1.number, "200")
+        self.assertEqual(self.c1.place, "EMS")
+        self.assertEqual(self.c1.days, "MWF")
+        self.assertEqual(self.c1.time, "01:00 - 01:50")
+        self.assertEqual(self.c1.semester, "FALL")
+        self.assertEqual(self.c1.proffessor, "ROCK")
+        self.assertEqual(self.c1.ta, "LING")
+        # checks course c1 was created properly
+
         self.assertEqual(
-            self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                           self.c1.professor, self.c1.ta), "Course was created")
+            Course.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
+                          self.c1.professor, self.c1.ta), "That course already exists.")
         # should return this if already exists
 
-        self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta)
-        self.assertEqual(
-            self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                           self.c1.professor, self.c1.ta), "Course already exist")
-        # should return this if already exists
-        pass
-
-    """
     def testSearch(self):
-        self.assertTrue(self.c2.search("History of Baths"))
+        self.assertTrue(Course.search("History of Baths"))
         # should be true
 
-        self.assertFalse(self.c2.search("History"))
-        self.assertFalse(self.c2.search("Chinese Horse Energy"))
-        # should both be false
-        pass
-        """
+        self.assertFalse(Course.search("History"))
+        self.assertFalse(Course.search("Chinese Horse Energy"))
+        # should both be fals.
 
+    def test_assignin(self):
+        self.assertEqual(Course.assignin("History of Math", self.a4.userName),
+                         "Administrators and Supervisors cannot be assigned to a course.")
+        self.assertEqual(Course.assignin("History of Math", self.a3.userName),
+                         "Administrators and Supervisors cannot be assigned to a course.")
+        # attempts to set a supervisor/admin to a course
+
+        self.assertEqual(Course.assignin("Clown Class", self.a1.userName), "There is no account named Rick Flair")
+        self.assertEqual(Course.assignin("History of Math", "Rick Flair"), "There is no course named Clown Class")
+        # checks parameters exist
+
+    def test_assignta(self):
+        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
+                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
+        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
+                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
+        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
+                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
+        # attempts setting non TA to a lab
+
+        self.assertEqual(Course.assignta("Clown Class", self.a1.userName), "There is no account named Rick Flair")
+        self.assertEqual(Course.assignta("History of Math", "Rick Flair"), "There is no course named Clown Class")
+        # checks parameters exist
+
+    def test__str__(self):
+        self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
+        # asserts toStr has correct format
+
+    """
     def testSet(self):
         self.c2.setname("Shower Physics")
         self.c2.setnumber(100)
@@ -227,8 +267,4 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.search("History of Baths"))
         # checks updated names in search
         pass
-
-    def testStr(self):
-        self.assertEqual(self.c2.tostr(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
-        # asserts toStr has correct format
-        pass
+    """
