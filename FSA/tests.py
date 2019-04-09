@@ -12,16 +12,16 @@ class TestAccount(TestCase):
         self.s = 1
         # 4 ID's
 
-        self.a1 = Account.objects.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
+        self.a1 = Account.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
                                          phone=1234567890, address = "22 Middleton rd", password1 = "password",
                                          password2 = "password", groupid = self.t)
-        self.a2 = Account.objects.create(userid="Andres3", username="Andres Z", email="sweatshirt@gmail.com",
+        self.a2 = Account.create(userid="Andres3", username="Andres Z", email="sweatshirt@gmail.com",
                                          phone=2121212121, address="34 Giannis rd", password1="password",
                                          password2="password", groupid=self.i)
-        self.a3 = Account.objects.create(userid="Sean2", username="Sean Z", email="tshirt@gmail.com",
+        self.a3 = Account.create(userid="Sean2", username="Sean Z", email="tshirt@gmail.com",
                                          phone=4145554444, address="13 Brogdon ave", password1="password",
                                          password2="password", groupid=self.a)
-        self.a4 = Account.objects.create(userid="Tyler1", username="Tyler Z", email="jersey@gmail.com",
+        self.a4 = Account.create(userid="Tyler1", username="Tyler Z", email="jersey@gmail.com",
                                          phone=4207106969, address="11 Bledsoe ct", password1="password",
                                          password2="password", groupid=self.s)
         # creates 4 accounts with each level of ID
@@ -140,24 +140,21 @@ class TestAccount(TestCase):
 class TestCourse(TestCase):
 
     def setUp(self):
-        self.c1 = Course.objects.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING", 4)
-        self.c2 = Course.objects.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING", 15)
+        self.c1 = Course.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING")
+        self.c2 = Course.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING")
         # create our test courses
 
-        self.c2.create(self.c2.name, self.c2.number, self.c2.place, self.c2.days, self.c2.time, self.c2.semester,
-                       self.c2.professor, self.c2.ta, self.c2.labs)
-        # create user class for c2
         pass
 
     def testCreate(self):
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta, self.c1.labs), "Course was created")
+                       self.c1.professor, self.c1.ta), "Course was created")
         # should return this if already exists
 
         self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta, self.c1.labs)
+                       self.c1.professor, self.c1.ta)
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta, self.c1.labs), "Course already exist")
+                       self.c1.professor, self.c1.ta), "Course already exist")
         # should return this if already exists
         pass
 
@@ -181,7 +178,6 @@ class TestCourse(TestCase):
         self.c2.setsemester("SPRING")
         self.c2.setprofessor("GLOCK")
         self.c2.setta("PING")
-        self.c2.setlabs(1)
         # sets new values
 
         self.assertEqual(self.c2.name, "Shower Physics")
@@ -192,7 +188,6 @@ class TestCourse(TestCase):
         self.assertEqual(self.c2.semester, "SPRING")
         self.assertEqual(self.c2.professor, "GLOCK")
         self.assertEqual(self.c2.ta, "PING")
-        self.assertEqual(self.c2.labs, 1)
         # checks correctly set
 
         self.assertFalse(self.c2.setname())
@@ -203,7 +198,6 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.setsemester())
         self.assertFalse(self.c2.setprofessor())
         self.assertFalse(self.c2.setta())
-        self.assertFalse(self.c2.setlabs())
         # checks empty set
 
         self.assertFalse(self.c2.setname(12))
@@ -214,7 +208,6 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.setsemester(12))
         self.assertFalse(self.c2.setprofessor(12))
         self.assertFalse(self.c2.setta(12))
-        self.assertFalse(self.c2.setlabs("hello"))
         # checks incorrectly set
 
         self.assertTrue(self.c2.search("Shower Physics"))
