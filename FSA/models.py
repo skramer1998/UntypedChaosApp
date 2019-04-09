@@ -3,11 +3,12 @@ from django.db import models
 from django.contrib.auth.models import User
 import getpass
 
-# User object
+"""
+This is our global user object to keep track of who is logged in, it's not elegant, but it works...
+"""
 user = None
 
 
-# Create your models here.
 class Terminal(models.Model):
 
     """
@@ -37,20 +38,20 @@ class Terminal(models.Model):
                 return self.login(parseCmd[1], parseCmd[2])
             else:
                 return "You need to provide login arguments!"
+        elif parseCmd[0].lower() == 'createaccount':
+            if len(parseCmd) > 9:
+                #  print("branch 1")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+            elif len(parseCmd) > 8:
+                #  print("branch 2")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
+            else:
+                return "not enough args to create account"
         else:
             if user is None:
                 return "You are not logged in, you must login before entering commands."
-            elif parseCmd[0].lower() == 'createaccount':
-                if len(parseCmd) > 9:
-                    #  print("branch 1")
-                    return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
-                                              parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
-                elif len(parseCmd) > 8:
-                    #  print("branch 2")
-                    return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
-                                              parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
-                else:
-                    return "not enough args to create account"
             elif parseCmd[0].lower() == 'accountlist':
                 return self.accountList()
             elif parseCmd[0].lower() == 'logout':
@@ -65,15 +66,15 @@ class Terminal(models.Model):
                 return self.help()
 
     """
-    Print out the list of user accounts by SignInName.
+    Print out the list of user accounts by userName.
     """
     def accountList(self):
         return "Account List: " + ", ".join(list(Account.objects.values_list('userName', flat=True)))
 
     """
-    Create the password for new accounts.
+    Create the password for new accounts. This is an internal function, not to be called directly.
     """
-    def setNewPassword(self, npuser, passwordAttempt1, passwordAttempt2 ):  # CAN'T BE CALLED DIRECTLY
+    def setNewPassword(self, npuser, passwordAttempt1, passwordAttempt2 ):
         global user
         if not npuser.has_usable_password():
             while True:
@@ -89,6 +90,9 @@ class Terminal(models.Model):
             can't set new password with this function. use the account(.) something or other")
             return self
 
+    """
+    A list of all commands, what they do, and how to use them.
+    """
     def help(self):
         return "Commands: \n----------------\
               \n\nlogin-- sign into an existing account.\nusage: login Username Password\
@@ -100,7 +104,6 @@ class Terminal(models.Model):
               professor ta #OfLabs\
               \n\nlistCourses-- lists all courses\nusage: listCourses"
 
-
     """
     Create a new account.
     """
@@ -108,6 +111,9 @@ class Terminal(models.Model):
         Account.create(SignInName, name, email, phone, address, password1, password2)
         return "Your account was successfully created! You were also signed in."
 
+    """
+    Login to an existing account.
+    """
     def login(self, username, password):
         global user
         if user is not None:
