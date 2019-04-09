@@ -45,8 +45,8 @@ class TestAccount(TestCase):
         self.assertEqual(self.a2.userPhone, 2121212121)
         self.assertEqual(self.a2.userAddress, "34 Giannis rd")
         # Cannot check password values from account object
-        #self.assertEqual(self.a2.password1, "password")
-        #self.assertEqual(self.a2.password2, "password")
+        # self.assertEqual(self.a2.password1, "password")
+        # self.assertEqual(self.a2.password2, "password")
         self.assertEqual(self.a2.groupid, self.i)
         # checks Account a2 was created properly
 
@@ -55,8 +55,8 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.userEmail, "")
         self.assertNotEqual(self.a2.userPhone, "")
         self.assertNotEqual(self.a2.userAddress, "")
-        #self.assertNotEqual(self.a2.password1, "")
-        #self.assertNotEqual(self.a2.password2, "")
+        # self.assertNotEqual(self.a2.password1, "")
+        # self.assertNotEqual(self.a2.password2, "")
         self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
