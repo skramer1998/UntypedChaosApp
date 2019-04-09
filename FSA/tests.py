@@ -161,7 +161,7 @@ class TestCourse(TestCase):
         # should return this if already exists
         pass
 
-"""
+    """
     def testSearch(self):
         self.assertTrue(self.c2.search("History of Baths"))
         # should be true
@@ -170,7 +170,7 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.search("Chinese Horse Energy"))
         # should both be false
         pass
-"""
+    """
 
     def testSet(self):
         self.c2.setname("Shower Physics")
