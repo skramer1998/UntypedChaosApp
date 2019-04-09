@@ -404,6 +404,7 @@ class Course(models.Model):
             try:
                 accountp = Account.objects.filter(SignInName=professor)
                 accountp = accountp.first()
+                if accountp is None: return "Professor needs to be an account"
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 3:
@@ -413,6 +414,7 @@ class Course(models.Model):
             try:
                 accountta = Account.objects.filter(SignInName=ta)
                 accountta = accountta.first()
+                if accountta is None: return "TA needs to be an account"
                 temp = Account()
                 temp = temp.getid(accountta)
                 if temp < 4:
