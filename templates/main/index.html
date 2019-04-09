@@ -1,9 +1,11 @@
 {% extends "main/base.html" %}
 {% block content %}
-  <form style="text-align: center" method="post" action="/" >
+  <form method="post" action="/" >
   {% csrf_token %}
     Command: <input type="text" name="command" autocomplete="off" size="100" autofocus="autofocus"><br/>
-    <input type="submit">
+      <p></p>
+      <input type="submit">
   </form>
-  <p>{{message}}</p>
+  <p style = "color:firebrick">{{message}}</p>
+  <img src="https://i.pinimg.com/originals/92/ee/93/92ee936ffdec0749407abe674677b257.png" alt="Oxford" width="200px" height="250px">
 {% endblock content %}
