@@ -1,7 +1,6 @@
 from django.test import TestCase
 from FSA.models import Account
 from FSA.models import Course
-from FSA.models import Terminal
 
 
 class TestAccount(TestCase):
@@ -187,11 +186,11 @@ class TestCourse(TestCase):
         # should return this if already exists
 
     def testSearch(self):
-        self.assertTrue(Terminal.courseSearch("History of Baths"))
+        self.assertTrue(self.c1.search("History of Baths"))
         # should be true
 
-        self.assertFalse(Terminal.courseSearch("History"))
-        self.assertFalse(Terminal.courseSearch("Chinese Horse Energy"))
+        self.assertFalse(self.c2.search("History"))
+        self.assertFalse(self.c2.search("Chinese Horse Energy"))
         # should both be false.
 
     def test_assignin(self):
