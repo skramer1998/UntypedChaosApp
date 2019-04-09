@@ -1,6 +1,7 @@
 from django.test import TestCase
 from FSA.models import Account
 from FSA.models import Course
+from FSA.models import Terminal
 
 
 class TestAccount(TestCase):
@@ -165,8 +166,8 @@ class TestCourse(TestCase):
 
         # create 4 accounts for assign functions
 
-        self.c1 = Course.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING")
-        self.c2 = Course.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING")
+        self.c1 = Course.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "Andres3", "Nate4")
+        self.c2 = Course.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "Andres3", "Nate4")
         # create our test courses
 
     def testCreate(self):
@@ -186,11 +187,11 @@ class TestCourse(TestCase):
         # should return this if already exists
 
     def testSearch(self):
-        self.assertTrue(Course.search("History of Baths"))
+        self.assertTrue(Terminal.courseSearch("History of Baths"))
         # should be true
 
-        self.assertFalse(Course.search("History"))
-        self.assertFalse(Course.search("Chinese Horse Energy"))
+        self.assertFalse(Terminal.courseSearch("History"))
+        self.assertFalse(Terminal.courseSearch("Chinese Horse Energy"))
         # should both be false.
 
     def test_assignin(self):
