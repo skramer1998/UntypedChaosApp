@@ -267,8 +267,8 @@ class Account(models.Model):
         else:
             print("the new passwords don't match, start again from the beginning.")
 
+    def editSelf(self, userid, username, email, phone, address, password1, password2, id):
 
-    def editSelf(self, name, id, email, phone, address):
         """self.user.userid = id
         self.user.username = name
         self.user.userEmail = email
@@ -278,12 +278,12 @@ class Account(models.Model):
         self.userPhone = phone
         self.userAddress = address
         self.user.save()"""
-        return False
+        return "did not set for this reason: "
         # not updated for working with latest version of account-- will be split up and made to work in next sprint
-
 
     def getid(self, account):
         return account.groupid
+
 
 """
     def grantGroupStatus(self, user, groupName):  # supervisors and admins can grant permissions

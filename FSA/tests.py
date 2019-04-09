@@ -30,7 +30,7 @@ class TestAccount(TestCase):
         self.assertEqual(Account.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
                                         phone=1234567890, address="22 Middleton rd", password1="",
                                         password2="", id=self.t),
-                         "passwords don't match, couldn't create account")
+                         "password cannot be blank")
         # blank password
 
         self.assertEqual(Account.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
@@ -60,27 +60,35 @@ class TestAccount(TestCase):
         # checks not blank
 
     def test_editSelf(self):
-        self.assertFalse(self.a1.editSelf())
-        self.assertFalse(self.a1.editSelf("Howdy yall, I'm Towly!"))
-        self.assertFalse(self.a1.editSelf('a', self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(self.a1.editSelf("NateDog", "iNstRectAr", "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", 42, 1010101010))
-        self.assertFalse(self.a1.editSelf("NateDog", self.I, "NAT@", "The Trap House", 1010101010))
-        self.assertFalse(self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1))
-        # bad parameters for editSelf
+        self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
+        self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
+        self.assertEqual(self.a1.editSelf(userid="NateDog"), "Incorrect parameters given.")
+        # bad parameters for editSelf, should only return the appropriate string
 
-        self.a1.editSelf("NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010)
+        self.assertEqual(self.a1.editSelf(userid="NateDog", username="Nate Y", email="x@gmail.com",
+                                          phone=1010101010, address="The Trap", password1="code",
+                                          password2="binary", id=self.i),
+                         "passwords don't match, couldn't create account")
+        self.assertEqual(self.a1.editSelf(userid="NateDog", username="Nate Y", email="x@gmail.com",
+                                          phone=1010101010, address="The Trap", password1="",
+                                          password2="", id=self.i), "password cannot be blank")
+        # invalid passwords
+
+        self.a1.editSelf(userid="NateDog", username="Nate Y", email="x@gmail.com",
+                         phone=1010101010, address="The Trap", password1="code",
+                         password2="code", id=self.i)
         self.assertEqual(self.a1.user.username, "NateDog")
-        self.assertEqual(self.a1.user.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userName, "NateDog")
-        self.assertEqual(self.a1.userID, self.I)
-        self.assertEqual(self.a1.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userPhone, 1010101010)
-        self.assertEqual(self.a1.userAddress, "The Trap House")
-        self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
+        self.assertEqual(self.a1.user.first_name, "Nate")
+        self.assertEqual(self.a1.user.last_name, "Y")
+        self.assertEqual(self.a1.user.email, "Nate")
+        self.assertEqual(self.a1.userPhone, "1010101010")
+        self.assertEqual(self.a1.userAddress, "The Trap")
+        self.assertEqual(self.a1.user.password, "code")
+        self.assertEqual(self.a1.user.id, self.i)
         # checks if editSelf worked correctly with correct parameters
-        pass
 
+
+        """
     def test_editOther(self):
         self.assertFalse(
             self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
@@ -137,6 +145,7 @@ class TestAccount(TestCase):
         self.assertTrue(self.a4.createCourse())
         # checks only accounts with proper ID can create courses
         pass
+    """
 
 
 class TestCourse(TestCase):
