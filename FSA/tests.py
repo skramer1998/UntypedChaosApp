@@ -140,25 +140,28 @@ class TestAccount(TestCase):
 class TestCourse(TestCase):
 
     def setUp(self):
-        self.c1 = Course.objects.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING")
-        self.c2 = Course.objects.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING")
+        self.c1 = Course.objects.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "ROCK", "LING", 4)
+        self.c2 = Course.objects.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "SOCK", "TING", 15)
         # create our test courses
 
+        self.c2.create(self.c2.name, self.c2.number, self.c2.place, self.c2.days, self.c2.time, self.c2.semester,
+                       self.c2.professor, self.c2.ta, self.c2.labs)
+        # create user class for c2
         pass
 
     def testCreate(self):
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta), "Course was created")
+                       self.c1.professor, self.c1.ta, self.c1.labs), "Course was created")
         # should return this if already exists
 
         self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta)
+                       self.c1.professor, self.c1.ta, self.c1.labs)
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                       self.c1.professor, self.c1.ta), "Course already exist")
+                       self.c1.professor, self.c1.ta, self.c1.labs), "Course already exist")
         # should return this if already exists
         pass
 
-        """
+"""
     def testSearch(self):
         self.assertTrue(self.c2.search("History of Baths"))
         # should be true
@@ -167,7 +170,7 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.search("Chinese Horse Energy"))
         # should both be false
         pass
-        """
+"""
 
     def testSet(self):
         self.c2.setname("Shower Physics")
@@ -178,6 +181,7 @@ class TestCourse(TestCase):
         self.c2.setsemester("SPRING")
         self.c2.setprofessor("GLOCK")
         self.c2.setta("PING")
+        self.c2.setlabs(1)
         # sets new values
 
         self.assertEqual(self.c2.name, "Shower Physics")
@@ -188,6 +192,7 @@ class TestCourse(TestCase):
         self.assertEqual(self.c2.semester, "SPRING")
         self.assertEqual(self.c2.professor, "GLOCK")
         self.assertEqual(self.c2.ta, "PING")
+        self.assertEqual(self.c2.labs, 1)
         # checks correctly set
 
         self.assertFalse(self.c2.setname())
@@ -198,6 +203,7 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.setsemester())
         self.assertFalse(self.c2.setprofessor())
         self.assertFalse(self.c2.setta())
+        self.assertFalse(self.c2.setlabs())
         # checks empty set
 
         self.assertFalse(self.c2.setname(12))
@@ -208,6 +214,7 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.setsemester(12))
         self.assertFalse(self.c2.setprofessor(12))
         self.assertFalse(self.c2.setta(12))
+        self.assertFalse(self.c2.setlabs("hello"))
         # checks incorrectly set
 
         self.assertTrue(self.c2.search("Shower Physics"))
