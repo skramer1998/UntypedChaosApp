@@ -9,84 +9,87 @@ user = None
 
 # Create your models here.
 class Terminal(models.Model):
-    #termUser = user
 
-    def command(self, inStr):
-        cmdStr = inStr
-        #  would we want a loop here? break only when the cmd string is "exit?"
-        #while cmdStr != "exit":
-        return self.parseCommand(cmdStr)
-            #print("enter next command")
-            #cmdStr = raw_input("") #fucc that is Not How to Do The Thing
-            #print(cmdStr)
-        #return self.parseCommand(inStr)
+    """
+    Terminal Class: The class used to make the webpage comamnd line work correctly
+    """
 
-    # Parse the given input string based on whitespace
-    # Check to see if the user is trying to login, if they are follow that protocol, if they are not check to see if
-    # they are already logged in.  If they are not then tell them to login.  If they are, continue on processing
-    # the parsed command.
-    def parseCommand(self, cmdStr):
+    """
+    Function called by the Home view, immediately passes input to the command parser.
+    """
+    def command(self, input_string):
+        command_string = input_string
+        return self.parseCommand(command_string)
+
+    """
+    Parse the given input string based on whitespace.
+    Check to see if the user is trying to login, if they are follow protocol, if they are not check to see if
+    they are already logged in.  IF they are not tell them to login.  IF they are, continue on processing
+    the parsed command.
+    """
+    def parseCommand(self, command_string):
         global user
-        parseCmd = cmdStr.split()
-        print(parseCmd[0].lower())
+        parsed_command = command_string.split()
+        print(parsed_command[0].lower())
         print(user)
-        if parseCmd[0].lower() == 'login':
-            if len(parseCmd) > 2:
-                return self.login(parseCmd[1], parseCmd[2])
+        if parsed_command[0].lower() == 'login':
+            if len(parsed_command) > 2:
+                return self.login(parsed_command[1], parsed_command[2])
             else:
                 return "You need to provide login arguments!"
-        elif parseCmd[0].lower() == 'createaccount':
-            if len(parseCmd) > 9:
-                #  print("branch 1")
-                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
-                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
-            elif len(parseCmd) > 8:
-                #  print("branch 2")
-                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
-                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
-            else:
-                return "not enough args to create account"
-        elif parseCmd[0].lower() == 'accountlist':
-            return self.accountList()
-        elif parseCmd[0].lower() == 'logout':
-            return self.logout()
         else:
             if user is None:
                 return "You are not logged in, you must login before entering commands."
+            elif parsed_command[0].lower() == 'createaccount':
+                if len(parsed_command) > 9:
+                    #  print("branch 1")
+                    return self.createaccount(parsed_command[1], "" + parsed_command[2] + " " + parsed_command[3] + " " + parsed_command[4],
+                                              parsed_command[5], parsed_command[6], parsed_command[7], parsed_command[8], parsed_command[9])
+                elif len(parsed_command) > 8:
+                    #  print("branch 2")
+                    return self.createaccount(parsed_command[1], "" + parsed_command[2] + " " + parsed_command[3], parsed_command[4],
+                                              parsed_command[5], parsed_command[6], parsed_command[7], parsed_command[8])
+                else:
+                    return "not enough args to create account"
+            elif parsed_command[0].lower() == 'accountlist':
+                return self.accountList()
+            elif parsed_command[0].lower() == 'logout':
+                return self.logout()
             else:
                 # The rest of command parsing will occur here.
                 return "You are logged in, cool."
 
-    # DEBUGGING METHOD
+    """
+    Print out the list of user accounts by SignInName.
+    """
     def accountList(self):
-        retList = []
-        for i in range(1, len(Account.objects.all())):
-            retList.append(Account.objects.get(id=i).user.username)
-        return retList
-        #return Account.objects.filter(id__range=(1,len(Account.objects.all())))
+        return Account.objects.values_list('SignInName', flat=True)
 
+    """
+    Create the password for new accounts.
+    """
     def setNewPassword(self, npuser, passwordAttempt1, passwordAttempt2 ):  # CAN'T BE CALLED DIRECTLY
         global user
         if not npuser.has_usable_password():
             while True:
-                #print("your account currently has no password. You'll have to set it by typing it in twice")
                 if passwordAttempt1 == passwordAttempt2:
-                    # print("good, you typed the same thing twice. your password is set and good to go")
                     npuser.set_password(passwordAttempt1)
                     npuser.save()
                     user = npuser
-                    return self
+                    return "Account password set correctly"
                 else:
-                    print("those didn't match. Try again")
-                    return self
+                    return "Your passwords don't match, please try again."
         else:
             print("user has a usable password, \
             can't set new password with this function. use the account(.) something or other")
             return self
 
+    """
+    Create a new account.
+    """
     def createaccount(self, SignInName, name, email, phone, address, password1, password2):
-        print("called into createaccount")
-        return Account.create(SignInName, name, email, phone, address, password1, password2)
+        Account.create(SignInName, name, email, phone, address, password1, password2)
+        return "Your account was successfully created! You were also signed in."
 
     def login(self, username, password):
         global user
@@ -95,21 +98,15 @@ class Terminal(models.Model):
         else:
             almostuser = Account.objects.filter(SignInName=username).first()
             if almostuser is None:
-                #print(len(Account.objects.all()))
-                #print(Account.objects.filter(SignInName=username))
                 return "No user exists with that username."
             else:
                 almostuser = almostuser.user
                 if not almostuser.has_usable_password():
-                    #print("you'll have to set a password before you can login")
                     return self.setNewPassword(almostuser)
                 elif almostuser.check_password(password):
-                    #print(username + " is logged in")
                     user = almostuser
-                    #print(self.user)
                     return username + " successfully logged in."
                 else:
-                    #print("passwords don't match")
                     return "Incorrect password entered."
             # look up username
             # if username is real, get password
