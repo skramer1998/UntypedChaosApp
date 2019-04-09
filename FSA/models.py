@@ -42,10 +42,14 @@ class Terminal(models.Model):
         elif parseCmd[0].lower() == 'createaccount':
             if len(parseCmd) > 10:
                 #  print("branch 1")
+                if parseCmd[10] > 4 or parseCmd[10] < 1:
+                    return "Invalid groupID"
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9], parseCmd[10])
             elif len(parseCmd) > 9:
                 #  print("branch 2")
+                if parseCmd[9] > 4 or parseCmd[9] < 1:
+                    return "Invalid groupID"
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
             else:
@@ -111,13 +115,16 @@ class Terminal(models.Model):
     def help(self):
         return "Commands: \n----------------\
               \n\nlogin-- sign into an existing account.\nusage: login Username Password\
-              \n\n\logout-- sign out from your account\nusage: logout\
+              \n\nlogout-- sign out from your account\nusage: logout\
               \n\ncreateaccount-- makes a new account, default permissions none.\nusage: createaccount SignInName\
               FirstName [MiddleName(optional)] LastName Email Phone Address NewAccountpassword NewAccountpassword\
+              groupID\ngroupID values: 1-supervisor, 2-administrator, 3-instructor, 4-TA\
               \n\naccountlist-- returns a list of all accounts\nusage: accountlist\
               \n\ncreatecourse-- creates a new course\nusage: createcourse name number place days time semester\
               professor ta\
-              \n\ncourselist-- lists all courses\nusage: courselist"
+              \n\ncourselist-- lists all courses\nusage: courselist\
+              \n\nassignin-- assigns an instructor to a course\nusage: assignin coursename newprofessor\
+              \n\nassignta-- assigns a TA to a course\nusage: assignta coursename newta"
 
 
     """
@@ -480,4 +487,4 @@ class Course(models.Model):
     # call Course.objects.all() to get all courses to string
     def __str__(self):
         return str(self.name) + " " + str(self.number) + " " + str(self.place) + " " + str(self.days) + " " + str(
-            self.time) + " " + str(self.semester) + " " + str(self.professor) + " " + str(self.ta)
+            self.time) + " " + str(self.semester) + " " + self.professor + " " + str(self.ta)
