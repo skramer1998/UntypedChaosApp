@@ -131,30 +131,31 @@ class Terminal(models.Model):
                     return username + " successfully logged in."
                 else:
                     return "Incorrect password entered."
-            # look up username
-            # if username is real, get password
-            # validate password
-            # if correct, set user equal to the account
-            # if incorrect, print "wrong password" and end the function call
-            # password = getpass.getpass()
 
+    """
+    Logout of currently logged in account, if possible.
+    """
     def logout(self):
         global user
         if user is None:
-            #print("you aren't logged in, so you can't log out")
             return "You aren't logged in, so you can't log out."
         else:
             user = None
-            #print("logged out")
-            #print(self.user)
             return "You have been logged out."
 
+    """
+    Create a course using the given information
+    """
     def createCourse(self, name, number, place, days, time, semester, professor, ta, labs):
-        print("called into create Course")
         return Course.create(name, number, place, days, time, semester, professor, ta, labs)
 
 
 class Course(models.Model):
+
+    """
+    Courses Class: The class used to store course objects / edit / create them
+    """
+
     # need to change later. Lab class? courses can have more than one lab and more than one ta
     name = models.CharField(max_length=30)
     number = models.IntegerField(default=0)
