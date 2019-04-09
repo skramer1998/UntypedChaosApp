@@ -27,34 +27,40 @@ class Terminal(models.Model):
     they are already logged in.  IF they are not tell them to login.  IF they are, continue on processing
     the parsed command.
     """
-    def parseCommand(self, command_string):
+    def parseCommand(self, cmdStr):
         global user
-        parsed_command = command_string.split()
-        print(parsed_command[0].lower())
+        parseCmd = cmdStr.split()
+        print(parseCmd[0].lower())
         print(user)
-        if parsed_command[0].lower() == 'login':
-            if len(parsed_command) > 2:
-                return self.login(parsed_command[1], parsed_command[2])
+        if parseCmd[0].lower() == 'login':
+            if len(parseCmd) > 2:
+                return self.login(parseCmd[1], parseCmd[2])
             else:
                 return "You need to provide login arguments!"
+        elif parseCmd[0].lower() == 'createaccount':
+            if len(parseCmd) > 9:
+                #  print("branch 1")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+            elif len(parseCmd) > 8:
+                #  print("branch 2")
+                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
+                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
+            else:
+                return "not enough args to create account"
+        elif parseCmd[0].lower() == 'accountlist':
+            return self.accountList()
+        elif parseCmd[0].lower() == 'logout':
+            return self.logout()
+        elif parseCmd[0].lower() == 'createcourse':
+            if len(parseCmd) > 9:
+                return self.createCourse(parseCmd[1], parseCmd[2], parseCmd[3], parseCmd[4],
+                                         parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+            else:
+                return "not enough args to create a new course"
         else:
             if user is None:
                 return "You are not logged in, you must login before entering commands."
-            elif parsed_command[0].lower() == 'createaccount':
-                if len(parsed_command) > 9:
-                    #  print("branch 1")
-                    return self.createaccount(parsed_command[1], "" + parsed_command[2] + " " + parsed_command[3] + " " + parsed_command[4],
-                                              parsed_command[5], parsed_command[6], parsed_command[7], parsed_command[8], parsed_command[9])
-                elif len(parsed_command) > 8:
-                    #  print("branch 2")
-                    return self.createaccount(parsed_command[1], "" + parsed_command[2] + " " + parsed_command[3], parsed_command[4],
-                                              parsed_command[5], parsed_command[6], parsed_command[7], parsed_command[8])
-                else:
-                    return "not enough args to create account"
-            elif parsed_command[0].lower() == 'accountlist':
-                return self.accountList()
-            elif parsed_command[0].lower() == 'logout':
-                return self.logout()
             else:
                 # The rest of command parsing will occur here.
                 return "You are logged in, cool."
@@ -126,6 +132,9 @@ class Terminal(models.Model):
             #print(self.user)
             return "You have been logged out."
 
+    def createCourse(self, name, number, place, days, time, semester, professor, ta, labs):
+        print("called into create Course")
+        return Course.create(name, number, place, days, time, semester, professor, ta, labs)
 
 class Course(models.Model):
     # need to change later. Lab class? courses can have more than one lab and more than one ta
@@ -141,7 +150,7 @@ class Course(models.Model):
 
     @classmethod
     def create(cls, name, number, place, days, time, semester, professor, ta, labs):
-        has_course = cls.search(name)
+        has_course = cls.search(Course(Course), name)
         if has_course:
             return "Course already exist"
         else:
@@ -161,8 +170,8 @@ class Course(models.Model):
         self.labs = labs
         self.save()
 
-    def search(name):
-        if Course.objects.get(name__contains=name):
+    def search(self, name):
+        if Course.objects.filter(name__contains=name).first()
             return True
         else:
             return False
