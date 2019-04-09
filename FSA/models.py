@@ -215,6 +215,8 @@ class Account(models.Model):
     def create(cls, userid, username, email, phone, address, password1, password2, id):
         if password1 != password2:
             return "passwords don't match, couldn't create account"
+        elif not password1 or not password2:
+            return "password cannot be blank"
         #  print("go t into create")
         '''x = username.split()
         if len(x) == 2:

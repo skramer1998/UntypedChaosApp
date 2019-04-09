@@ -27,7 +27,7 @@ class TestAccount(TestCase):
         # creates 4 accounts with each level of ID
 
     def test_create(self):
-        self.assertEqual(Account.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
+        self.assertEqual(Account.create(userid="Nate5", username="Nate Z", email="glasses@gmail.com",
                                         phone=1234567890, address="22 Middleton rd", password1="",
                                         password2="", id=self.t),
                          "password cannot be blank")
@@ -39,24 +39,25 @@ class TestAccount(TestCase):
                          "passwords don't match, couldn't create account")
         # passwords do not match
 
-        self.assertEqual(self.a2.userid, "Andres3")
-        self.assertEqual(self.a2.username, "Andres Z")
-        self.assertEqual(self.a2.email, "sweatshirt@gmail.com")
-        self.assertEqual(self.a2.phone, 2121212121)
-        self.assertEqual(self.a2.address, "34 Giannis rd")
-        self.assertEqual(self.a2.password1, "password")
-        self.assertEqual(self.a2.password2, "password")
-        self.assertEqual(self.a2.id, self.i)
+        self.assertEqual(self.a2.SignInName, "Andres3")
+        self.assertEqual(self.a2.userName, "Andres Z")
+        self.assertEqual(self.a2.userEmail, "sweatshirt@gmail.com")
+        self.assertEqual(self.a2.userPhone, 2121212121)
+        self.assertEqual(self.a2.userAddress, "34 Giannis rd")
+        # Cannot check password values from account object
+        #self.assertEqual(self.a2.password1, "password")
+        #self.assertEqual(self.a2.password2, "password")
+        self.assertEqual(self.a2.groupid, self.i)
         # checks Account a2 was created properly
 
-        self.assertNotEqual(self.a2.userid, "")
-        self.assertNotEqual(self.a2.username, "")
-        self.assertNotEqual(self.a2.email, "")
-        self.assertNotEqual(self.a2.phone, "")
-        self.assertNotEqual(self.a2.address, "")
-        self.assertNotEqual(self.a2.password1, "")
-        self.assertNotEqual(self.a2.password2, "")
-        self.assertNotEqual(self.a2.id, "")
+        self.assertNotEqual(self.a2.SignInName, "")
+        self.assertNotEqual(self.a2.userName, "")
+        self.assertNotEqual(self.a2.userEmail, "")
+        self.assertNotEqual(self.a2.userPhone, "")
+        self.assertNotEqual(self.a2.userAddress, "")
+        #self.assertNotEqual(self.a2.password1, "")
+        #self.assertNotEqual(self.a2.password2, "")
+        self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
     def test_editSelf(self):
@@ -171,13 +172,13 @@ class TestCourse(TestCase):
 
     def testCreate(self):
         self.assertEqual(self.c1.name, "History of Math")
-        self.assertEqual(self.c1.number, "200")
+        self.assertEqual(self.c1.number, 200)
         self.assertEqual(self.c1.place, "EMS")
         self.assertEqual(self.c1.days, "MWF")
         self.assertEqual(self.c1.time, "01:00 - 01:50")
         self.assertEqual(self.c1.semester, "FALL")
-        self.assertEqual(self.c1.proffessor, "ROCK")
-        self.assertEqual(self.c1.ta, "LING")
+        self.assertEqual(self.c1.professor.SignInName, "Andres3")
+        self.assertEqual(self.c1.ta.SignInName, "Nate4")
         # checks course c1 was created properly
 
         self.assertEqual(
