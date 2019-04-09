@@ -214,6 +214,8 @@ class Account(models.Model):
 
     @classmethod
     def create(cls, userid, username, email, phone, address, password1, password2, id):
+        if password1 != password2:
+            return "passwords don't match, couldn't create account"
         print("go t into create")
         '''x = username.split()
         if len(x) == 2:
