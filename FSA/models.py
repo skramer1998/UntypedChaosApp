@@ -243,7 +243,13 @@ class Course(models.Model):
         return tostr(Courses.objects.values_list)
     #probs doesn't work but I wrote a line of code so here ya go
 
+
 class Account(models.Model):
+
+    """
+    Account Class: The class we're using to store account objects / edit / create them.
+    """
+
     SignInName = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
