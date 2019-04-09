@@ -42,13 +42,13 @@ class Terminal(models.Model):
         elif parseCmd[0].lower() == 'createaccount':
             if len(parseCmd) > 10:
                 #  print("branch 1")
-                if parseCmd[10] > 4 or parseCmd[10] < 1:
+                if 4 < int(parseCmd[10]) < 1:
                     return "Invalid groupID"
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9], parseCmd[10])
             elif len(parseCmd) > 9:
                 #  print("branch 2")
-                if parseCmd[9] > 4 or parseCmd[9] < 1:
+                if 4 < int(parseCmd[9]) < 1:
                     return "Invalid groupID"
                 return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
                                           parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
@@ -126,18 +126,18 @@ class Terminal(models.Model):
               \n\nassignin-- assigns an instructor to a course\nusage: assignin coursename newprofessor\
               \n\nassignta-- assigns a TA to a course\nusage: assignta coursename newta"
 
-
     """
     Create a new account.
     """
 
     def createaccount(self, SignInName, name, email, phone, address, password1, password2, groupid):
 
-        if Account.objects.filter(groupid=1) is not None:
-            return "There is already a supervisor"
-        if Account.objects.filter(groupid=2) is not None:
-            return "There is already an administrator"
-
+        if groupid == '1':
+            if Account.objects.filter(groupid=1).first() is not None:
+                return "There is already a supervisor "
+        if groupid == '2':
+            if Account.objects.filter(groupid=2).first() is not None:
+                return "There is already an administrator"
         Account.create(SignInName, name, email, phone, address, password1, password2, groupid)
         return "Your account was successfully created! You were also signed in."
 
@@ -189,6 +189,7 @@ class Terminal(models.Model):
     def assignmentta(self, coursename, newprof):
         Course.assignta(coursename, newprof)
         return "Course ta was changed"
+
 
 class Account(models.Model):
     """
@@ -389,8 +390,8 @@ class Course(models.Model):
     semester = models.CharField(max_length=30)
     professor = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
     ta = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
-    # labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
+    # labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
     @classmethod
     def create(cls, name, number, place, days, time, semester, professor, ta):
@@ -482,7 +483,6 @@ class Course(models.Model):
                 return currentcourse
             return "No account with name" + str(newta)
         return "No course with that name"
-
 
     # call Course.objects.all() to get all courses to string
     def __str__(self):
