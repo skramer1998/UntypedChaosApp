@@ -487,4 +487,4 @@ class Course(models.Model):
     # call Course.objects.all() to get all courses to string
     def __str__(self):
         return str(self.name) + " " + str(self.number) + " " + str(self.place) + " " + str(self.days) + " " + str(
-            self.time) + " " + str(self.semester) + " " + self.professor + " " + str(self.ta)
+            self.time) + " " + str(self.semester) + " " + str(self.professor) + " " + str(self.ta)
