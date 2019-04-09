@@ -14,28 +14,28 @@ class TestAccount(TestCase):
 
         self.a1 = Account.objects.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
                                          phone=1234567890, address = "22 Middleton rd", password1 = "password",
-                                         password2 = "password", id = self.t)
+                                         password2 = "password", groupid = self.t)
         self.a2 = Account.objects.create(userid="Andres3", username="Andres Z", email="sweatshirt@gmail.com",
                                          phone=2121212121, address="34 Giannis rd", password1="password",
-                                         password2="password", id=self.i)
+                                         password2="password", groupid=self.i)
         self.a3 = Account.objects.create(userid="Sean2", username="Sean Z", email="tshirt@gmail.com",
                                          phone=4145554444, address="13 Brogdon ave", password1="password",
-                                         password2="password", id=self.a)
+                                         password2="password", groupid=self.a)
         self.a4 = Account.objects.create(userid="Tyler1", username="Tyler Z", email="jersey@gmail.com",
                                          phone=4207106969, address="11 Bledsoe ct", password1="password",
-                                         password2="password", id=self.s)
+                                         password2="password", groupid=self.s)
         # creates 4 accounts with each level of ID
 
     def test_create(self):
         self.assertEqual(Account.objects.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
                                                 phone=1234567890, address = "22 Middleton rd", password1 = "",
-                                                password2 = "", id = self.t),
+                                                password2 = "", groupid = self.t),
                                                 "passwords don't match, couldn't create account")
         # blank password
 
         self.assertEqual(Account.objects.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
                                                 phone=1234567890, address="22 Middleton rd", password1="",
-                                                password2="password2", id=self.t),
+                                                password2="password2", groupid=self.t),
                                                 "passwords don't match, couldn't create account")
         # passwords do not match
 
@@ -46,7 +46,7 @@ class TestAccount(TestCase):
         self.assertEqual(self.a2.address, "34 Giannis rd")
         self.assertEqual(self.a2.password1, "password")
         self.assertEqual(self.a2.password2, "password")
-        self.assertEqual(self.a2.id, self.i)
+        self.assertEqual(self.a2.groupid, self.i)
         # checks Account a2 was created properly
 
         self.assertNotEqual(self.a2.userid, "")
@@ -56,7 +56,7 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.address, "")
         self.assertNotEqual(self.a2.password1, "")
         self.assertNotEqual(self.a2.password2, "")
-        self.assertNotEqual(self.a2.id, "")
+        self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
     def test_editSelf(self):
@@ -112,6 +112,7 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userAddress, "The Trap House")
         self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
         # checks edit other successfully edits user info with correct parameters
+        pass
 
     def test_checkRole(self):
         self.assertTrue(self.a1.is_TA() | self.a1.is_Instructor() | self.a1.is_Admin() | self.a1.is_Supervisor())
@@ -134,7 +135,7 @@ class TestAccount(TestCase):
         self.assertTrue(self.a3.createCourse())
         self.assertTrue(self.a4.createCourse())
         # checks only accounts with proper ID can create courses
-
+        pass
 
 class TestCourse(TestCase):
 
@@ -146,6 +147,7 @@ class TestCourse(TestCase):
         self.c2.create(self.c2.name, self.c2.number, self.c2.place, self.c2.days, self.c2.time, self.c2.semester,
                        self.c2.professor, self.c2.ta, self.c2.labs)
         # create user class for c2
+        pass
 
     def testCreate(self):
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
@@ -157,7 +159,9 @@ class TestCourse(TestCase):
         self.assertEqual(self.c1.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
                        self.c1.professor, self.c1.ta, self.c1.labs), "Course already exist")
         # should return this if already exists
+        pass
 
+"""
     def testSearch(self):
         self.assertTrue(self.c2.search("History of Baths"))
         # should be true
@@ -165,6 +169,8 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.search("History"))
         self.assertFalse(self.c2.search("Chinese Horse Energy"))
         # should both be false
+        pass
+"""
 
     def testSet(self):
         self.c2.setname("Shower Physics")
@@ -214,9 +220,11 @@ class TestCourse(TestCase):
         self.assertTrue(self.c2.search("Shower Physics"))
         self.assertFalse(self.c2.search("History of Baths"))
         # checks updated names in search
+        pass
 
     def testStr(self):
         self.assertEqual(self.c2.tostr(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
         # asserts toStr has correct format
+        pass
 
 
