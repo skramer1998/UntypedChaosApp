@@ -104,9 +104,8 @@ class Terminal(models.Model):
                 else:
                     return "Your passwords don't match, please try again."
         else:
-            print("user has a usable password, \
-            can't set new password with this function. use the account(.) something or other")
-            return self
+            return "user has a usable password, \
+            can't set new password with this function. use the account(.) something or other"
 
     """
     A list of all commands, what they do, and how to use them.
@@ -216,7 +215,7 @@ class Account(models.Model):
     def create(cls, userid, username, email, phone, address, password1, password2, id):
         if password1 != password2:
             return "passwords don't match, couldn't create account"
-        print("go t into create")
+        #  print("go t into create")
         '''x = username.split()
         if len(x) == 2:
               return cls(SignInName=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
@@ -268,8 +267,9 @@ class Account(models.Model):
         else:
             print("the new passwords don't match, start again from the beginning.")
 
+
     def editSelf(self, name, id, email, phone, address):
-        self.user.userid = id
+        """self.user.userid = id
         self.user.username = name
         self.user.userEmail = email
         self.userName = name
@@ -277,12 +277,13 @@ class Account(models.Model):
         self.userEmail = email
         self.userPhone = phone
         self.userAddress = address
-        self.user.save()
-        # should return false if not set otherwise true
+        self.user.save()"""
+        return False
+        # not updated for working with latest version of account-- will be split up and made to work in next sprint
+
 
     def getid(self, account):
         return account.groupid
-
 
 """
     def grantGroupStatus(self, user, groupName):  # supervisors and admins can grant permissions
