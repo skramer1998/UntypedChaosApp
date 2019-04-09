@@ -151,16 +151,22 @@ class Course(models.Model):
 
     @classmethod
     def create(cls, name, number, place, days, time, semester, professor, ta, labs):
-        has_course = cls.search(Course(Course), name)
-        if has_course:
+        print("got into course.create")
+        if Course.objects.filter(name__contains=name).first() is not None:
             return "Course already exist"
         else:
-            cls(name=name, number=number, place=place, days=days, time=time, semester=semester, professor=professor,
-                ta=ta, labs=labs)
+            print("got into the else")
+            newThing = Course.cls(Course(Course), name=name, number=number, place=place, days=days, time=time, semester=semester, professor=professor,
+                                  ta=ta, labs=labs)
+            print(len(Course.objects.all()))
             return "Course was created"
 
     def cls(self, name, number, place, days, time, semester, professor, ta, labs):
-        self.name = name
+        print("got into cls")
+        almost_course = Course.objects.create(name=name, number=number, place=place, days=days,
+                                              time=time, semester=semester, professor=professor,
+                                              ta=ta, labs=labs)
+        """self.name = name
         self.number = number
         self.place = place
         self.days = days
@@ -168,11 +174,13 @@ class Course(models.Model):
         self.semester = semester
         self.professor = professor
         self.ta = ta
-        self.labs = labs
-        self.save()
+        self.labs = labs"""
+        print(almost_course)
+        almost_course.save()
+        return almost_course
 
     def search(self, name):
-        if Course.objects.filter(name__contains=name).first():
+        if Course.objects.filter(name__contains=name).first() is not None:
             return True
         else:
             return False
