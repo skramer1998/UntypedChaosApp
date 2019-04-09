@@ -240,7 +240,7 @@ class Course(models.Model):
         return self.name + " " + self.number + " " + self.place + " " + self.days + " " + self.time + " " + self.semester + " " + self.professor + " " + self.ta + "" + self.labs
 
     def listCourses(self):
-        return tostr(Courses.objects.values_list)
+        return tostr(Course.objects.values_list)
     #probs doesn't work but I wrote a line of code so here ya go
 
 
@@ -256,6 +256,12 @@ class Account(models.Model):
     userPhone = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Associated Auth User+")
+
+    """
+    Overwrite the generic Account str() function for printing
+    """
+    def __str__(self):
+        return str(self.SignInName) + " " + str(self.userName) + " " + str(self.userEmail)
 
     @classmethod
     def create(cls, userid, username, email, phone, address, password1, password2):
@@ -331,11 +337,11 @@ class Account(models.Model):
         self.user.save()
         # should return false if not set otherwise true
 
-    def is_TA(self, user):
-        return user.user.groups.filter(name='ta').exists()
+    def is_TA(self, search_user):
+        return search_user.user.groups.filter(name='ta').exists()
 
-    def is_Instructor(self, user):
-        return user.user.groups.filter(name='instructor').exists()
+    def is_Instructor(self, search_user):
+        return search_user.user.groups.filter(name='instructor').exists()
 
     def is_Admin(self, user):
         return user.user.groups.filter(name='admin').exists()
