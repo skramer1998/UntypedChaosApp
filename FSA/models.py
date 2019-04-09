@@ -69,7 +69,7 @@ class Terminal(models.Model):
     Print out the list of user accounts by SignInName.
     """
     def accountList(self):
-        return Account.objects.values_list('SignInName', flat=True)
+        return list(Account.objects.values_list('SignInName', 'userName'))
 
     """
     Create the password for new accounts.
@@ -145,6 +145,7 @@ class Terminal(models.Model):
     def createCourse(self, name, number, place, days, time, semester, professor, ta, labs):
         print("called into create Course")
         return Course.create(name, number, place, days, time, semester, professor, ta, labs)
+
 
 class Course(models.Model):
     # need to change later. Lab class? courses can have more than one lab and more than one ta
