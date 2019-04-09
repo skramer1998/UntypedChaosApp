@@ -6,27 +6,58 @@ from FSA.models import Course
 class TestAccount(TestCase):
 
     def setUp(self):
-        self.t = "TA"
-        self.i = "Instructor"
-        self.a = "Admin"
-        self.s = "Supervisor"
+        self.t = 4
+        self.i = 3
+        self.a = 2
+        self.s = 1
         # 4 ID's
 
-        self.a1 = Account.objects.create(userID = self.t, userName = "Nate", userEmail = "glasses@gmail.com",
-                                         userAddress = "22 Middleton rd", userPhone = 1234567890)
-        self.a2 = Account.objects.create(userID=self.i, userName="Andres", userEmail="sweatshirt@gmail.com",
-                                         userAddress="34 Giannis rd", userPhone = 2121212121)
-        self.a3 = Account.objects.create(userID=self.a, userName="Sean", userEmail="tshirt@gmail.com",
-                                         userAddress="13 Brogdon ave", userPhone = 4145554444)
-        self.a4 = Account.objects.create(userID=self.s, userName="Tyler", userEmail="jersey@gmail.com",
-                                         userAddress="11 Bledsoe ct", userPhone = 4207106969)
+        self.a1 = Account.objects.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
+                                         phone=1234567890, address = "22 Middleton rd", password1 = "password",
+                                         password2 = "password", id = self.t)
+        self.a2 = Account.objects.create(userid="Andres3", username="Andres Z", email="sweatshirt@gmail.com",
+                                         phone=2121212121, address="34 Giannis rd", password1="password",
+                                         password2="password", id=self.i)
+        self.a3 = Account.objects.create(userid="Sean2", username="Sean Z", email="tshirt@gmail.com",
+                                         phone=4145554444, address="13 Brogdon ave", password1="password",
+                                         password2="password", id=self.a)
+        self.a4 = Account.objects.create(userid="Tyler1", username="Tyler Z", email="jersey@gmail.com",
+                                         phone=4207106969, address="11 Bledsoe ct", password1="password",
+                                         password2="password", id=self.s)
         # creates 4 accounts with each level of ID
 
-        self.a1.create(self.a1.userID, self.a1.userName, self.a1.userEmail, self.a1.userPhone, self.a1.userAddress)
-        self.a2.create(self.a2.userID, self.a2.userName, self.a2.userEmail, self.a2.userPhone, self.a2.userAddress)
-        self.a3.create(self.a3.userID, self.a3.userName, self.a3.userEmail, self.a3.userPhone, self.a3.userAddress)
-        self.a4.create(self.a4.userID, self.a4.userName, self.a4.userEmail, self.a4.userPhone, self.a4.userAddress)
-        # creates user classes
+    def test_create(self):
+        self.assertEqual(Account.objects.create(userid = "Nate4", username = "Nate Z", email = "glasses@gmail.com",
+                                                phone=1234567890, address = "22 Middleton rd", password1 = "",
+                                                password2 = "", id = self.t),
+                                                "passwords don't match, couldn't create account")
+        # blank password
+
+        self.assertEqual(Account.objects.create(userid="Nate4", username="Nate Z", email="glasses@gmail.com",
+                                                phone=1234567890, address="22 Middleton rd", password1="",
+                                                password2="password2", id=self.t),
+                                                "passwords don't match, couldn't create account")
+        # passwords do not match
+
+        self.assertEqual(self.a2.userid, "Andres3")
+        self.assertEqual(self.a2.username, "Andres Z")
+        self.assertEqual(self.a2.email, "sweatshirt@gmail.com")
+        self.assertEqual(self.a2.phone,2121212121)
+        self.assertEqual(self.a2.address, "34 Giannis rd")
+        self.assertEqual(self.a2.password1, "password")
+        self.assertEqual(self.a2.password2, "password")
+        self.assertEqual(self.a2.id, self.i)
+        # checks Account a2 was created properly
+
+        self.assertNotEqual(self.a2.userid, "")
+        self.assertNotEqual(self.a2.username, "")
+        self.assertNotEqual(self.a2.email, "")
+        self.assertNotEqual(self.a2.phone, "")
+        self.assertNotEqual(self.a2.address, "")
+        self.assertNotEqual(self.a2.password1, "")
+        self.assertNotEqual(self.a2.password2, "")
+        self.assertNotEqual(self.a2.id, "")
+        # checks not blank
 
     def test_editSelf(self):
         self.assertFalse(self.a1.editSelf())
@@ -48,6 +79,7 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userAddress, "The Trap House")
         self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
         # checks if editSelf worked correctly with correct parameters
+        pass
 
     def test_editOther(self):
         self.assertFalse(
