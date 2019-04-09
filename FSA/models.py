@@ -62,8 +62,8 @@ class Terminal(models.Model):
                 else:
                     return "not enough args to create a new course"
             else:
-                # The rest of command parsing will occur here.
-                return "You are logged in, cool."
+                return "You are logged in, cool. Here's the help page, as your command didn't match anything else\n"\
+                       + self.help()
 
     """
     Print out the list of user accounts by SignInName.
@@ -89,6 +89,16 @@ class Terminal(models.Model):
             print("user has a usable password, \
             can't set new password with this function. use the account(.) something or other")
             return self
+
+    def help(self):
+        return "FSA help\nCommands: \nlogin-- sign into an existing account.\nusage: login Username Password\n\
+              logout-- sign out from your account\nusage: logout\ncreateAccount-- makes a new account, \
+              default permissions none.\nusage: createAccount SignInName FirstName [MiddleName(optional)] \
+              LastName Email Phone Address NewAccountpassword NewAccountpassword\naccountList-- \
+              returns a list of all accounts\nusage: accountList\ncreateCourse-- creates a new course\n\
+              usage: createCourse name #number# place days time semester professor ta #OfLabs\n\
+              listCourses-- lists all courses\nusage: listCourses"
+
 
     """
     Create a new account.
