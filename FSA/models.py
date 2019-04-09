@@ -37,30 +37,30 @@ class Terminal(models.Model):
                 return self.login(parseCmd[1], parseCmd[2])
             else:
                 return "You need to provide login arguments!"
-        elif parseCmd[0].lower() == 'createaccount':
-            if len(parseCmd) > 9:
-                #  print("branch 1")
-                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
-                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
-            elif len(parseCmd) > 8:
-                #  print("branch 2")
-                return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
-                                          parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
-            else:
-                return "not enough args to create account"
-        elif parseCmd[0].lower() == 'accountlist':
-            return self.accountList()
-        elif parseCmd[0].lower() == 'logout':
-            return self.logout()
-        elif parseCmd[0].lower() == 'createcourse':
-            if len(parseCmd) > 9:
-                return self.createCourse(parseCmd[1], parseCmd[2], parseCmd[3], parseCmd[4],
-                                         parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
-            else:
-                return "not enough args to create a new course"
         else:
             if user is None:
                 return "You are not logged in, you must login before entering commands."
+            elif parseCmd[0].lower() == 'createaccount':
+                if len(parseCmd) > 9:
+                    #  print("branch 1")
+                    return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3] + " " + parseCmd[4],
+                                              parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+                elif len(parseCmd) > 8:
+                    #  print("branch 2")
+                    return self.createaccount(parseCmd[1], "" + parseCmd[2] + " " + parseCmd[3], parseCmd[4],
+                                              parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
+                else:
+                    return "not enough args to create account"
+            elif parseCmd[0].lower() == 'accountlist':
+                return self.accountList()
+            elif parseCmd[0].lower() == 'logout':
+                return self.logout()
+            elif parseCmd[0].lower() == 'createcourse':
+                if len(parseCmd) > 9:
+                    return self.createCourse(parseCmd[1], parseCmd[2], parseCmd[3], parseCmd[4],
+                                             parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8], parseCmd[9])
+                else:
+                    return "not enough args to create a new course"
             else:
                 # The rest of command parsing will occur here.
                 return "You are logged in, cool."
