@@ -1,6 +1,6 @@
 {% extends "main/base.html" %}
 {% block content %}
-  <form method="post" action="/" >
+  <form style="text-align: center" method="post" action="/" >
   {% csrf_token %}
     Command: <input type="text" name="command" autocomplete="off" size="100" autofocus="autofocus"><br/>
     <input type="submit">
