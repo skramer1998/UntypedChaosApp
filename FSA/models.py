@@ -184,11 +184,11 @@ class Terminal(models.Model):
 
     def assignmentin(self, coursename, newprof):
         Course.assignin(coursename, newprof)
-        return "Course instructor was changed"
+        return "Course instructor has been updated to " + newprof
 
     def assignmentta(self, coursename, newprof):
         Course.assignta(coursename, newprof)
-        return "Course ta was changed"
+        return "Course TA has been updated to " + newprof
 
 
 class Account(models.Model):
@@ -226,23 +226,14 @@ class Account(models.Model):
     def cls(self, othernameforid, username, email, userPhone, address, password1, password2, id):
         if Account.objects.filter(SignInName=othernameforid).first() is not None:
             return "That username is already in use, please select a different one."
-            # return self
-        print("ayyo let's create some shit")
-        print(hash(othernameforid))
         user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
         account = Account.objects.create(SignInName=othernameforid,
                                          userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
                                          groupid=id,
                                          user_id=user.id)
-        # user_id=hash(othernameforid)
-        #  user_id cannot be trusted to set itself. creating an accout where the username hashes to the same value as
-        #  an existing account will fail.
         terminal = Terminal()
         terminal.setNewPassword(npuser=user, passwordAttempt1=password1, passwordAttempt2=password2)
         account.user = user
-        print(account)
-        print(account.user)
-        print(len(User.objects.all()))
         x = username.split()
         account.user.first_name = x[0]
         account.user.last_name = x[1] if len(x) == 2 else x[2]
@@ -398,27 +389,27 @@ class Course(models.Model):
         has_course = Course()
         has_course = has_course.search(name)
         if has_course:
-            return "Course already exist"
+            return "That course already exists."
         else:
             print("got into the else")
             try:
                 accountp = Account.objects.filter(SignInName=professor)
                 accountp = accountp.first()
-                if accountp is None: return "Professor needs to be an account"
+                if accountp is None: return "Professor needs to be an account to be assigned to a course."
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 3:
-                    return "Administrators and Supervisors cannot be assigned to a course"
+                    return "Administrators and Supervisors cannot be assigned to a course."
             except Account.DoesNotExist:
                 accountp = None
             try:
                 accountta = Account.objects.filter(SignInName=ta)
                 accountta = accountta.first()
-                if accountta is None: return "TA needs to be an account"
+                if accountta is None: return "TA needs to be an account to be assigned to a course."
                 temp = Account()
                 temp = temp.getid(accountta)
                 if temp < 4:
-                    return "Only Tas can be TAs"
+                    return "Only TAs can be TAs."
             except Account.DoesNotExist:
                 accountta = None
 
@@ -428,7 +419,7 @@ class Course(models.Model):
                                  professor=accountp, ta=accountta)
                     course.save()
                     return course
-            return "Course can not be created"
+            return "Course can not be created."
 
     def search(self, name):
         try:
@@ -451,7 +442,7 @@ class Course(models.Model):
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 3:
-                    return "Administrators and Supervisors cannot be assigned to a course"
+                    return "Administrators and Supervisors cannot be assigned to a course."
             except Account.DoesNotExist:
                 accountp = None
             if accountp is not None:
@@ -460,8 +451,8 @@ class Course(models.Model):
                 currentcourse.professor = accountp
                 currentcourse.save()
                 return currentcourse
-            return "No account with name" + str(newprofessor)
-        return "No course with that name"
+            return "There is no account named " + str(newprofessor)
+        return "There is no course named " + str(coursename)
 
     @classmethod
     def assignta(cls, coursename, newta):
@@ -474,7 +465,7 @@ class Course(models.Model):
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 4:
-                    return "Administrators and Supervisors cannot be assigned to a course"
+                    return "Administrators and Supervisors cannot be assigned to a course."
             except Account.DoesNotExist:
                 accountp = None
             if accountp is not None:
@@ -483,8 +474,8 @@ class Course(models.Model):
                 currentcourse.ta = accountp
                 currentcourse.save()
                 return currentcourse
-            return "No account with name" + str(newta)
-        return "No course with that name"
+            return "There is no account named " + str(newta)
+        return "There is no course named " + str(coursename)
 
     # call Course.objects.all() to get all courses to string
     def __str__(self):
