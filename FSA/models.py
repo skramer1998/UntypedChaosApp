@@ -65,6 +65,12 @@ class Terminal(models.Model):
                                              parseCmd[5], parseCmd[6], parseCmd[7], parseCmd[8])
                 else:
                     return "not enough args to create a new course"
+            elif parseCmd[0].lower() == 'assignin':
+                if len(parseCmd) > 2:
+                    return self.assignmentin(parseCmd[1], parseCmd[2])
+            elif parseCmd[0].lower() == 'assignta':
+                if len(parseCmd) > 2:
+                    return self.assignmentta(parseCmd[1], parseCmd[2])
             else:
                 return self.help()
 
@@ -76,7 +82,7 @@ class Terminal(models.Model):
         return "Account List: " + ", ".join(list(Account.objects.values_list('userName', flat=True)))
 
     def courseList(self):
-        return "Course List: " + ", ".join(list(Course.objects.values_list('name', flat=True)))
+        return Course.objects.all()
 
     """
     Create the password for new accounts. This is an internal function, not to be called directly.
@@ -106,18 +112,25 @@ class Terminal(models.Model):
         return "Commands: \n----------------\
               \n\nlogin-- sign into an existing account.\nusage: login Username Password\
               \n\n\logout-- sign out from your account\nusage: logout\
-              \n\ncreateaccount-- makes a new account, default permissions none.\nusage: createAccount SignInName\
+              \n\ncreateaccount-- makes a new account, default permissions none.\nusage: createaccount SignInName\
               FirstName [MiddleName(optional)] LastName Email Phone Address NewAccountpassword NewAccountpassword\
-              \n\naccountlist-- returns a list of all accounts\nusage: accountList\
-              \n\ncreatecourse-- creates a new course\n\usage: createCourse name number place days time semester\
-              professor ta #OfLabs\
-              \n\ncourselist-- lists all courses\nusage: listCourses"
+              \n\naccountlist-- returns a list of all accounts\nusage: accountlist\
+              \n\ncreatecourse-- creates a new course\nusage: createcourse name number place days time semester\
+              professor ta\
+              \n\ncourselist-- lists all courses\nusage: courselist"
+
 
     """
     Create a new account.
     """
 
     def createaccount(self, SignInName, name, email, phone, address, password1, password2, groupid):
+
+        if Account.objects.filter(groupid=1) is not None:
+            return "There is already a supervisor"
+        if Account.objects.filter(groupid=2) is not None:
+            return "There is already an administrator"
+
         Account.create(SignInName, name, email, phone, address, password1, password2, groupid)
         return "Your account was successfully created! You were also signed in."
 
@@ -162,6 +175,14 @@ class Terminal(models.Model):
     def createCourse(self, name, number, place, days, time, semester, professor, ta):
         return Course.create(name, number, place, days, time, semester, professor, ta)
 
+    def assignmentin(self, coursename, newprof):
+        Course.assignin(coursename, newprof)
+        return "Course instructor was changed"
+
+    def assignmentta(self, coursename, newprof):
+        Course.assignta(coursename, newprof)
+        return "Course ta was changed"
+
 class Account(models.Model):
     """
     Account Class: The class we're using to store account objects / edit / create them.
@@ -203,7 +224,8 @@ class Account(models.Model):
         user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
         account = Account.objects.create(SignInName=othernameforid,
                                          userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
-                                         user_id=user.id, groupid=id)
+                                         groupid=id,
+                                         user_id=user.id)
         # user_id=hash(othernameforid)
         #  user_id cannot be trusted to set itself. creating an accout where the username hashes to the same value as
         #  an existing account will fail.
@@ -257,9 +279,8 @@ class Account(models.Model):
         self.user.save()
         # should return false if not set otherwise true
 
-    def getid(self):
-        return self.groupid
-
+    def getid(self, account):
+        return account.groupid
 
 
 """
@@ -340,7 +361,8 @@ class Account(models.Model):
                self.user.userEmail + "\nUserPhone: " + self.userPhone + "\nUser Address: " + self.userAddress
     """
 
-#currently labs will not work
+
+# currently labs will not work
 class Lab(models.Model):
     number = models.IntegerField(default=0)
     ta = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -360,14 +382,13 @@ class Course(models.Model):
     semester = models.CharField(max_length=30)
     professor = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
     ta = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
-    #labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
+    # labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
+
 
     @classmethod
     def create(cls, name, number, place, days, time, semester, professor, ta):
         has_course = Course()
         has_course = has_course.search(name)
-        if cls.professor.groupid > 2:
-            return "you do not have permission, contact your administrator or supervisor"
         if has_course:
             return "Course already exist"
         else:
@@ -375,11 +396,19 @@ class Course(models.Model):
             try:
                 accountp = Account.objects.filter(SignInName=professor)
                 accountp = accountp.first()
+                temp = Account()
+                temp = temp.getid(accountp)
+                if temp < 3:
+                    return "Administrators and Supervisors cannot be assigned to a course"
             except Account.DoesNotExist:
                 accountp = None
             try:
                 accountta = Account.objects.filter(SignInName=ta)
                 accountta = accountta.first()
+                temp = Account()
+                temp = temp.getid(accountta)
+                if temp < 4:
+                    return "Only Tas can be TAs"
             except Account.DoesNotExist:
                 accountta = None
 
@@ -400,6 +429,53 @@ class Course(models.Model):
             return True
         else:
             return False
+
+    @classmethod
+    def assignin(cls, coursename, newprofessor):
+        has_course = Course()
+        has_course = has_course.search(coursename)
+        if has_course:
+            try:
+                accountp = Account.objects.filter(SignInName=newprofessor)
+                accountp = accountp.first()
+                temp = Account()
+                temp = temp.getid(accountp)
+                if temp < 3:
+                    return "Administrators and Supervisors cannot be assigned to a course"
+            except Account.DoesNotExist:
+                accountp = None
+            if accountp is not None:
+                currentcourse = Course.objects.filter(name=coursename)
+                currentcourse = currentcourse.first()
+                currentcourse.professor = accountp
+                currentcourse.save()
+                return currentcourse
+            return "No account with name" + str(newprofessor)
+        return "No course with that name"
+
+    @classmethod
+    def assignta(cls, coursename, newta):
+        has_course = Course()
+        has_course = has_course.search(coursename)
+        if has_course:
+            try:
+                accountp = Account.objects.filter(SignInName=newta)
+                accountp = accountp.first()
+                temp = Account()
+                temp = temp.getid(accountp)
+                if temp < 4:
+                    return "Administrators and Supervisors cannot be assigned to a course"
+            except Account.DoesNotExist:
+                accountp = None
+            if accountp is not None:
+                currentcourse = Course.objects.filter(name=coursename)
+                currentcourse = currentcourse.first()
+                currentcourse.ta = accountp
+                currentcourse.save()
+                return currentcourse
+            return "No account with name" + str(newta)
+        return "No course with that name"
+
 
     # call Course.objects.all() to get all courses to string
     def __str__(self):
