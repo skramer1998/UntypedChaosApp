@@ -444,13 +444,14 @@ class Course(models.Model):
             try:
                 accountp = Account.objects.filter(SignInName=newprofessor)
                 accountp = accountp.first()
+
+            except Account.DoesNotExist:
+                accountp = None
+            if accountp is not None:
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 3:
                     return "Administrators and Supervisors cannot be assigned to a course."
-            except Account.DoesNotExist:
-                accountp = None
-            if accountp is not None:
                 currentcourse = Course.objects.filter(name=coursename)
                 currentcourse = currentcourse.first()
                 currentcourse.professor = accountp
@@ -467,13 +468,13 @@ class Course(models.Model):
             try:
                 accountp = Account.objects.filter(SignInName=newta)
                 accountp = accountp.first()
+            except Account.DoesNotExist:
+                accountp = None
+            if accountp is not None:
                 temp = Account()
                 temp = temp.getid(accountp)
                 if temp < 4:
                     return "Administrators and Supervisors cannot be assigned to a course."
-            except Account.DoesNotExist:
-                accountp = None
-            if accountp is not None:
                 currentcourse = Course.objects.filter(name=coursename)
                 currentcourse = currentcourse.first()
                 currentcourse.ta = accountp

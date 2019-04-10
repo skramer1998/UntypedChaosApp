@@ -195,31 +195,31 @@ class TestCourse(TestCase):
         # should both be false.
 
     def test_assignin(self):
-        self.assertEqual(Course.assignin("History of Math", self.a4.userName),
+        self.assertEqual(Course.assignin("History of Math", self.a4.SignInName),
                          "Administrators and Supervisors cannot be assigned to a course.")
-        self.assertEqual(Course.assignin("History of Math", self.a3.userName),
+        self.assertEqual(Course.assignin("History of Math", self.a3.SignInName),
                          "Administrators and Supervisors cannot be assigned to a course.")
         # attempts to set a supervisor/admin to a course
 
-        self.assertEqual(Course.assignin("Clown Class", self.a1.userName), "There is no account named Rick Flair")
-        self.assertEqual(Course.assignin("History of Math", "Rick Flair"), "There is no course named Clown Class")
+        self.assertEqual(Course.assignin("Clown Class", self.a1.SignInName), "There is no course named Clown Class")
+        self.assertEqual(Course.assignin("History of Math", "Rick Flair"), "There is no account named Rick Flair")
         # checks parameters exist
 
     def test_assignta(self):
-        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
-                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
-        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
-                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
-        self.assertEqual(Course.assignta("History of Math", self.a2.userName),
-                         "Administrators, Supervisors, and Instructors cannot be assigned to a Lab.")
+        self.assertEqual(Course.assignta("History of Math", self.a2),
+                         "Administrators and Supervisors cannot be assigned to a course.")
+        self.assertEqual(Course.assignta("History of Math", self.a2),
+                         "Administrators and Supervisors cannot be assigned to a course.")
+        self.assertEqual(Course.assignta("History of Math", self.a2),
+                         "Administrators and Supervisors cannot be assigned to a course.")
         # attempts setting non TA to a lab
 
-        self.assertEqual(Course.assignta("Clown Class", self.a1.userName), "There is no account named Rick Flair")
-        self.assertEqual(Course.assignta("History of Math", "Rick Flair"), "There is no course named Clown Class")
+        self.assertEqual(Course.assignta("Clown Class", self.a1.userName), "There is no course named Clown Class")
+        self.assertEqual(Course.assignta("History of Math", "Rick Flair"), "There is no account named Rick Flair")
         # checks parameters exist
 
     def test__str__(self):
-        self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL SOCK TING 15")
+        self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL Andres3 Nate4")
         # asserts toStr has correct format
 
     """
