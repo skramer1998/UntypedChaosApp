@@ -60,6 +60,7 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
+    """"
     def test_editSelf(self):
         # self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
         # self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
@@ -88,7 +89,7 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.user.id, self.i)
         # checks if editSelf worked correctly with correct parameters
 
-        """
+        
     def test_editOther(self):
         self.assertFalse(
             self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
