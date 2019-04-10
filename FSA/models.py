@@ -396,7 +396,6 @@ class Course(models.Model):
         if has_course:
             return "That course already exists."
         else:
-            print("got into the else")
             try:
                 accountp = Account.objects.filter(SignInName=professor)
                 accountp = accountp.first()
@@ -428,9 +427,10 @@ class Course(models.Model):
 
     def search(self, name):
         try:
-            check = Course.get(name__contains=name)
-        except:
+            check = Course.objects.get(name=name)
+        except Course.DoesNotExist:
             check = None
+
         if check is not None:
             return True
         else:
