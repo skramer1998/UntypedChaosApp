@@ -3,34 +3,29 @@ from django.db import models
 from django.contrib.auth.models import User
 import getpass
 
-"""
-This is our global user object to keep track of who is logged in, it's not elegant, but it works...
-"""
-user = None
 
-
+"""
 class Terminal(models.Model):
-    """
+    
     Terminal Class: The class used to make the webpage command line work correctly
-    """
+  
 
-    """
+   
     Function called by the Home view, immediately passes input to the command parser.
-    """
+    
 
     def command(self, input_string):
         command_string = input_string
         return self.parseCommand(command_string)
 
-    """
+    
     Parse the given input string based on whitespace.
     Check to see if the user is trying to login, if they are follow protocol, if they are not check to see if
     they are already logged in.  IF they are not tell them to login.  IF they are, continue on processing
     the parsed command.
-    """
+    
 
     def parseCommand(self, cmdStr):
-        global user
         parseCmd = cmdStr.split()
         print(parseCmd[0].lower())
         print(user)
@@ -78,9 +73,9 @@ class Terminal(models.Model):
             else:
                 return self.help()
 
-    """
+   
     Print out the list of user accounts by userName.
-    """
+   
 
     def accountList(self):
         return "Account List: " + ", ".join(list(Account.objects.values_list('userName', flat=True)))
@@ -88,9 +83,9 @@ class Terminal(models.Model):
     def courseList(self):
         return Course.objects.all()
 
-    """
+    
     Create the password for new accounts. This is an internal function, not to be called directly.
-    """
+   
 
     def setNewPassword(self, npuser, passwordAttempt1, passwordAttempt2):
         global user
@@ -107,9 +102,9 @@ class Terminal(models.Model):
             return "user has a usable password, \
             can't set new password with this function. use the account(.) something or other"
 
-    """
+   
     A list of all commands, what they do, and how to use them.
-    """
+   
 
     def help(self):
         return "Commands: \n----------------\
@@ -125,9 +120,9 @@ class Terminal(models.Model):
               \n\nassignin-- assigns an instructor to a course\nusage: assignin coursename newprofessor\
               \n\nassignta-- assigns a TA to a course\nusage: assignta coursename newta"
 
-    """
+   
     Create a new account.
-    """
+    
 
     def createaccount(self, SignInName, name, email, phone, address, password1, password2, groupid):
 
@@ -140,9 +135,9 @@ class Terminal(models.Model):
         Account.create(SignInName, name, email, phone, address, password1, password2, groupid)
         return "Your account was successfully created! You were also signed in."
 
-    """
+   
     Login to an existing account.
-    """
+    
 
     def login(self, username, password):
         global user
@@ -162,9 +157,9 @@ class Terminal(models.Model):
                 else:
                     return "Incorrect password entered."
 
-    """
+    
     Logout of currently logged in account, if possible.
-    """
+    
 
     def logout(self):
         global user
@@ -174,10 +169,9 @@ class Terminal(models.Model):
             user = None
             return "You have been logged out."
 
-    """
+    
     Create a course using the given information
-    """
-
+    
     def createCourse(self, name, number, place, days, time, semester, professor, ta):
         return Course.create(name, number, place, days, time, semester, professor, ta)
 
@@ -189,18 +183,19 @@ class Terminal(models.Model):
         Course.assignta(coursename, newprof)
         return "Course TA has been updated to " + newprof
 
+"""
+
 
 class Account(models.Model):
     """
     Account Class: The class we're using to store account objects / edit / create them.
     """
-
     SignInName = models.CharField(max_length=30)
+    userPass = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
     userEmail = models.CharField(max_length=30)
     userPhone = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Associated Auth User+")
     groupid = models.IntegerField(default=0)
     """1=SU, 2=AD, 3=IN, 4=TA"""
 
@@ -212,41 +207,14 @@ class Account(models.Model):
         return str(self.SignInName)
 
     @classmethod
-    def create(cls, userid, username, email, phone, address, password1, password2, id):
+    def create(cls, username, name, email, phone, address, password1, password2, id):
         if password1 != password2:
             return "passwords don't match, couldn't create account"
         elif not password1 or not password2:
             return "password cannot be blank"
-        #  print("go t into create")
-        '''x = username.split()
-        if len(x) == 2:
-              return cls(SignInName=userid, first=x[0], middle="", last=x[1], email=email, phone=phone, address=address)
-        else:
-              return cls(SignInName=userid, first=x[0], middle=x[1], last=x[2], email=email, phone=phone, address=address)
-        '''
-        return Account.cls(Account(cls), userid, username, email, phone, address, password1, password2, id)
-
-    def cls(self, othernameforid, username, email, userPhone, address, password1, password2, id):
-        if Account.objects.filter(SignInName=othernameforid).first() is not None:
-            return "That username is already in use, please select a different one."
-        user = User.objects.create_user(username=othernameforid, email=email)  # '''id=len(User.objects.all())+1,'''
-        account = Account.objects.create(SignInName=othernameforid,
-                                         userName=username, userEmail=email, userPhone=userPhone, userAddress=address,
-                                         groupid=id,
-                                         user_id=user.id)
-        terminal = Terminal()
-        terminal.setNewPassword(npuser=user, passwordAttempt1=password1, passwordAttempt2=password2)
-        account.user = user
-        x = username.split()
-        account.user.first_name = x[0]
-        account.user.last_name = x[1] if len(x) == 2 else x[2]
-        account.user.save()
-        account.save()
-        return account
-        # create an account in the user DB. No password at first, default permissions for user are none, individual
-        # group status should be set in a later step.
-
-        # should return false if not set otherwise true
+        newAccount = cls(SignInName=username, userPass=password1, userName=name, userEmail=email, userPhone=phone, userAddress=address, groupid=id)
+        newAccount.save()
+        return newAccount
 
     def editPassword(self):
         # Validate permissions before being able to call this function
@@ -285,85 +253,6 @@ class Account(models.Model):
 
     def getid(self, account):
         return account.groupid
-
-
-"""
-    def grantGroupStatus(self, user, groupName):  # supervisors and admins can grant permissions
-        groupName = groupName.lower()
-        if Account.is_Supervisor(self):
-            if groupName == "ta" or groupName == "instructor" or groupName == "admin" or groupName == "supervisor":
-                user.user.group.add(groupName)
-                user.user.save()
-                print(user.userName + " has been added to " + groupName + " role")
-                return True
-            else:
-                print("that's not a group. the 4 groups are TA, Instructor, Admin, and Supervisor")
-                return False
-        elif Account.is_Admin(self):
-            if groupName == "ta" or groupName == "instructor" or groupName == "admin":
-                user.user.group.add(groupName)
-                user.user.save()
-                print(user.userName + " has been added to " + groupName)
-                return True
-            elif groupName == "supervisor":
-                print("Admin accounts cannot add Supervisor status")
-                return False
-            else:
-                print("that's not a group. the 4 groups are TA, Instructor, Admin, and Supervisor")
-                return False
-        else:
-            print("sign in as an Admin or Supervisor to grant group assignments")
-
-    def invalidatePassword(self, user):
-        if Account.is_Admin(self) or Account.is_Supervisor(self):
-            user.user.setUnusablePassword()
-            user.user.save()
-            return True
-        else:
-            print("only Admins and Supervisors can invalidate passwords")
-            return False
-
-    def editOther(self, user, name, id, email, phone, address):
-        if Account.is_Admin(self) or Account.is_Supervisor(self):
-            user.user.username = name
-            user.user.userEmail = email
-            user.userName = name
-            user.userID = id
-            user.userEmail = email
-            user.userPhone = phone
-            user.userAddress = address
-            user.user.save()
-            print("changes made")
-            return True
-        else:
-            print("only Admins and Supervisors can edit the account details of others")
-            return False
-        # should return false if not set otherwise true
-    
-    def createCourse(self, otherargs):
-        if Account.is_Admin(self) or Account.is_Supervisor(self):
-            # call course constructor
-            return True
-        else:
-            print("Only Admins and Supervisors can add new Courses")
-            return False
-
-    def modifyCourse(self, course, otherargs):
-        return False
-        # pass shit to course edit method, if self has the permissions to do so.
-
-    def publicInfo(self, user):
-        stringofinfo = "Name: " + user.username + "\nEmail: " + user.userEmail + "\nUser ID: " + user.userID
-        if Account.is_Admin(self) or Account.is_Supervisor(self):
-            stringofinfo += "\nPhone Number:" + user.userPhone + "\nAddress: " + user.userAddress
-        return stringofinfo
-        # prints the user's public information, and gives the extra private fields if permissions allow
-        # wasn't sure if the private info should be its own method or not, so I did it like this
-
-    def toString(self):
-        return "User ID: " + self.userID + "\nUsername: " + self.user.username + "\nUserEmail: " + \
-               self.user.userEmail + "\nUserPhone: " + self.userPhone + "\nUser Address: " + self.userAddress
-    """
 
 
 # currently labs will not work

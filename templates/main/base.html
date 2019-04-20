@@ -1,16 +1,20 @@
-{% load staticfiles %}
-        <!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Functional School Application v1.0</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
-    <h1 style="text-align:center"><b>Oxford University Online</b></h1>
-</head>
-<body style="text-align:center; background-color: powderblue">
-    {% block content %}{% endblock content %}
-</body>
+{% load static %}
+<html>
+    <head>
+        <title>FSA</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <div class="menu">
+            <div style="margin-left:15px; float:left"><a href="/">login</a></div>
+            <div style="margin-left:15px; float:left"><a href="/register">register</a></div>
+            <div style="margin-left:15px; float:left"><a href="/user">user</a></div>
+            <div style="margin-left:15px; float:left"><a href="/logout">logout</a></div>
+        </div>
+        <br/>
+        <div class="content container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

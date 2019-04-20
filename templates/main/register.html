@@ -1,0 +1,46 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% if error_messages %}
+        {{ error_messages }}
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" name="name" required ></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><input type="email" name="email" required ></td>
+            </tr>
+            <tr>
+                <td>Username:</td>
+                <td><input type="text" name="username" required ></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="password" required /></td>
+            </tr>
+            <tr>
+                <td>Password Verification:</td>
+                <td><input type="password" name="passwordV" required /></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><input type="text" name="phone" required ></td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td><input type="text" name="address" required ></td>
+            </tr>
+            <tr>
+                <td>1=Supervisor or 2=Administrator:</td>
+                <td><input type="number" name="groupid" required ></td>
+            </tr>
+        </table>
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}
