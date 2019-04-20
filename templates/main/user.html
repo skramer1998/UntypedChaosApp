@@ -30,7 +30,20 @@
     </form>
     <ul>
         {% for user in allusers %}
-            <li> {{ user.userName }} : {{ user.userEmail }}</li>
+            <li> {% if user.groupid == 1 %}
+                Supervisor =
+                {% endif %}
+                {% if user.groupid == 2 %}
+                Administrator =
+                {% endif %}
+                {% if user.groupid == 3 %}
+                Instructor =
+                {% endif %}
+                {% if user.groupid == 4 %}
+                TA =
+                {% endif %}
+
+               {{ user.userName }} : {{ user.userEmail }} </li>
         {% endfor %}
     </ul>
 

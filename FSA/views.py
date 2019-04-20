@@ -109,8 +109,8 @@ class UserView(View):
         groupid = user.groupid
 
         allUsers = Account.objects.all()
+        textid = None
 
-        if groupid > 2:
-            allUsers = None
-
-        return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password, "name": name, "phone": phone, "address": address, "groupid": groupid, "allusers": allUsers})
+        return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password,
+                                                  "name": name, "phone": phone, "address": address, "groupid": groupid,
+                                                  "allusers": allUsers})
