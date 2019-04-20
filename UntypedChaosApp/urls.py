@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^$', views.Login.as_view(), name="login"),
     url(r'^user/$', views.UserView.as_view(), name="user"),
     url(r'^logout/$', views.LogoutView.as_view(), name="logout"),
+    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin"),
 ]

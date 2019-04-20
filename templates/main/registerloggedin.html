@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% if error_messages %}
+        {{ error_messages }}
+    {% endif %}
+
+    <h1> Input New User Information </h1>
+
+    <form action="{% url 'registerloggedin' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" name="name" required /></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><input type="email" name="email" required /></td>
+            </tr>
+            <tr>
+                <td>Username:</td>
+                <td><input type="text" name="username" required /></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><input type="text" name="phone" required /></td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td><input type="text" name="address" required /></td>
+            </tr>
+            <tr>
+                <td>ID 3=Instructor or 4=TA:</td>
+                <td><input type="number" name="groupid" required /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
