@@ -74,19 +74,19 @@ class Register(View):
 
         check_user = Account.objects.all().filter(SignInName=username)
         if check_user.count() != 0:
-            error_messages = "%s exist, please use another username" % (username)
+            error_messages = "%s exist, please use another username. Contact Supervisor or Administrator for more help." %(username)
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         if int(groupid) > 2:
-            error_messages = "%s is not a valid ID" % (groupid)
+            error_messages = "%s is not a valid ID. Contact Supervisor or Administrator for more help." % (groupid)
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         if Account.objects.all().filter(groupid=1).count() == 1 and groupid == "1":
-            error_messages = "ID %s is already active" % (groupid)
+            error_messages = "ID %s is already active. Contact Supervisor or Administrator for more help." % (groupid)
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         if Account.objects.all().filter(groupid=2).count() == 1 and groupid == "2":
-            error_messages = "ID %s is already active" % (groupid)
+            error_messages = "ID %s is already active. Contact Supervisor or Administrator for more help." % (groupid)
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         Account.create(username, name, email, phone, address, password, passwordV, groupid)
@@ -97,9 +97,20 @@ class UserView(View):
     def get(self, request):
         if not request.session.get("SignInName"):
             return redirect("login")
+
         username = request.session["SignInName"]
+        user = Account.objects.all().filter(SignInName=username)
+        user = user[0]
+        email = user.userEmail
+        password = user.userPass
+        name = user.userName
+        phone = user.userPhone
+        address = user.userAddress
+        groupid = user.groupid
 
-        return render(request, "main/user.html", {"username": username})
+        allUsers = Account.objects.all()
 
-    def post(self, request):
-        return redirect("user")
+        if groupid > 2:
+            allUsers = None
+
+        return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password, "name": name, "phone": phone, "address": address, "groupid": groupid, "allusers": allUsers})
