@@ -31,8 +31,14 @@
                 <td><input type="text" name="address" required /></td>
             </tr>
             <tr>
-                <td>ID 3=Instructor or 4=TA:</td>
-                <td><input type="number" name="groupid" required /></td>
+                <td>User Type:</td>
+                <td class="dropdown">
+                    <select name="groupid" required>
+                        <option value="2">Administrator</option>
+                        <option value="3">Instructor</option>
+                        <option value="4">TA</option>
+                    </select>
+                </td>
             </tr>
         </table>
         <input type="submit" value="Submit" />

@@ -37,8 +37,13 @@
                 <td><input type="text" name="address" required /></td>
             </tr>
             <tr>
-                <td>1=Supervisor or 2=Administrator:</td>
-                <td><input type="number" name="groupid" required /></td>
+                <td>User Type:</td>
+                <td class="dropdown">
+                    <select name="groupid" required>
+                        <option value="1">Supervisor</option>
+                        <option value="2">Administrator</option>
+                    </select>
+                </td>
             </tr>
         </table>
         <input type="submit" value="Register" />
