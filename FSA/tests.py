@@ -281,10 +281,18 @@ class TestCourse(TestCase):
 
 class TestUser(TestCase):
     def setUp(self):
-        # Every test needs a client.
         self.c = Client()
-        self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password', 'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2', 'groupID': 'Supervisor'})
-        self.c.login(username='tdn', password='password')
 
-    #def test_info(self):
+    def test_info(self):
+        self.c.get('/register/')
+        self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password',
+                                   'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2',
+                                   'groupid': '1'})
+
+        response = self.c.get('')
+        self.assertEqual(response.status_code, 200)
+        self.c.post('', {'username': 'tdn', 'password': 'password'})
+
+        response = self.c.get('/user/')
+        self.assertEqual(response.status_code, 200)
 
