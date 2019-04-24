@@ -134,8 +134,7 @@ class Register(View):
             return render(request, "main/register.html")
 
         user = request.session.get("SignInName")
-        user = Account.objects.all().filter(SignInName=user)
-        user = user[0]
+        user = (Account.objects.all().filter(SignInName=user))[0]
         user = user.groupid
         print(user)
 
@@ -211,8 +210,7 @@ class UserView(View):
 
         # Get all the user info to display to the HTML page
         username = request.session["SignInName"]
-        user = Account.objects.all().filter(SignInName=username)
-        user = user[0]
+        user = (Account.objects.all().filter(SignInName=username))[0]
         email = user.userEmail
         password = user.userPass
         name = user.userName
