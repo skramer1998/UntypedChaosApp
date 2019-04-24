@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from FSA.models import Account
 from FSA.models import Course
 
@@ -270,3 +270,14 @@ class TestCourse(TestCase):
         # checks updated names in search
         pass
     """
+
+
+class TestUser(TestCase):
+    def setUp(self):
+        # Every test needs a client.
+        self.c = Client()
+        self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password', 'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2', 'groupID': 'Supervisor'})
+        self.c.login(username = 'tdn', password = 'password')
+
+    #def test_info(self):
+
