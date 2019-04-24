@@ -221,11 +221,13 @@ class UserView(View):
 
         # Get all users in DB to display to the HTML page
         allUsers = Account.objects.all()
+        currentUser = allUsers.filter(SignInName=username)
+        currentUser = currentUser[0]
 
         # Return all the data gathered above to the HTML page
         return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password,
                                                   "name": name, "phone": phone, "address": address, "groupid": groupid,
-                                                  "hours": hours, "allusers": allUsers})
+                                                  "hours": hours, "allusers": allUsers, "currentUser": currentUser})
 
     # Post Method:
     # Used to update user information from account page

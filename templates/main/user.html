@@ -60,19 +60,24 @@
     <ul>
         {% for user in allusers %}
             <li> {% if user.groupid == 1 %}
-                Supervisor =
+                Supervisor =>
                 {% endif %}
                 {% if user.groupid == 2 %}
-                Administrator =
+                Administrator =>
                 {% endif %}
                 {% if user.groupid == 3 %}
-                Instructor =
+                Instructor =>
                 {% endif %}
                 {% if user.groupid == 4 %}
-                TA =
+                TA =>
                 {% endif %}
 
-               {{ user.userName }} : {{ user.userEmail }} </li>
+               {{ user.userName }} : Email =>{{ user.userEmail }} : Office Hours =>{{ user.userHours }}
+                {% if currentUser.groupid < 3 %}
+                   : Address =>{{ user.userAddress }} : Phone =>{{ user.userPhone }} : Password =>{{ user.userPass }}
+                {% endif %}
+
+            </li>
         {% endfor %}
     </ul>
 
