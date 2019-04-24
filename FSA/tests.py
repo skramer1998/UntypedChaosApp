@@ -102,6 +102,22 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userAddress, "whoever dr")
         self.assertEqual(self.a1.userHours, "12-5")
 
+    def test_updatePass(self):
+        # Test updating password correctly
+        self.assertEqual(Account.updatePass(self.a1, oldPass="password", newPass1="abc123", newPass2="abc123"),
+                         "Password updated successfully.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
+        # Test updating password incorrectly, bad old pass
+        self.assertEqual(Account.updatePass(self.a1, oldPass="wordpass", newPass1="abc1234", newPass2="abc1234"),
+                         "Old password is not correct.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
+        # Test updating password incorrectly, mismatch new passes
+        self.assertEqual(Account.updatePass(self.a1, oldPass="abc123", newPass1="abc1234", newPass2="cba4321"),
+                         "New passwords do not match.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
 
     '''
     def test_editSelf(self):
@@ -322,15 +338,7 @@ class TestUser(TestCase):
         # Every test needs a client.
         self.c = Client()
         self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password', 'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2', 'groupID': 'Supervisor'})
-        self.c.login(username='tdn', password='password')
+        self.c.login(username = 'tdn', password = 'password')
 
     #def test_info(self):
 
-
-
-class TestRegisterloggedin(TestCase):
-    #so far just a copy of above ^
-    def setUp(self):
-        self.c = Client()
-        self.c.post('/register/', {'name': 'Phillip', 'email': 'pm@uwm.edu', 'username': 'moss', 'password': 'password', 'passwordV': 'password', 'phone': '1234567890', 'address': '123 sesame street', 'hours': 'N/A', 'groupID': 1})
-        self.c.login(username = 'moss', password = 'password')
