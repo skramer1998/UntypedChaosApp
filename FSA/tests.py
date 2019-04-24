@@ -62,8 +62,46 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
-    #def test_updateUser(self):
-        #self.assertEqual(Account.updateUser(self.a1, "uwm@uwm.edu", ""))
+    def test_updateUser(self):
+        # Test updating all params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm@uwm.edu", phone="2624929332", address="wherever dr", hours="12-5"),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "2624929332")
+        self.assertEqual(self.a1.userAddress, "wherever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating three params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm2@uwm.edu", phone="4144929332", address="whoever dr", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm2@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "4144929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating two params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm3@uwm.edu", phone="5154929332", address="", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating one param
+        self.assertEqual(Account.updateUser(self.a1, email="uwm3@uwm.edu", phone="", address="", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating no params
+        self.assertEqual(Account.updateUser(self.a1, email="", phone="", address="", hours=""), "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
 
     '''
     def test_editSelf(self):
