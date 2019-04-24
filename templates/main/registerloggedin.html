@@ -6,6 +6,7 @@
     {% endif %}
 
     <h1> Input New User Information </h1>
+    <p>Default passwords are set to the User's username</p>
 
     <form action="{% url 'registerloggedin' %}" method="post">
         {% csrf_token %}
@@ -16,7 +17,7 @@
             </tr>
             <tr>
                 <td>Email:</td>
-                <td><input type="email" name="email" required /></td>
+                <td><input type="email" name="email"/></td>
             </tr>
             <tr>
                 <td>Username:</td>
@@ -24,15 +25,15 @@
             </tr>
             <tr>
                 <td>Phone:</td>
-                <td><input type="text" name="phone" required /></td>
+                <td><input type="text" name="phone"/></td>
             </tr>
             <tr>
                 <td>Address:</td>
-                <td><input type="text" name="address" required /></td>
+                <td><input type="text" name="address"/></td>
             </tr>
             <tr>
                 <td>Office Hours:</td>
-                <td><input type="text" name="hours" required /></td>
+                <td><input type="text" name="hours"/></td>
             </tr>
             <tr>
                 <td>User Type:</td>

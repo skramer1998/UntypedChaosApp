@@ -193,11 +193,11 @@ class Account(models.Model):
     SignInName = models.CharField(max_length=30)
     userPass = models.CharField(max_length=30)
     userName = models.CharField(max_length=50)
-    userEmail = models.CharField(max_length=30)
-    userPhone = models.CharField(max_length=30)
-    userAddress = models.CharField(max_length=120)
+    userEmail = models.CharField(max_length=30, blank=True)
+    userPhone = models.CharField(max_length=30, blank=True)
+    userAddress = models.CharField(max_length=120, blank=True)
     groupid = models.IntegerField(default=0)
-    userHours = models.CharField(max_length=100)
+    userHours = models.CharField(max_length=100, blank=True)
     """1=SU, 2=AD, 3=IN, 4=TA"""
 
     """
@@ -257,16 +257,16 @@ class Account(models.Model):
 
     # Method used to update user information, currently limited to basic information
     def updateUser(self, email, phone, address, hours):
-        if self.userEmail != email and email is not "":
+        if email is not "":
             self.userEmail = email
 
-        if self.userPhone != phone and phone is not "":
+        if phone is not "":
             self.userPhone = phone
 
-        if self.userAddress != address and address is not "":
+        if address is not "":
             self.userAddress = address
 
-        if self.userHours != hours and hours is not "":
+        if hours is not "":
             self.userHours = hours
 
         self.save()
