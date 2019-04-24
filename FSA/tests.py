@@ -62,8 +62,62 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
-    #def test_updateUser(self):
-        #self.assertEqual(Account.updateUser(self.a1, "uwm@uwm.edu", ""))
+    def test_updateUser(self):
+        # Test updating all params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm@uwm.edu", phone="2624929332", address="wherever dr", hours="12-5"),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "2624929332")
+        self.assertEqual(self.a1.userAddress, "wherever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating three params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm2@uwm.edu", phone="4144929332", address="whoever dr", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm2@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "4144929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating two params
+        self.assertEqual(Account.updateUser(self.a1, email="uwm3@uwm.edu", phone="5154929332", address="", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating one param
+        self.assertEqual(Account.updateUser(self.a1, email="uwm3@uwm.edu", phone="", address="", hours=""),
+                         "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+        # Test updating no params
+        self.assertEqual(Account.updateUser(self.a1, email="", phone="", address="", hours=""), "Account information updated.")
+        self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
+        self.assertEqual(self.a1.userPhone, "5154929332")
+        self.assertEqual(self.a1.userAddress, "whoever dr")
+        self.assertEqual(self.a1.userHours, "12-5")
+
+    def test_updatePass(self):
+        # Test updating password correctly
+        self.assertEqual(Account.updatePass(self.a1, oldPass="password", newPass1="abc123", newPass2="abc123"),
+                         "Password updated successfully.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
+        # Test updating password incorrectly, bad old pass
+        self.assertEqual(Account.updatePass(self.a1, oldPass="wordpass", newPass1="abc1234", newPass2="abc1234"),
+                         "Old password is not correct.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
+        # Test updating password incorrectly, mismatch new passes
+        self.assertEqual(Account.updatePass(self.a1, oldPass="abc123", newPass1="abc1234", newPass2="cba4321"),
+                         "New passwords do not match.")
+        self.assertEqual(self.a1.userPass, "abc123")
+
 
     '''
     def test_editSelf(self):
@@ -281,18 +335,18 @@ class TestCourse(TestCase):
 
 class TestUser(TestCase):
     def setUp(self):
-        # Every test needs a client.
         self.c = Client()
-        self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password', 'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2', 'groupID': 'Supervisor'})
-        self.c.login(username='tdn', password='password')
 
-    #def test_info(self):
+    def test_info(self):
+        self.c.get('/register/')
+        self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password',
+                                   'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2',
+                                   'groupid': '1'})
 
+        response = self.c.get('')
+        self.assertEqual(response.status_code, 200)
+        self.c.post('', {'username': 'tdn', 'password': 'password'})
 
+        response = self.c.get('/user/')
+        self.assertEqual(response.status_code, 200)
 
-class TestRegisterloggedin(TestCase):
-    #so far just a copy of above ^
-    def setUp(self):
-        self.c = Client()
-        self.c.post('/register/', {'name': 'Phillip', 'email': 'pm@uwm.edu', 'username': 'moss', 'password': 'password', 'passwordV': 'password', 'phone': '1234567890', 'address': '123 sesame street', 'hours': 'N/A', 'groupID': 1})
-        self.c.login(username = 'moss', password = 'password')
