@@ -233,4 +233,9 @@ class UserView(View):
         phone = request.POST["phone"]
         address = request.POST["address"]
 
+        username = request.session["SignInName"]
+        user = (Account.objects.all().filter(SignInName=username))[0]
+
+        Account.updateUser(user, email, phone, address)
+
         return redirect("user")

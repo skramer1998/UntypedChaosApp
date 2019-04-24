@@ -254,6 +254,20 @@ class Account(models.Model):
     def getid(self, account):
         return account.groupid
 
+    # Method used to update user information, currently limited to basic information
+    def updateUser(self, email, phone, address):
+        if self.userEmail != email and email is not "":
+            self.userEmail = email
+
+        if self.userPhone != phone and phone is not "":
+            self.userPhone = phone
+
+        if self.userAddress != address and address is not "":
+            self.userAddress = address
+
+        self.save()
+        return "Account information updated."
+
 
 # currently labs will not work
 class Lab(models.Model):
