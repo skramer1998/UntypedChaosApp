@@ -197,6 +197,7 @@ class Account(models.Model):
     userPhone = models.CharField(max_length=30)
     userAddress = models.CharField(max_length=120)
     groupid = models.IntegerField(default=0)
+    userHours = models.CharField(max_length=100)
     """1=SU, 2=AD, 3=IN, 4=TA"""
 
     """
@@ -207,12 +208,12 @@ class Account(models.Model):
         return str(self.SignInName)
 
     @classmethod
-    def create(cls, username, name, email, phone, address, password1, password2, id):
+    def create(cls, username, name, email, phone, address, password1, password2, id, hours):
         if password1 != password2:
             return "passwords don't match, couldn't create account"
         elif not password1 or not password2:
             return "password cannot be blank"
-        newAccount = cls(SignInName=username, userPass=password1, userName=name, userEmail=email, userPhone=phone, userAddress=address, groupid=id)
+        newAccount = cls(SignInName=username, userPass=password1, userName=name, userEmail=email, userPhone=phone, userAddress=address, groupid=id, userHours=hours)
         newAccount.save()
         return newAccount
 
@@ -255,7 +256,7 @@ class Account(models.Model):
         return account.groupid
 
     # Method used to update user information, currently limited to basic information
-    def updateUser(self, email, phone, address):
+    def updateUser(self, email, phone, address, hours):
         if self.userEmail != email and email is not "":
             self.userEmail = email
 
@@ -264,6 +265,9 @@ class Account(models.Model):
 
         if self.userAddress != address and address is not "":
             self.userAddress = address
+
+        if self.userHours != hours and hours is not "":
+            self.userHours = hours
 
         self.save()
         return "Account information updated."

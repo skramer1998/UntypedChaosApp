@@ -99,6 +99,7 @@ class RegisterLoggedIn(View):
         phone = request.POST["phone"]
         address = request.POST["address"]
         groupid = request.POST['groupid']
+        hours = request.POST['hours']
 
         # Check if the user already exists in the system
         check_user = Account.objects.all().filter(SignInName=username)
@@ -112,7 +113,7 @@ class RegisterLoggedIn(View):
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         # Create a new account using the previously gained HTML info
-        Account.create(username, name, email, phone, address, password, passwordV, groupid)
+        Account.create(username, name, email, phone, address, password, passwordV, groupid, hours)
 
         # Redirect to the user page
         return redirect("user")
@@ -168,6 +169,7 @@ class Register(View):
         phone = request.POST["phone"]
         address = request.POST["address"]
         groupid = request.POST["groupid"]
+        hours = request.POST["hours"]
 
         # Check if the user already exists in the database
         check_user = Account.objects.all().filter(SignInName=username)
@@ -187,7 +189,7 @@ class Register(View):
             return render(request, "main/register.html", {"error_messages": error_messages})
 
         # Create a new user once the above checks have passed
-        Account.create(username, name, email, phone, address, password, passwordV, groupid)
+        Account.create(username, name, email, phone, address, password, passwordV, groupid, hours)
 
         # Redirect to login page
         return redirect("login")
@@ -217,6 +219,7 @@ class UserView(View):
         phone = user.userPhone
         address = user.userAddress
         groupid = user.groupid
+        hours = user.userHours
 
         # Get all users in DB to display to the HTML page
         allUsers = Account.objects.all()
@@ -224,7 +227,7 @@ class UserView(View):
         # Return all the data gathered above to the HTML page
         return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password,
                                                   "name": name, "phone": phone, "address": address, "groupid": groupid,
-                                                  "allusers": allUsers})
+                                                  "hours": hours, "allusers": allUsers})
 
     # Post Method:
     # Used to update user information from account page
@@ -232,10 +235,11 @@ class UserView(View):
         email = request.POST["email"]
         phone = request.POST["phone"]
         address = request.POST["address"]
+        hours = request.POST["hours"]
 
         username = request.session["SignInName"]
         user = (Account.objects.all().filter(SignInName=username))[0]
 
-        Account.updateUser(user, email, phone, address)
+        Account.updateUser(user, email, phone, address, hours)
 
         return redirect("user")
