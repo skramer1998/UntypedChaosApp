@@ -62,6 +62,10 @@ class TestAccount(TestCase):
         self.assertNotEqual(self.a2.groupid, "")
         # checks not blank
 
+    def test_getid(self):
+        # Test if userID retrieval works
+        self.assertEqual(self.a1.getid(self.a1), self.t)
+
     def test_updateUser(self):
         # Test updating all params
         self.assertEqual(Account.updateUser(self.a1, email="uwm@uwm.edu", phone="2624929332", address="wherever dr", hours="12-5"),
