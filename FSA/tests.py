@@ -284,7 +284,7 @@ class TestUser(TestCase):
         # Every test needs a client.
         self.c = Client()
         self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password', 'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2', 'groupID': 'Supervisor'})
-        self.c.login(username = 'tdn', password = 'password')
+        self.c.login(username='tdn', password='password')
 
     #def test_info(self):
 
