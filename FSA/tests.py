@@ -26,6 +26,11 @@ class TestAccount(TestCase):
                                  password2="password", id=self.s, hours="1-2")
         # creates 4 accounts with each level of ID
 
+        # Create accounts with blank fields
+        self.a5 = Account.create(username="skramer", name="Sean Kramer", email="",
+                                 phone="", address="", password1="abc123", password2="abc123",
+                                 id=self.i, hours="")
+
     def test_create(self):
         self.assertEqual(Account.create(username="Nate5", name="Nate Z", email="glasses@gmail.com",
                                         phone=1234567890, address="22 Middleton rd", password1="",
@@ -38,6 +43,16 @@ class TestAccount(TestCase):
                                         password2="password2", id=self.t, hours="10-11"),
                          "passwords don't match, couldn't create account")
         # passwords do not match
+
+        # Check blank fields work
+        self.assertEqual(self.a5.SignInName, "skramer")
+        self.assertEqual(self.a5.userPass, "abc123")
+        self.assertEqual(self.a5.userName, "Sean Kramer")
+        self.assertEqual(self.a5.userEmail, "")
+        self.assertEqual(self.a5.userPhone, "")
+        self.assertEqual(self.a5.userAddress, "")
+        self.assertEqual(self.a5.groupid, self.i)
+        self.assertEqual(self.a5.userHours, "")
 
         self.assertEqual(self.a2.SignInName, "Andres3")
         self.assertEqual(self.a2.userName, "Andres Z")
