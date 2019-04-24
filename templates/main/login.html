@@ -8,15 +8,16 @@
     <form action="" method="post">
         <table>
             <tr>
-                <td>username: </td>
+                <td>Username: </td>
                 <td><input type="text" name="username" required ></td>
             </tr>
             <tr>
-                <td>password: </td>
+                <td>Password: </td>
                 <td><input type="password" name="password" required /></td>
             </tr>
         </table>
         {% csrf_token %}
+        <br>
         <input type="submit" value="Login" />
     </form>
 {% endblock %}

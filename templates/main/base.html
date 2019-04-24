@@ -2,15 +2,37 @@
 <html>
     <head>
         <title>FSA</title>
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
     </head>
     <body>
+    <!--
         <div class="menu">
-            <div id = 'logPage' style="margin-left:15px; float:left"><a href="/">login</a></div>
-            <div id = 'regPage' style="margin-left:15px; float:left"><a href="/register">register</a></div>
-            <div id = 'userPage' style="margin-left:15px; float:left"><a href="/user">user</a></div>
-            <div id = 'logoPage' style="margin-left:15px; float:left"><a href="/logout">logout</a></div>
+            <div id = 'logPage' class="menu_el"><a href="/">LOGIN</a></div>
+            <div id = 'regPage' class="menu_el"><a href="/register">REGISTER</a></div>
+            <div id = 'userPage' class="menu_el"><a href="/user">USER</a></div>
+            <div id = 'logoPage' class="menu_el"><a href="/logout">LOGOUT</a></div>
         </div>
+    -->
+        <ul class="navbar">
+            <li id="logPage"><a class="inactive" href="/">LOGIN</a></li>
+            <li id="regPage"><a class="inactive" href="/register">REGISTER</a></li>
+            <li id="userPage"><a class="inactive" href="/user">USER</a></li>
+            <li id="logoPage"><a class="inactive" href="/logout">LOGOUT</a></li>
+        </ul>
+
+        <script>
+        // Add active class to the current button (highlight it)
+        let header = document.getElementById("navbar");
+        let btns = header.getElementsByClassName("inactive");
+        for (let i = 0; i < btns.length; i++) {
+          btns[i].addEventListener("click", function() {
+          let current = document.getElementsByClassName("active");
+          current[0].className = current[0].className.replace(" active", "");
+          this.className += " active";
+          });
+        }
+        </script>
+
         <br/>
         <div class="content container">
             {% block content %}
@@ -22,10 +44,22 @@
                 let log = document.getElementById('logPage');
                 let logo = document.getElementById('logoPage');
                 let user = document.getElementById('userPage');
-                let id = {{ sessionID }}
+                let id = {{ sessionID }};
+                let curPage = window.location.href.split("/")[3];
 
-                console.log("I've been called");
-                console.log(reg);
+                let curActive = document.getElementsByClassName("active");
+                curActive.className = "inactive";
+                if (curPage == ''){
+                    log.className = "active";
+                } else if (curPage == 'register'){
+                    reg.className = "active";
+                } else if (curPage == 'user'){
+                    user.className = "active";
+                } else if (curPage == 'registerloggedin'){
+                    reg.className = "active";
+                } else {
+                    logo.className = "active";
+                }
 
                 // Hide the registration page if user is not logged in, or not a supervisor/admin
                 if (id == -1 || id == 1 || id == 2){
@@ -46,7 +80,6 @@
                 }
 
                 // Hide the logout page if a user is not logged in
-                if (id != -1)
                 return
             }
             window.onload = hideReg();

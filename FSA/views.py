@@ -232,14 +232,29 @@ class UserView(View):
     # Post Method:
     # Used to update user information from account page
     def post(self, request):
-        email = request.POST["email"]
-        phone = request.POST["phone"]
-        address = request.POST["address"]
-        hours = request.POST["hours"]
 
-        username = request.session["SignInName"]
-        user = (Account.objects.all().filter(SignInName=username))[0]
+        # This is a dual-post function
+        # It checks to see if it is updating the account or updating the password from the request, and then
+        # calls the necessary functions / generates variables from there
+        if 'update_account' in request.POST:
+            email = request.POST["email"]
+            phone = request.POST["phone"]
+            address = request.POST["address"]
+            hours = request.POST["hours"]
 
-        Account.updateUser(user, email, phone, address, hours)
+            username = request.session["SignInName"]
+            user = (Account.objects.all().filter(SignInName=username))[0]
+
+            Account.updateUser(user, email, phone, address, hours)
+
+        if 'update_password' in request.POST:
+            oldPass = request.POST["oldPass"]
+            newPass1 = request.POST["newPass1"]
+            newPass2 = request.POST["newPass2"]
+
+            username = request.session["SignInName"]
+            user = (Account.objects.all().filter(SignInName=username))[0]
+
+            Account.updatePass(user, oldPass, newPass1, newPass2)
 
         return redirect("user")

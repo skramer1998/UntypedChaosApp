@@ -5,8 +5,8 @@
         {{ error_messages }}
     {% endif %}
 
-    <h1> Input New User Information </h1>
-    <p>Default passwords are set to the User's username</p>
+    <h1 align="center">New User Registration</h1>
+    <p align="center">A new user's default password is their username.  They can change it once they login.</p>
 
     <form action="{% url 'registerloggedin' %}" method="post">
         {% csrf_token %}
@@ -46,6 +46,7 @@
                 </td>
             </tr>
         </table>
+        <br>
         <input type="submit" value="Submit" />
     </form>
 {% endblock %}

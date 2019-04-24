@@ -272,6 +272,19 @@ class Account(models.Model):
         self.save()
         return "Account information updated."
 
+    # Method used to update user password, mostly used for instructors and TAs
+    def updatePass(self, oldPass, newPass1, newPass2):
+        if self.userPass == oldPass:
+            if newPass1 == newPass2:
+                self.userPass = newPass1
+            else:
+                return "New passwords do not match."
+        else:
+            return "Old password is not correct."
+
+        self.save()
+        return "Password updated successfully."
+
 
 # currently labs will not work
 class Lab(models.Model):
