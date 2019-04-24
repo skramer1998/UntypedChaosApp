@@ -225,3 +225,12 @@ class UserView(View):
         return render(request, "main/user.html", {"SignInName": username, "email": email, "password": password,
                                                   "name": name, "phone": phone, "address": address, "groupid": groupid,
                                                   "allusers": allUsers})
+
+    # Post Method:
+    # Used to update user information from account page
+    def post(self, request):
+        email = request.POST["email"]
+        phone = request.POST["phone"]
+        address = request.POST["address"]
+
+        return redirect("user")
