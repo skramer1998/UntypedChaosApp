@@ -23,9 +23,6 @@
                         <td>Username: {{ SignInName }}</td>
                     </tr>
                     <tr>
-                        <td>Password: {{ password }}</td>
-                    </tr>
-                    <tr>
                         <td>Phone: {{ phone }}</td>
                     </tr>
                     <tr>
@@ -103,24 +100,25 @@
     <ul>
         {% for user in allusers %}
             <li> {% if user.groupid == 1 %}
-                Supervisor =>
+                Supervisor ::
                 {% endif %}
                 {% if user.groupid == 2 %}
-                Administrator =>
+                Administrator ::
                 {% endif %}
                 {% if user.groupid == 3 %}
-                Instructor =>
+                Instructor ::
                 {% endif %}
                 {% if user.groupid == 4 %}
-                TA =>
+                TA ::
                 {% endif %}
 
-               {{ user.userName }} : Email =>{{ user.userEmail }} : Office Hours =>{{ user.userHours }}
+               Name -- [{{ user.userName }}], Email -- [{{ user.userEmail }}], Office Hours -- [{{ user.userHours }}]
                 {% if currentUser.groupid < 3 %}
-                   : Address =>{{ user.userAddress }} : Phone =>{{ user.userPhone }} : Password =>{{ user.userPass }}
+                   , Address -- [{{ user.userAddress }}], Phone -- [{{ user.userPhone }}]
                 {% endif %}
 
             </li>
+            <br>
         {% endfor %}
     </ul>
 
