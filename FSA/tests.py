@@ -440,7 +440,7 @@ class TestRegisterloggedin(TestCase):
     def setUp(self):
         self.c = Client()
 
-    def testAdminCreat(self):
+    def testAdminCreate(self):
         self.c.get('/register/')
         self.c.post('/register/', {'name': 'Phillip', 'email': 'pm@email.com', 'username': 'moss', 'password': 'password',
                                    'passwordV': 'password', 'phone': '1234567890', 'address': '123 Sesame Street', 'hours': 'n/a',
