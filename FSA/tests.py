@@ -2,6 +2,10 @@ from django.test import TestCase, Client
 from FSA.models import Account
 from FSA.models import Course
 
+"""
+ACCEPTANCE TESTS ARE AT THE BOTTOM
+"""
+
 
 class TestAccount(TestCase):
 
@@ -140,96 +144,6 @@ class TestAccount(TestCase):
                          "New passwords do not match.")
         self.assertEqual(self.a1.userPass, "abc123")
 
-    '''
-    def test_editSelf(self):
-        # self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
-        # self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
-        # self.assertEqual(self.a1.editSelf(SignInName="NateDog"), "Incorrect parameters given.")
-        # bad parameters for editSelf, should only return the appropriate string
-
-        self.assertEqual(self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                                          phone=1010101010, address="The Trap", password1="code",
-                                          password2="binary", id=self.i),
-                         "passwords don't match, couldn't create account")
-        self.assertEqual(self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                                          phone=1010101010, address="The Trap", password1="",
-                                          password2="", id=self.i), "password cannot be blank")
-        # invalid passwords
-
-        self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                         phone=1010101010, address="The Trap", password1="code",
-                         password2="code", id=self.i)
-        self.assertEqual(self.a1.user.username, "NateDog")
-        self.assertEqual(self.a1.user.first_name, "Nate")
-        self.assertEqual(self.a1.user.last_name, "Y")
-        self.assertEqual(self.a1.user.email, "Nate")
-        self.assertEqual(self.a1.userPhone, "1010101010")
-        self.assertEqual(self.a1.userAddress, "The Trap")
-        self.assertEqual(self.a1.user.password, "code")
-        self.assertEqual(self.a1.user.id, self.i)
-        # checks if editSelf worked correctly with correct parameters
-        pass
-    '''
-
-    """    
-    def test_editOther(self):
-        self.assertFalse(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertTrue(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertTrue(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
-        # checks only accounts with proper ID can edit other accounts
-
-        self.assertFalse(self.a4.editOther(self.a1))
-        self.assertFalse(self.a4.editOther(self.a1, "Howdy yall, I'm Towly!"))
-        self.assertFalse(self.a4.editOther(self.a1, 'a', self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(
-            self.a4.editOther(self.a1, "NateDog", "iNstRectAr", "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", 42, 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "NAT@", "The Trap House", 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1))
-        # returns false for bad parameters given
-
-        self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010)
-        self.assertEqual(self.a1.user.username, "NateDog")
-        self.assertEqual(self.a1.user.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userName, "NateDog")
-        self.assertEqual(self.a1.SignInName, self.I)
-        self.assertEqual(self.a1.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userPhone, 1010101010)
-        self.assertEqual(self.a1.userAddress, "The Trap House")
-        self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
-        # checks edit other successfully edits user info with correct parameters
-        pass
-
-    def test_checkRole(self):
-        self.assertTrue(self.a1.is_TA() | self.a1.is_Instructor() | self.a1.is_Admin() | self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Instructor())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Admin())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Admin())
-        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_Admin() & self.a1.is_Supervisor())
-        # makes ure user has an ID, and that it does not have more than 1 ID.
-
-        self.assertFalse(self.a1.invalidatePassword(self.a1.user))
-        self.assertFalse(self.a2.invalidatePassword(self.a1.user))
-        self.assertTrue(self.a3.invalidatePassword(self.a1.user))
-        self.assertTrue(self.a4.invalidatePassword(self.a1.user))
-        # checks only accounts with proper ID can invalidate passwords
-
-        self.assertFalse(self.a1.createCourse())
-        self.assertFalse(self.a2.createCourse())
-        self.assertTrue(self.a3.createCourse())
-        self.assertTrue(self.a4.createCourse())
-        # checks only accounts with proper ID can create courses
-        pass
-    """
-
 
 class TestCourse(TestCase):
 
@@ -304,54 +218,6 @@ class TestCourse(TestCase):
     def test__str__(self):
         self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL Andres3 Nate4")
         # asserts toStr has correct format
-
-    """
-    def testSet(self):
-        self.c2.setname("Shower Physics")
-        self.c2.setnumber(100)
-        self.c2.setplace("Physics Building")
-        self.c2.setdays("MW")
-        self.c2.settime("12:00 - 12:50")
-        self.c2.setsemester("SPRING")
-        self.c2.setprofessor("GLOCK")
-        self.c2.setta("PING")
-        # sets new values
-
-        self.assertEqual(self.c2.name, "Shower Physics")
-        self.assertEqual(self.c2.number, 100)
-        self.assertEqual(self.c2.place, "Physics Building")
-        self.assertEqual(self.c2.days, "MW")
-        self.assertEqual(self.c2.time, "12:00 - 12:50")
-        self.assertEqual(self.c2.semester, "SPRING")
-        self.assertEqual(self.c2.professor, "GLOCK")
-        self.assertEqual(self.c2.ta, "PING")
-        # checks correctly set
-
-        self.assertFalse(self.c2.setname())
-        self.assertFalse(self.c2.setnumber())
-        self.assertFalse(self.c2.setplace())
-        self.assertFalse(self.c2.setdays())
-        self.assertFalse(self.c2.settime())
-        self.assertFalse(self.c2.setsemester())
-        self.assertFalse(self.c2.setprofessor())
-        self.assertFalse(self.c2.setta())
-        # checks empty set
-
-        self.assertFalse(self.c2.setname(12))
-        self.assertFalse(self.c2.setnumber("hi"))
-        self.assertFalse(self.c2.setplace(12))
-        self.assertFalse(self.c2.setdays(12))
-        self.assertFalse(self.c2.settime(12))
-        self.assertFalse(self.c2.setsemester(12))
-        self.assertFalse(self.c2.setprofessor(12))
-        self.assertFalse(self.c2.setta(12))
-        # checks incorrectly set
-
-        self.assertTrue(self.c2.search("Shower Physics"))
-        self.assertFalse(self.c2.search("History of Baths"))
-        # checks updated names in search
-        pass
-    """
 
 
 # Acceptance test class
