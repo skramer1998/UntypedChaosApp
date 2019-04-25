@@ -85,6 +85,15 @@ class RegisterLoggedIn(View):
         if not request.session.get("SignInName"):
             return redirect("login")
 
+        # next line log outs a user after 5 minutes
+        # request.session.set_expiry(300)
+
+        user = request.session.get("SignInName")
+        user = (Account.objects.all().filter(SignInName=user))[0]
+        user = user.groupid
+        if user > 2:
+            return render(request, "main/user.html")
+
         return render(request, "main/registerloggedin.html")
 
     # Post Method:
@@ -133,13 +142,12 @@ class Register(View):
     # Process registration access, redirect as necessary (Gonna need @Andres to update this method comment)
     def get(self, request):
 
-        if not request.session.get("SignInName"):
-            return render(request, "main/register.html")
+        if request.session.get("SignInName"):
+            return render(request, "main/user.html")
 
         user = request.session.get("SignInName")
         user = (Account.objects.all().filter(SignInName=user))[0]
         user = user.groupid
-        print(user)
 
         check = False
         if Account.objects.all().filter(groupid="1").count() == 1:
@@ -210,6 +218,9 @@ class UserView(View):
         # Check if a user is logged in, if they are not then redirect to login
         if not request.session.get("SignInName"):
             return redirect("login")
+
+        # next line log outs a user after 5 minutes
+        # request.session.set_expiry(300)
 
         # Get all the user info to display to the HTML page
         username = request.session["SignInName"]
