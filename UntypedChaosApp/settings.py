@@ -25,19 +25,21 @@ SECRET_KEY = '4ymi34rc=&w1h__27p1v)&#up6$$r%@t)l6-snvb4ll-+%%*r2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'testserver',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'FSA.apps.FsaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'FSA.apps.FsaConfig',
 ]
 
 MIDDLEWARE = [
@@ -116,7 +118,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+DEFAULT_CHARSET = 'utf-8'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
