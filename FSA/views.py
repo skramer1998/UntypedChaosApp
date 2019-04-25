@@ -82,6 +82,9 @@ class RegisterLoggedIn(View):
     # Get Method:
     # Renders the registerloggedin page
     def get(self, request):
+        if not request.session.get("SignInName"):
+            return redirect("login")
+
         return render(request, "main/registerloggedin.html")
 
     # Post Method:
