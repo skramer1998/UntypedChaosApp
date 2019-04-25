@@ -145,21 +145,22 @@ class Register(View):
         if request.session.get("SignInName"):
             return render(request, "main/user.html")
 
-        user = request.session.get("SignInName")
-        user = (Account.objects.all().filter(SignInName=user))[0]
-        user = user.groupid
+        if 'SignInName' in request.session:
+            user = request.session.get("SignInName")
+            user = (Account.objects.all().filter(SignInName=user))[0]
+            user = user.groupid
 
-        check = False
-        if Account.objects.all().filter(groupid="1").count() == 1:
-            check = True
-        if Account.objects.all().filter(groupid="2").count() == 1:
-            check = True
-        if user == 3:
             check = False
-        if user == 4:
-            check = False
-        if check:
-            return redirect("registerloggedin")
+            if Account.objects.all().filter(groupid="1").count() == 1:
+                check = True
+            if Account.objects.all().filter(groupid="2").count() == 1:
+                check = True
+            if user == 3:
+                check = False
+            if user == 4:
+                check = False
+            if check:
+                return redirect("registerloggedin")
 
         return render(request, "main/register.html")
 
