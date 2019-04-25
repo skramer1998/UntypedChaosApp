@@ -352,6 +352,7 @@ class TestCourse(TestCase):
     """
 
 
+# Acceptance test class
 class TestRegister(TestCase):
     def setUp(self):
         self.client = Client()
@@ -386,6 +387,20 @@ class TestRegister(TestCase):
         getUser = getUser.SignInName
         self.assertEqual(getUser, 'superuser')
 
+        # create admin account with same username as supervisor but should not go through
+        self.client.post('/register/',
+                         {'email': 'admin@email.com', 'username': 'superuser', 'password': 'superpass',
+                          'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
+                          'address': 'Milwaukee Street', 'groupid': '2',
+                          'hours': 'Monday 10:00am-11:00am'})
+        # should only be one account in database
+        self.assertEqual(Account.objects.all().count(), 1)
+        # should not overwrite original supervisor
+        getUser = Account.objects.all().filter(SignInName='superuser')
+        getUser = getUser[0]
+        getUser = getUser.SignInName
+        self.assertEqual(getUser, 'superuser')
+
         # create second account type admin
         self.client.post('/register/', {'email': 'admin@email.com', 'username': 'adminuser', 'password': 'adminpass',
                                         'passwordV': 'adminpass', 'name': 'Admin Name', 'phone': '1234567890',
@@ -406,14 +421,86 @@ class TestRegister(TestCase):
                                         'hours': 'Monday 10:00am-11:00am'})
         # should be two accounts in database
         self.assertEqual(Account.objects.all().count(), 2)
-        # should not overwrite original supervisor
+        # should not overwrite original admin
         getUser = Account.objects.all().filter(SignInName='adminuser', groupid='2')
         getUser = getUser[0]
         getUser = getUser.SignInName
         self.assertEqual(getUser, 'adminuser')
 
+    def test_not_enough_information(self):
+        # go to post with all empty fields
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '', 'name': '',
+                                        'phone': '', 'address': '', 'groupid': '', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
 
+        # only name in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': 'onlyName', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
 
+        # only username in post
+        self.client.post('/register/', {'email': '', 'username': 'onlyUsername', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only password in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': 'onlyPassword', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only passwordV in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': 'onlyPasswordV',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only passwordV in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': 'onlyPasswordV',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only email in post
+        self.client.post('/register/', {'email': 'email@uwm.edu', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only phone in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '1234567890', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only address in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': 'Milwaukee Somewhere', 'groupid': '1',
+                                        'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only hours in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': 'Monday'})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+    def test_barely_enough_information(self):
+        # only needs username, password, passwordV, name, groupid
+        self.client.post('/register/', {'email': '', 'username': 'NeedS', 'password': 'match', 'passwordV': 'match',
+                                        'name': 'Need', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # one account in database
+        self.assertEqual(Account.objects.all().count(), 1)
+
+        # only needs username, password, passwordV, name, groupid
+        self.client.post('/register/', {'email': '', 'username': 'NeedA', 'password': 'match', 'passwordV': 'match',
+                                        'name': 'Need', 'phone': '', 'address': '', 'groupid': '2', 'hours': ''})
+        # two accounts in database
+        self.assertEqual(Account.objects.all().count(), 2)
 
 
 class TestUser(TestCase):
