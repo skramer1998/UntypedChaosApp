@@ -83,16 +83,18 @@ class TestAccount(TestCase):
 
     def test_updateUser(self):
         # Test updating all params
-        self.assertEqual(Account.updateUser(self.a1, email="uwm@uwm.edu", phone="2624929332", address="wherever dr", hours="12-5"),
-                         "Account information updated.")
+        self.assertEqual(
+            Account.updateUser(self.a1, email="uwm@uwm.edu", phone="2624929332", address="wherever dr", hours="12-5"),
+            "Account information updated.")
         self.assertEqual(self.a1.userEmail, "uwm@uwm.edu")
         self.assertEqual(self.a1.userPhone, "2624929332")
         self.assertEqual(self.a1.userAddress, "wherever dr")
         self.assertEqual(self.a1.userHours, "12-5")
 
         # Test updating three params
-        self.assertEqual(Account.updateUser(self.a1, email="uwm2@uwm.edu", phone="4144929332", address="whoever dr", hours=""),
-                         "Account information updated.")
+        self.assertEqual(
+            Account.updateUser(self.a1, email="uwm2@uwm.edu", phone="4144929332", address="whoever dr", hours=""),
+            "Account information updated.")
         self.assertEqual(self.a1.userEmail, "uwm2@uwm.edu")
         self.assertEqual(self.a1.userPhone, "4144929332")
         self.assertEqual(self.a1.userAddress, "whoever dr")
@@ -115,7 +117,8 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userHours, "12-5")
 
         # Test updating no params
-        self.assertEqual(Account.updateUser(self.a1, email="", phone="", address="", hours=""), "Account information updated.")
+        self.assertEqual(Account.updateUser(self.a1, email="", phone="", address="", hours=""),
+                         "Account information updated.")
         self.assertEqual(self.a1.userEmail, "uwm3@uwm.edu")
         self.assertEqual(self.a1.userPhone, "5154929332")
         self.assertEqual(self.a1.userAddress, "whoever dr")
@@ -136,7 +139,6 @@ class TestAccount(TestCase):
         self.assertEqual(Account.updatePass(self.a1, oldPass="abc123", newPass1="abc1234", newPass2="cba4321"),
                          "New passwords do not match.")
         self.assertEqual(self.a1.userPass, "abc123")
-
 
     '''
     def test_editSelf(self):
@@ -375,10 +377,11 @@ class TestRegister(TestCase):
         self.assertEqual(getUser, 'superuser')
 
         # create another supervisor account but should not go through
-        self.client.post('/register/', {'email': 'super@email.com', 'username': 'fakesuperuser', 'password': 'superpass',
-                                        'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
-                                        'address': 'Milwaukee Street', 'groupid': '1',
-                                        'hours': 'Monday 10:00am-11:00am'})
+        self.client.post('/register/',
+                         {'email': 'super@email.com', 'username': 'fakesuperuser', 'password': 'superpass',
+                          'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
+                          'address': 'Milwaukee Street', 'groupid': '1',
+                          'hours': 'Monday 10:00am-11:00am'})
         # should only be one account in database
         self.assertEqual(Account.objects.all().count(), 1)
         # should not overwrite original supervisor
@@ -503,6 +506,7 @@ class TestRegister(TestCase):
         self.assertEqual(Account.objects.all().count(), 2)
 
 
+# Acceptance test class
 class TestUser(TestCase):
     def setUp(self):
         self.c = Client()
@@ -525,7 +529,8 @@ class TestUser(TestCase):
         # checks data and password are stored properly
 
     def test_update(self):
-        self.c.post('/user/',  {'email': 't@gmail.com', 'phone': '5556969', 'address': '567 Street', 'hours': '12-2', 'update_account': True})
+        self.c.post('/user/', {'email': 't@gmail.com', 'phone': '5556969', 'address': '567 Street', 'hours': '12-2',
+                               'update_account': True})
         self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userEmail, 't@gmail.com')
         self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userAddress, '567 Street')
         # checks that update account info works
@@ -545,8 +550,7 @@ class TestUser(TestCase):
         # we can logout from user, brings us back to login page
 
 
-
-class LoginTest(TestCase): # Acceptance tests for our login page
+class LoginTest(TestCase):  # Acceptance tests for our login page
 
     def setUp(self):
         # Every test needs a client.
@@ -561,8 +565,8 @@ class LoginTest(TestCase): # Acceptance tests for our login page
     def test_loginRedirectResponses(self):
         # setup
         Account.create(username="Nate5", name="Nate Z", email="glasses@gmail.com",
-                        phone=1234567890, address="22 Middleton rd", password1="password",
-                        password2="password", id=1, hours="10-11")
+                       phone=1234567890, address="22 Middleton rd", password1="password",
+                       password2="password", id=1, hours="10-11")
         # pass along existing credentials from setup
         response = self.client.post('/', {'username': 'Nate5', 'password': 'password'})
         # see if those are good, redirect to main page if all is well
