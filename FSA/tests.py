@@ -2,6 +2,10 @@ from django.test import TestCase, Client
 from FSA.models import Account
 from FSA.models import Course
 
+"""
+ACCEPTANCE TEST CLASSES AT THE BOTTOM
+"""
+
 
 class TestAccount(TestCase):
 
@@ -138,97 +142,6 @@ class TestAccount(TestCase):
         self.assertEqual(self.a1.userPass, "abc123")
 
 
-    '''
-    def test_editSelf(self):
-        # self.assertEqual(self.a1.editSelf(), "Incorrect parameters given.")
-        # self.assertEqual(self.a1.editSelf("Howdy yall, I'm Towly!"), "Incorrect parameters given.")
-        # self.assertEqual(self.a1.editSelf(SignInName="NateDog"), "Incorrect parameters given.")
-        # bad parameters for editSelf, should only return the appropriate string
-
-        self.assertEqual(self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                                          phone=1010101010, address="The Trap", password1="code",
-                                          password2="binary", id=self.i),
-                         "passwords don't match, couldn't create account")
-        self.assertEqual(self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                                          phone=1010101010, address="The Trap", password1="",
-                                          password2="", id=self.i), "password cannot be blank")
-        # invalid passwords
-
-        self.a1.editSelf(username="NateDog", name="Nate Y", email="x@gmail.com",
-                         phone=1010101010, address="The Trap", password1="code",
-                         password2="code", id=self.i)
-        self.assertEqual(self.a1.user.username, "NateDog")
-        self.assertEqual(self.a1.user.first_name, "Nate")
-        self.assertEqual(self.a1.user.last_name, "Y")
-        self.assertEqual(self.a1.user.email, "Nate")
-        self.assertEqual(self.a1.userPhone, "1010101010")
-        self.assertEqual(self.a1.userAddress, "The Trap")
-        self.assertEqual(self.a1.user.password, "code")
-        self.assertEqual(self.a1.user.id, self.i)
-        # checks if editSelf worked correctly with correct parameters
-        pass
-    '''
-
-    """    
-    def test_editOther(self):
-        self.assertFalse(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertTrue(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertTrue(
-            self.a1.editOther(self.a1.user, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
-        # checks only accounts with proper ID can edit other accounts
-
-        self.assertFalse(self.a4.editOther(self.a1))
-        self.assertFalse(self.a4.editOther(self.a1, "Howdy yall, I'm Towly!"))
-        self.assertFalse(self.a4.editOther(self.a1, 'a', self.I, "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(
-            self.a4.editOther(self.a1, "NateDog", "iNstRectAr", "Natedog@gmail.com", "The Trap House", 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", 42, 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "NAT@", "The Trap House", 1010101010))
-        self.assertFalse(self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1))
-        # returns false for bad parameters given
-
-        self.a4.editOther(self.a1, "NateDog", self.I, "Natedog@gmail.com", "The Trap House", 1010101010)
-        self.assertEqual(self.a1.user.username, "NateDog")
-        self.assertEqual(self.a1.user.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userName, "NateDog")
-        self.assertEqual(self.a1.SignInName, self.I)
-        self.assertEqual(self.a1.userEmail, "Natedog@gmail.com")
-        self.assertEqual(self.a1.userPhone, 1010101010)
-        self.assertEqual(self.a1.userAddress, "The Trap House")
-        self.a1.editSelf("Nate", self.T, "glasses@gmail.com", "22 Middleton Rd", 1234567890)
-        # checks edit other successfully edits user info with correct parameters
-        pass
-
-    def test_checkRole(self):
-        self.assertTrue(self.a1.is_TA() | self.a1.is_Instructor() | self.a1.is_Admin() | self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Instructor())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Admin())
-        self.assertFalse(self.a1.is_TA() & self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Admin())
-        self.assertFalse(self.a1.is_Instructor() & self.a1.is_Supervisor())
-        self.assertFalse(self.a1.is_Admin() & self.a1.is_Supervisor())
-        # makes ure user has an ID, and that it does not have more than 1 ID.
-
-        self.assertFalse(self.a1.invalidatePassword(self.a1.user))
-        self.assertFalse(self.a2.invalidatePassword(self.a1.user))
-        self.assertTrue(self.a3.invalidatePassword(self.a1.user))
-        self.assertTrue(self.a4.invalidatePassword(self.a1.user))
-        # checks only accounts with proper ID can invalidate passwords
-
-        self.assertFalse(self.a1.createCourse())
-        self.assertFalse(self.a2.createCourse())
-        self.assertTrue(self.a3.createCourse())
-        self.assertTrue(self.a4.createCourse())
-        # checks only accounts with proper ID can create courses
-        pass
-    """
-
-
 class TestCourse(TestCase):
 
     def setUp(self):
@@ -303,55 +216,8 @@ class TestCourse(TestCase):
         self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL Andres3 Nate4")
         # asserts toStr has correct format
 
-    """
-    def testSet(self):
-        self.c2.setname("Shower Physics")
-        self.c2.setnumber(100)
-        self.c2.setplace("Physics Building")
-        self.c2.setdays("MW")
-        self.c2.settime("12:00 - 12:50")
-        self.c2.setsemester("SPRING")
-        self.c2.setprofessor("GLOCK")
-        self.c2.setta("PING")
-        # sets new values
 
-        self.assertEqual(self.c2.name, "Shower Physics")
-        self.assertEqual(self.c2.number, 100)
-        self.assertEqual(self.c2.place, "Physics Building")
-        self.assertEqual(self.c2.days, "MW")
-        self.assertEqual(self.c2.time, "12:00 - 12:50")
-        self.assertEqual(self.c2.semester, "SPRING")
-        self.assertEqual(self.c2.professor, "GLOCK")
-        self.assertEqual(self.c2.ta, "PING")
-        # checks correctly set
-
-        self.assertFalse(self.c2.setname())
-        self.assertFalse(self.c2.setnumber())
-        self.assertFalse(self.c2.setplace())
-        self.assertFalse(self.c2.setdays())
-        self.assertFalse(self.c2.settime())
-        self.assertFalse(self.c2.setsemester())
-        self.assertFalse(self.c2.setprofessor())
-        self.assertFalse(self.c2.setta())
-        # checks empty set
-
-        self.assertFalse(self.c2.setname(12))
-        self.assertFalse(self.c2.setnumber("hi"))
-        self.assertFalse(self.c2.setplace(12))
-        self.assertFalse(self.c2.setdays(12))
-        self.assertFalse(self.c2.settime(12))
-        self.assertFalse(self.c2.setsemester(12))
-        self.assertFalse(self.c2.setprofessor(12))
-        self.assertFalse(self.c2.setta(12))
-        # checks incorrectly set
-
-        self.assertTrue(self.c2.search("Shower Physics"))
-        self.assertFalse(self.c2.search("History of Baths"))
-        # checks updated names in search
-        pass
-    """
-
-
+# Acceptance test classes
 class TestRegister(TestCase):
     def setUp(self):
         self.client = Client()
@@ -374,14 +240,29 @@ class TestRegister(TestCase):
         self.assertEqual(getUser, 'superuser')
 
         # create another supervisor account but should not go through
-        self.client.post('/register/', {'email': 'super@email.com', 'username': 'fakesuperuser', 'password': 'superpass',
-                                        'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
-                                        'address': 'Milwaukee Street', 'groupid': '1',
-                                        'hours': 'Monday 10:00am-11:00am'})
+        self.client.post('/register/',
+                         {'email': 'super@email.com', 'username': 'fakesuperuser', 'password': 'superpass',
+                          'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
+                          'address': 'Milwaukee Street', 'groupid': '1',
+                          'hours': 'Monday 10:00am-11:00am'})
         # should only be one account in database
         self.assertEqual(Account.objects.all().count(), 1)
         # should not overwrite original supervisor
         getUser = Account.objects.all().filter(SignInName='superuser', groupid='1')
+        getUser = getUser[0]
+        getUser = getUser.SignInName
+        self.assertEqual(getUser, 'superuser')
+
+        # create admin account with same username as supervisor but should not go through
+        self.client.post('/register/',
+                         {'email': 'admin@email.com', 'username': 'superuser', 'password': 'superpass',
+                          'passwordV': 'superpass', 'name': 'Supervisor Name', 'phone': '1234567890',
+                          'address': 'Milwaukee Street', 'groupid': '2',
+                          'hours': 'Monday 10:00am-11:00am'})
+        # should only be one account in database
+        self.assertEqual(Account.objects.all().count(), 1)
+        # should not overwrite original supervisor
+        getUser = Account.objects.all().filter(SignInName='superuser')
         getUser = getUser[0]
         getUser = getUser.SignInName
         self.assertEqual(getUser, 'superuser')
@@ -406,35 +287,165 @@ class TestRegister(TestCase):
                                         'hours': 'Monday 10:00am-11:00am'})
         # should be two accounts in database
         self.assertEqual(Account.objects.all().count(), 2)
-        # should not overwrite original supervisor
+        # should not overwrite original admin
         getUser = Account.objects.all().filter(SignInName='adminuser', groupid='2')
         getUser = getUser[0]
         getUser = getUser.SignInName
         self.assertEqual(getUser, 'adminuser')
 
+    def test_not_enough_information(self):
+        # go to post with all empty fields
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '', 'name': '',
+                                        'phone': '', 'address': '', 'groupid': '', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only name in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': 'onlyName', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only username in post
+        self.client.post('/register/', {'email': '', 'username': 'onlyUsername', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only password in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': 'onlyPassword', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only passwordV in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': 'onlyPasswordV',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only passwordV in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': 'onlyPasswordV',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only email in post
+        self.client.post('/register/', {'email': 'email@uwm.edu', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only phone in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '1234567890', 'address': '', 'groupid': '1', 'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only address in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': 'Milwaukee Somewhere', 'groupid': '1',
+                                        'hours': ''})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+        # only hours in post
+        self.client.post('/register/', {'email': '', 'username': '', 'password': '', 'passwordV': '',
+                                        'name': '', 'phone': '', 'address': '', 'groupid': '1', 'hours': 'Monday'})
+        # nothing should be created
+        self.assertEqual(Account.objects.all().count(), 0)
+
+    def test_barely_enough_information(self):
+        # only needs username, password, passwordV, name, groupid
+        self.client.post('/register/', {'email': '', 'username': 'NeedS', 'password': 'match', 'passwordV': 'match',
+                                        'name': 'Need', 'phone': '', 'address': '', 'groupid': '1', 'hours': ''})
+        # one account in database
+        self.assertEqual(Account.objects.all().count(), 1)
+
+        # only needs username, password, passwordV, name, groupid
+        self.client.post('/register/', {'email': '', 'username': 'NeedA', 'password': 'match', 'passwordV': 'match',
+                                        'name': 'Need', 'phone': '', 'address': '', 'groupid': '2', 'hours': ''})
+        # two accounts in database
+        self.assertEqual(Account.objects.all().count(), 2)
 
 
-
-
+# Acceptance test classes
 class TestUser(TestCase):
     def setUp(self):
         self.c = Client()
-
-    def test_info(self):
         self.c.get('/register/')
         self.c.post('/register/', {'name': 'tyler', 'email': 'x@gmail.com', 'username': 'tdn', 'password': 'password',
                                    'passwordV': 'password', 'phone': '5556969', 'address': '123 lane', 'hours': '12-2',
                                    'groupid': '1'})
-
-        response = self.c.get('')
-        self.assertEqual(response.status_code, 200)
+        self.c.get('')
         self.c.post('', {'username': 'tdn', 'password': 'password'})
+        # creates account and logs into user page
 
+    def test_info(self):
         response = self.c.get('/user/')
         self.assertEqual(response.status_code, 200)
+        # we are now logged in on the user page
+
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userEmail, 'x@gmail.com')
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().groupid, 1)
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userPass, 'password')
+        # checks data and password are stored properly
+
+    def test_update(self):
+        self.c.post('/user/', {'email': 't@gmail.com', 'phone': '5556969', 'address': '567 Street', 'hours': '12-2',
+                               'update_account': True})
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userEmail, 't@gmail.com')
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userAddress, '567 Street')
+        # checks that update account info works
+
+        self.c.post('/user/', {'oldPass': 'password', 'newPass1': 'yeet', 'newPass2': 'yeet', 'update_password': True})
+        self.assertEqual(Account.objects.all().filter(SignInName='tdn').get().userPass, 'yeet')
+        # checks that update password works correctly
+
+    def test_links(self):
+        response = self.c.get('/registerloggedin/')
+        self.assertEqual(response.status_code, 200)
+        # we can access register page from user
+
+        self.c.get('/logout/')
+        response = self.c.get('')
+        self.assertEqual(response.status_code, 200)
+        # we can logout from user, brings us back to login page
 
 
+class LoginTest(TestCase):  # Acceptance tests for our login page
 
+    def setUp(self):
+        # Every test needs a client.
+        self.client = Client()
+
+    def test_setup(self):
+        # Issue a GET request for the main page, which is login
+        response = self.client.get('/')
+        # check that it's ok
+        self.assertEqual(response.status_code, 200)
+
+    def test_loginRedirectResponses(self):
+        # setup
+        Account.create(username="Nate5", name="Nate Z", email="glasses@gmail.com",
+                       phone=1234567890, address="22 Middleton rd", password1="password",
+                       password2="password", id=1, hours="10-11")
+        # pass along existing credentials from setup
+        response = self.client.post('/', {'username': 'Nate5', 'password': 'password'})
+        # see if those are good, redirect to main page if all is well
+        self.assertEqual(response.status_code, 302)
+
+    def test_loginFailRedirectResponse(self):
+        # pass along bad credentials
+        response = self.client.post('/', {'username': 'NotGood', 'password': 'NotGood'})
+        # see if it rejects those, which will keep them  ar the login page
+        self.assertEqual(response.status_code, 200)
+
+    def test_loginFailedNoCredentials(self):
+        # pass along empty
+        response = self.client.post('/', {'username': '', 'password': ''})
+        # keep user at login page
+        self.assertEqual(response.status_code, 200)
 
 class TestRegisterloggedin(TestCase):
     def setUp(self):
@@ -447,5 +458,5 @@ class TestRegisterloggedin(TestCase):
                                    'groupid': '1'})
         self.c.post('', {'username': 'moss', 'password': 'password'})
         self.c.get('/registerloggedin/')
-        self.c.post('registerloggedin/', {'name': 'admin', 'email': 'admin.email', 'username': 'admin', 'phone': '0987654321', 'address': 'default', 'hours':, '10-11', 'groupid': '2'})
+        self.c.post('registerloggedin/', {'name': 'admin', 'email': 'admin.email', 'username': 'admin', 'phone': '0987654321', 'address': 'default', 'hours': '10-11', 'groupid': '2'})
         response = self.c.get('')
