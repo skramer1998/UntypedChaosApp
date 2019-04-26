@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.views import View
 
-from django.contrib.sessions.models import Session
 """ DEPRECIATED COMMAND LINE IMPORT
 from FSA.models import Terminal
 from django.template.defaultfilters import linebreaksbr
