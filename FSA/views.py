@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.views import View
 
+from django.contrib.sessions.models import Session
 """ DEPRECIATED COMMAND LINE IMPORT
 from FSA.models import Terminal
 from django.template.defaultfilters import linebreaksbr
@@ -65,7 +66,6 @@ class LogoutView(View):
     Logout:
         This is the view that will be processed by all users when they attempt to logout.
     """
-
     # Get Method:
     # Used to remove the existing user from the session, renders login page
     def get(self, request):
