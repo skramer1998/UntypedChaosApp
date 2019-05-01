@@ -59,18 +59,12 @@
         {% endif %}
 
             <td>
-                <ul>
                     {% for course in allClasses %}
-                        <li>
 
-                            Name -- [{{ course.name }}], Number -- [{{ course.number }}], Place -- [{{ course.place }}],
-                            Days -- [{{ course.days }}], Time -- [{{ course.time }}], Semester -- [{{ course.semester }}],
-                            Professor -- [{{ course.professor }}], TA(s) -- [{{ allTAs.items.course }}]
+                            <a href="/courseview?coursename={{ course.name }}">{{ course.name }}</a>
+                            <br>
 
-                        </li>
-                        <br>
                     {% endfor %}
-                </ul>
             </td>
         </tr>
 
