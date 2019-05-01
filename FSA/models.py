@@ -305,7 +305,8 @@ class Course(models.Model):
     time = models.CharField(max_length=30)
     semester = models.CharField(max_length=30)
     professor = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
-    ta = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
+    #ta = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
+    ta = models.ManyToManyField(Account)
 
     # labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
 
@@ -340,7 +341,9 @@ class Course(models.Model):
             if accountp is not None:
                 if accountta is not None:
                     course = cls(name=name, number=number, place=place, days=days, time=time, semester=semester,
-                                 professor=accountp, ta=accountta)
+                                 professor=accountp)
+                    course.save()
+                    course.ta.add(accountta)
                     course.save()
                     return course
             return "Course can not be created."
