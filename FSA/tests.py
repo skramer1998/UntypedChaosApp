@@ -507,3 +507,14 @@ class TestRegisterloggedin(TestCase):
         user = user[0]
         user = user.SignInName
         self.assertEqual(user, "admin")
+
+class TestCourses(TestCase):
+    def setUp(self):
+        self.c = Client()
+        self.c.get('/register/')
+        self.c.post('/register/',
+                    {'name': 'Phillip', 'email': 'pm@email.com', 'username': 'moss', 'password': 'password',
+                     'passwordV': 'password', 'phone': '1234567890', 'address': '123 Sesame Street', 'hours': 'n/a',
+                     'groupid': '1'})
+        self.c.post('', {'username': 'moss', 'password': 'password'})
+        self.c.get('/courses/')
