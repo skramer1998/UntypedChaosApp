@@ -315,7 +315,9 @@ class CourseView(View):
         username = request.session.get("SignInName")
         user = Account.objects.all().filter(SignInName=username).first()
 
-        return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user})
+        listTA = course.ta.all()
+
+        return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user, "listTA": listTA})
 
 
     def post(self, request):
