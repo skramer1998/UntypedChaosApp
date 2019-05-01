@@ -17,6 +17,7 @@
             <li id="logPage"><a class="inactive" href="/">LOGIN</a></li>
             <li id="regPage"><a class="inactive" href="/register">REGISTER</a></li>
             <li id="userPage"><a class="inactive" href="/user">USER</a></li>
+            <li id="courseCat"><a class="inactive" href="/courses">COURSE CATALOG</a></li>
             <li id="logoPage"><a class="inactive" href="/logout">LOGOUT</a></li>
         </ul>
         <br/>
@@ -30,6 +31,7 @@
                 let log = document.getElementById('logPage');
                 let logo = document.getElementById('logoPage');
                 let user = document.getElementById('userPage');
+                let courses = document.getElementById('courseCat');
                 let id = {{ sessionID }};
                 let curPage = window.location.href.split("/")[3];
 
@@ -41,8 +43,10 @@
                     reg.className = "active";
                 } else if (curPage == 'user'){
                     user.className = "active";
-                } else if (curPage == 'registerloggedin'){
+                } else if (curPage == 'registerloggedin') {
                     reg.className = "active";
+                } else if (curPage == 'courses'){
+                    courses.className = "active";
                 } else {
                     logo.className = "active";
                 }
@@ -55,14 +59,17 @@
                 }
 
                 // Hide the login page if a user is logged in, and the logout/user page if a user is not
+                // Hide the courses page if a user is not logged in, and show it if they are
                 if (id == -1){
                     log.style.display = "block";
                     logo.style.display = "none";
                     user.style.display = "none";
+                    courses.style.display = "none"
                 } else {
                     log.style.display = "none";
                     logo.style.display = "block";
                     user.style.display = "block";
+                    courses.style.display = "block"
                 }
 
                 // Hide the logout page if a user is not logged in

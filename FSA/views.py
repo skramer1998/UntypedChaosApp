@@ -2,33 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.views import View
-
-""" DEPRECIATED COMMAND LINE IMPORT
-from FSA.models import Terminal
-from django.template.defaultfilters import linebreaksbr
-"""
-
-from .models import Account
-
-# Create your views here.
-
-""" DEPRECIATED COMMAND LINE VIEW
-class Home(View):
-
-    def get(self, request):
-        return render(request, 'main/index.html')
-
-    def post(self, request):
-        yourInstance = Terminal()
-        commandInput = request.POST["command"]
-        if commandInput:
-            response = yourInstance.command(commandInput)
-            response = linebreaksbr(response)
-        else:
-            response = ""
-        return render(request, 'main/index.html', {"message": response})
-
-"""
+from .models import Account, Course
 
 
 class Login(View):
@@ -140,9 +114,6 @@ class Register(View):
     # Get Method:
     # Process registration access, redirect as necessary (Gonna need @Andres to update this method comment)
     def get(self, request):
-
-        if request.session.get("SignInName"):
-            return render(request, "main/user.html")
 
         if 'SignInName' in request.session:
             user = request.session.get("SignInName")
@@ -272,3 +243,56 @@ class UserView(View):
             Account.updatePass(user, oldPass, newPass1, newPass2)
 
         return redirect("user")
+
+
+class Courses(View):
+    """
+    Courses:
+        This class is used to display the Course Catalog page
+    """
+
+    # Get Method:
+    # Used to display course information and more, still IN PROGRESS
+    def get(self, request):
+
+        # Check if a user is logged in, if they are not then redirect to login
+        if not request.session.get("SignInName"):
+            return redirect("login")
+
+        # Get the classes information to display the HTML page
+        username = request.session["SignInName"]
+        user = (Account.objects.all().filter(SignInName=username))[0]
+
+        """
+        DO ACTUAL COURSE STUFF HERE
+        """
+
+        # Get all classes in DB to display to the HTML page
+        allClasses = Course.objects.all()
+
+        # Return all the data to the HTML page
+        return render(request, "main/courses.html", {"SignInName": username, "allClasses": allClasses, "currentUser": username})
+
+    # Post Method:
+    # Work in Progress
+    def post(self, request):
+
+        # This is a dual-post function
+        # It checks to see if it is updating the account or updating the password from the request, and then
+        # calls the necessary functions / generates variables from there
+        if 'create_course' in request.POST:
+            name = request.POST["name"]
+            number = request.POST["number"]
+            place = request.POST["place"]
+            days = request.POST["days"]
+            time = request.POST["time"]
+            semester = request.POST["semester"]
+            professor = request.POST["professor"]
+            ta = request.POST["ta"]
+
+            #username = request.session["SignInName"]
+            #user = (Account.objects.all().filter(SignInName=username))[0]
+
+            Course.create(name, number, place, days, time, semester, professor, ta)
+
+        return redirect("courses")

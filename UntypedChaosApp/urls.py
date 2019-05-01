@@ -15,8 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-#  from django.urls import path  #  It's yelling at me about cannot import name path
-# from django.urls import path
 from FSA import views
 
 urlpatterns = [
@@ -24,6 +22,7 @@ urlpatterns = [
     url(r'^register/$', views.Register.as_view(), name="register"),
     url(r'^$', views.Login.as_view(), name="login"),
     url(r'^user/$', views.UserView.as_view(), name="user"),
+    url(r'^courses/$', views.Courses.as_view(), name="courses"),
     url(r'^logout/$', views.LogoutView.as_view(), name="logout"),
-    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin"),
+    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin")
 ]

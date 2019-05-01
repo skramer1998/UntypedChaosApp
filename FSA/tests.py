@@ -413,6 +413,7 @@ class TestUser(TestCase):
         # we can logout from user, brings us back to login page
 
 
+# Acceptance test classes
 class LoginTest(TestCase):  # Acceptance tests for our login page
 
     def setUp(self):
@@ -447,6 +448,8 @@ class LoginTest(TestCase):  # Acceptance tests for our login page
         # keep user at login page
         self.assertEqual(response.status_code, 200)
 
+
+# Acceptance test classes
 class TestRegisterloggedin(TestCase):
     def setUp(self):
         self.c = Client()
