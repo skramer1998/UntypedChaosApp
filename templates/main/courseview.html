@@ -28,7 +28,13 @@
                         <td>Professor: {{ currentCourse.professor }}</td>
                     </tr>
                     <tr>
-                        <td>TA's: {{ listTA }}</td>
+                        <td>TA(s):
+                        {% for ta in listTA %}
+
+                            {{ ta.userName }}
+
+                        {% endfor %}
+                        </td>
                     </tr>
                 </table>
             </td>
