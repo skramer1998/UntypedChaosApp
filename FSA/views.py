@@ -261,7 +261,7 @@ class Courses(View):
 
         # Get the classes information to display the HTML page
         username = request.session["SignInName"]
-        user = (Account.objects.all().filter(SignInName=username))[0]
+        user = (Account.objects.all().filter(SignInName=username)).first()
 
         """
         DO ACTUAL COURSE STUFF HERE
@@ -271,7 +271,7 @@ class Courses(View):
         allClasses = Course.objects.all()
 
         # Return all the data to the HTML page
-        return render(request, "main/courses.html", {"SignInName": username, "allClasses": allClasses, "currentUser": username})
+        return render(request, "main/courses.html", {"SignInName": username, "allClasses": allClasses, "currentUser": user})
 
     # Post Method:
     # Work in Progress
