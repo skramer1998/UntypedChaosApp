@@ -34,6 +34,7 @@
                 let courses = document.getElementById('courseCat');
                 let id = {{ sessionID }};
                 let curPage = window.location.href.split("/")[3];
+                console.log(curPage);
 
                 let curActive = document.getElementsByClassName("active");
                 curActive.className = "inactive";
@@ -45,7 +46,7 @@
                     user.className = "active";
                 } else if (curPage == 'registerloggedin') {
                     reg.className = "active";
-                } else if (curPage == 'courses'){
+                } else if (curPage == 'courses' || curPage == 'courseview') {
                     courses.className = "active";
                 } else {
                     logo.className = "active";
@@ -64,12 +65,12 @@
                     log.style.display = "block";
                     logo.style.display = "none";
                     user.style.display = "none";
-                    courses.style.display = "none"
+                    courses.style.display = "none";
                 } else {
                     log.style.display = "none";
                     logo.style.display = "block";
                     user.style.display = "block";
-                    courses.style.display = "block"
+                    courses.style.display = "block";
                 }
 
                 // Hide the logout page if a user is not logged in

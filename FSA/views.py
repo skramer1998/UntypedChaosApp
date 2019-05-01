@@ -259,6 +259,8 @@ class Courses(View):
         if not request.session.get("SignInName"):
             return redirect("login")
 
+
+
         # Get the classes information to display the HTML page
         username = request.session["SignInName"]
         user = (Account.objects.all().filter(SignInName=username)).first()
