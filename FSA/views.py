@@ -295,4 +295,10 @@ class Courses(View):
 
             Course.create(name, number, place, days, time, semester, professor, ta)
 
+        if 'assign_ta' in request.POST:
+            coursename = request.POST["coursename"]
+            ta = request.POST["ta"]
+
+            Course.assignta(coursename, ta)
+
         return redirect("courses")

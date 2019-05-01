@@ -305,7 +305,6 @@ class Course(models.Model):
     time = models.CharField(max_length=30)
     semester = models.CharField(max_length=30)
     professor = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
-    #ta = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='+')
     ta = models.ManyToManyField(Account)
 
     # labs = models.ForeignKey(Lab, on_delete=models.CASCADE)
@@ -387,6 +386,8 @@ class Course(models.Model):
     def assignta(cls, coursename, newta):
         has_course = Course()
         has_course = has_course.search(coursename)
+
+        print("Assign course called")
         if has_course:
             try:
                 accountp = Account.objects.filter(SignInName=newta)
@@ -403,6 +404,9 @@ class Course(models.Model):
                 currentcourse.ta.add(accountp)
                 """currentcourse.ta = accountp """
                 currentcourse.save()
+
+                print(currentcourse.ta.all())
+
                 return currentcourse
             return "There is no account named " + str(newta)
         return "There is no course named " + str(coursename)
