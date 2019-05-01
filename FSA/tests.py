@@ -518,3 +518,26 @@ class TestCourses(TestCase):
                      'groupid': '1'})
         self.c.post('', {'username': 'moss', 'password': 'password'})
         self.c.get('/courses/')
+
+    def test_failCreate(self):
+        response = self.c.post('/courses/', {'name': 'memology', 'number': '101', 'place': 'here', 'days': 'MWF',
+                                  'time': 'whenever', 'semester': 'Spring', 'Professor': 'Overlord Rico',
+                                  'TA': 'Rico Jr.'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Course.object.all(), 0)
+
+    def test_Create(self):
+        self.c.get('/registerloggedin/')
+        self.c.post('/registerloggedin/',
+                    {'name': 'instructor', 'email': 'instructor@email.com', 'username': 'instructor',
+                     'phone': '0987654321', 'address': 'default', 'hours': 'Monday 10-11', 'groupid': '3'})
+        self.c.get('/registerloggedin/')
+        self.c.post('/registerloggedin/',
+                    {'name': 'ta', 'email': 'ta@email.com', 'username': 'ta', 'phone': '0987654321',
+                     'address': 'default', 'hours': 'Monday 10-11', 'groupid': '4'})
+        self.c.get('/courses/')
+        response = self.c.post('/courses/', {'name': 'memology', 'number': '101', 'place': 'here', 'days': 'MWF',
+                                             'time': 'whenever', 'semester': 'Spring', 'Professor': 'instructor',
+                                             'TA': 'ta'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Course.object.all(), 1)
