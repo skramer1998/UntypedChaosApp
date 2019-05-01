@@ -302,3 +302,21 @@ class Courses(View):
             Course.assignta(coursename, ta)
 
         return redirect("courses")
+
+
+class CourseView(View):
+    def get(self, request):
+        if not request.session.get("SignInName"):
+            return redirect("login")
+
+        cousename = request.GET.get("coursename")
+        course = Course.objects.all().filter(name=cousename).first()
+
+        username = request.session.get("SignInName")
+        user = Account.objects.all().filter(SignInName=username).first()
+
+        return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user})
+
+
+    def post(self, request):
+        pass

@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Name: {{ currentCourse.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Number: {{ currentCourse.number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Place: {{ currentCourse.place }}</td>
+                    </tr>
+                    <tr>
+                        <td>Days: {{ currentCourse.days }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time: {{ currentCourse.time }}</td>
+                    </tr>
+                    <tr>
+                        <td>Semester: {{ currentCourse.semester }}</td>
+                    </tr>
+                    <tr>
+                        <td>Professor: {{ currentCourse.professor }}</td>
+                    </tr>
+                    <tr>
+                        <td>TA's: {{ currentCourse.ta }}</td>
+                    </tr>
+                </table>
+            </td>
+    </tr>
+
+
+{% endblock %}

@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^user/$', views.UserView.as_view(), name="user"),
     url(r'^courses/$', views.Courses.as_view(), name="courses"),
     url(r'^logout/$', views.LogoutView.as_view(), name="logout"),
-    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin")
+    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin"),
+    url(r'^courseview/$', views.CourseView.as_view(), name="courseview"),
 ]
