@@ -400,7 +400,8 @@ class Course(models.Model):
                     return "Administrators and Supervisors cannot be assigned to a course."
                 currentcourse = Course.objects.filter(name=coursename)
                 currentcourse = currentcourse.first()
-                currentcourse.ta = accountp
+                currentcourse.ta.add(accountp)
+                """currentcourse.ta = accountp """
                 currentcourse.save()
                 return currentcourse
             return "There is no account named " + str(newta)
