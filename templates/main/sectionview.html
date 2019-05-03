@@ -3,25 +3,32 @@
 {% block content %}
     {% csrf_token %}
 
+    <h1> {{ currentCourse.name }} </h1>
     <table width=100%>
     <tr>
             <td>
                 <table>
                     <tr>
-                        <td>Name: {{ currentCourse.name }}</td>
+                        <td>Number: {{ currentSection.number }}</td>
                     </tr>
                     <tr>
-                        <td>Number: {{ currentCourse.number }}</td>
+                        <td>Place: {{ currentSection.place }}</td>
                     </tr>
                     <tr>
-                        <td>Semester: {{ currentCourse.semester }}</td>
+                        <td>Days: {{ currentCourse.days }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time: {{ currentCourse.days }}</td>
+                    </tr>
+                    <tr>
+                        <td>Instructor: {{ currentCourse.days }}</td>
                     </tr>
                 <td>
                 <table>
                     <tr>
-                        <td> Section(s):
-                        {% for section in listSection %}
-                            <a href="/sectionview?info={{ currentCourse.name }}?{{ section.number }}">[{{ section.number }}, {{ section.instructor }}]</a>
+                        <td> Labs(s):
+                        {% for lab in labList %}
+                            [{{ lab.number}}, {{ lab.ta }}]
                         {% endfor %}
                         </td>
                     </tr>
@@ -31,24 +38,25 @@
             </td>
             {% if currentUser.groupid < 3 %}
                 <td>
-                <form action="{% url 'courseview' %}" method="post">
+                <form action="{% url 'sectionview' %}" method="post">
                     {% csrf_token %}
                         <table>
                             <tr>
-                                <td>Section Number:</td>
+                                <td>Lab Number:</td>
                              <td><input type="text" name="number" required/></td>
                          </tr>
                          <tr>
-                              <td>Instructor:</td>
-                              <td><input type="text" name="instructor"/></td>
+                              <td>TA:</td>
+                              <td><input type="text" name="ta"/></td>
                             </tr>
                       </table>
                         <br>
                         <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
-                        <input type="submit" name="create_section" value="Create New Section" />
+                        <input type="hidden" name="currentSection" value="{{ currentSection.number }}"/>
+                        <input type="submit" name="create_lab" value="Create New Lab" />
                     </form>
                 </td>
-            {% endif %}
+                {% endif %}
         </tr>
 
     </table>

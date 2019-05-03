@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Account, Course
+from .models import Account, Course, Lab, Section
 
 
 class Login(View):
@@ -39,6 +39,7 @@ class LogoutView(View):
     Logout:
         This is the view that will be processed by all users when they attempt to logout.
     """
+
     # Get Method:
     # Used to remove the existing user from the session, renders login page
     def get(self, request):
@@ -259,8 +260,6 @@ class Courses(View):
         if not request.session.get("SignInName"):
             return redirect("login")
 
-
-
         # Get the classes information to display the HTML page
         username = request.session["SignInName"]
         user = (Account.objects.all().filter(SignInName=username)).first()
@@ -273,7 +272,8 @@ class Courses(View):
         allClasses = Course.objects.all()
 
         # Return all the data to the HTML page
-        return render(request, "main/courses.html", {"SignInName": username, "allClasses": allClasses, "currentUser": user})
+        return render(request, "main/courses.html",
+                      {"SignInName": username, "allClasses": allClasses, "currentUser": user})
 
     # Post Method:
     # Work in Progress
@@ -285,24 +285,8 @@ class Courses(View):
         if 'create_course' in request.POST:
             name = request.POST["name"]
             number = request.POST["number"]
-            place = request.POST["place"]
-            days = request.POST["days"]
-            time = request.POST["time"]
             semester = request.POST["semester"]
-            professor = request.POST["professor"]
-            ta = request.POST["ta"]
-
-            #username = request.session["SignInName"]
-            #user = (Account.objects.all().filter(SignInName=username))[0]
-
-            Course.create(name, number, place, days, time, semester, professor, ta)
-
-        if 'assign_ta' in request.POST:
-            coursename = request.POST["coursename"]
-            ta = request.POST["ta"]
-
-            Course.assignta(coursename, ta)
-
+            Course.create(name, number, semester)
         return redirect("courses")
 
 
@@ -311,16 +295,70 @@ class CourseView(View):
         if not request.session.get("SignInName"):
             return redirect("login")
 
-        cousename = request.GET.get("coursename")
-        course = Course.objects.all().filter(name=cousename).first()
+        coursename = request.GET.get("coursename")
+        course = Course.get(coursename)
 
         username = request.session.get("SignInName")
         user = Account.objects.all().filter(SignInName=username).first()
 
-        listTA = course.ta.all()
+        listSection = course.sections.all()
 
-        return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user, "listTA": listTA})
-
+        return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user,
+                                                        "listSection": listSection})
 
     def post(self, request):
-        pass
+        # pressed on create_section
+        if 'create_section' in request.POST:
+            # get values
+            currentCourse = request.POST["currentCourse"]
+            newInstructor = request.POST["instructor"]
+            sectionNumber = request.POST["number"]
+            # add section to course
+            Course.addsection(currentCourse, sectionNumber, newInstructor)
+
+        return redirect("courses")
+
+
+class SectionView(View):
+
+    def get(self, request):
+        if not request.session.get("SignInName"):
+            return redirect("login")
+
+        # get the information passed in ur
+        info = request.GET.get("info")
+        # split it using '?'
+        info = info.split('?')
+
+        # get course name from info
+        coursename = info[0]
+        # get course
+        course = Course.get(coursename)
+
+        # get section number from info
+        sectionnumber = info[1]
+        # get section
+        section = Section.get(coursename, sectionnumber)
+
+        # get a list of all labs in the section
+        labList = section.labs.all()
+
+        # get current user
+        username = request.session.get("SignInName")
+        user = Account.get(username)
+
+        return render(request, "main/sectionview.html", {"currentCourse": course, "currentUser": user,
+                                                         "currentSection": section, "labList": labList})
+
+    def post(self, request):
+        # pressed on create_lab button
+        if 'create_lab' in request.POST:
+            # getting values
+            currentCourse = request.POST["currentCourse"]
+            currentSection = request.POST["currentSection"]
+            newTA = request.POST["ta"]
+            labNumber = request.POST["number"]
+            # adding a lab to the section
+            Section.addlab(currentCourse, currentSection, labNumber, newTA)
+
+        return redirect("courses")

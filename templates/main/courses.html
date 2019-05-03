@@ -21,35 +21,15 @@
                     <table>
                         <tr>
                             <td>Name:</td>
-                            <td><input type="test" name="name" required/></td>
+                            <td><input type="text" name="name" required/></td>
                         </tr>
                         <tr>
                             <td>Number:</td>
                             <td><input type="text" name="number" required/></td>
                         </tr>
                         <tr>
-                            <td>Place:</td>
-                            <td><input type="text" name="place" required/></td>
-                        </tr>
-                        <tr>
-                            <td>Days:</td>
-                            <td><input type="text" name="days" required/></td>
-                        </tr>
-                        <tr>
-                            <td>Time:</td>
-                            <td><input type="text" name="time" required/></td>
-                        </tr>
-                        <tr>
                             <td>Semester:</td>
                             <td><input type="text" name="semester" required/></td>
-                        </tr>
-                        <tr>
-                            <td>Professor:</td>
-                            <td><input type="text" name="professor" required/></td>
-                        </tr>
-                        <tr>
-                            <td>TA:</td>
-                            <td><input type="text" name="ta" required/></td>
                         </tr>
                     </table>
                     <br>
@@ -60,10 +40,8 @@
 
             <td>
                     {% for course in allClasses %}
-
                             <a href="/courseview?coursename={{ course.name }}">{{ course.name }}</a>
-                            <br>
-
+                        <br>
                     {% endfor %}
             </td>
         </tr>
