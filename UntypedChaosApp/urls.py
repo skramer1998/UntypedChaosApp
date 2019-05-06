@@ -15,16 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from FSA import views
+from FSA.views import logviews, registerviews, userviews, courseviews, sectionviews
 
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url(r'^register/$', views.Register.as_view(), name="register"),
-    url(r'^$', views.Login.as_view(), name="login"),
-    url(r'^user/$', views.UserView.as_view(), name="user"),
-    url(r'^courses/$', views.Courses.as_view(), name="courses"),
-    url(r'^logout/$', views.LogoutView.as_view(), name="logout"),
-    url(r'^registerloggedin/$', views.RegisterLoggedIn.as_view(), name="registerloggedin"),
-    url(r'^courseview/$', views.CourseView.as_view(), name="courseview"),
-    url(r'^sectionview/$', views.SectionView.as_view(), name="sectionview"),
+    url(r'^register/$', registerviews.Register.as_view(), name="register"),
+    url(r'^$', logviews.Login.as_view(), name="login"),
+    url(r'^user/$', userviews.UserView.as_view(), name="user"),
+    url(r'^courses/$', courseviews.Courses.as_view(), name="courses"),
+    url(r'^logout/$', logviews.LogoutView.as_view(), name="logout"),
+    url(r'^registerloggedin/$', registerviews.RegisterLoggedIn.as_view(), name="registerloggedin"),
+    url(r'^courseview/$', courseviews.CourseView.as_view(), name="courseview"),
+    url(r'^sectionview/$', sectionviews.SectionView.as_view(), name="sectionview"),
 ]

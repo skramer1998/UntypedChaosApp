@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
-from FSA.models import Account
-from FSA.models import Course
+from FSA.accountmodel.account import Account
+from FSA.coursemodel.course import Course
 
 """
 ACCEPTANCE TEST CLASSES AT THE BOTTOM

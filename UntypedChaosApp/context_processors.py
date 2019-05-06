@@ -1,4 +1,4 @@
-from FSA.models import Account
+from FSA.accountmodel.account import Account
 
 def add_variable_to_context(request):
     user = request.session.get("SignInName")
