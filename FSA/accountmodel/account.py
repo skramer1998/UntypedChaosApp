@@ -87,7 +87,6 @@ class Account(models.Model):
 
         if hours is not "":
             self.userHours = hours
-
         self.save()
         return "Account information updated."
 
