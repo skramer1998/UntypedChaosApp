@@ -105,12 +105,6 @@ class Lab(models.Model):
     def __str__(self):
         return str(self.parentSection) + " Lab: " + str(self.number) + " TA: " + str(self.ta)
 
-    def save(self, *args, **kwargs):
-        try:
-            self.full_clean()
-            super(Lab, self).save(*args, **kwargs)
-        except:
-            print("Error saving model")
 
 class Section(models.Model):
     parentCourse = models.CharField(max_length=60)
@@ -226,13 +220,6 @@ class Section(models.Model):
     def __str__(self):
         return str(self.parentCourse) + ": " + str(self.number) + " Instructor: " + str(self.instructor)
 
-    def save(self, *args, **kwargs):
-        try:
-            self.full_clean()
-            super(Section, self).save(*args, **kwargs)
-        except:
-            print("Error saving model")
-
 
 class Course(models.Model):
     """
@@ -325,10 +312,3 @@ class Course(models.Model):
     # call Course.objects.all() to get all courses to string
     def __str__(self):
         return str(self.name) + " " + str(self.number) + " " + str(self.semester)
-
-    def save(self, *args, **kwargs):
-        try:
-            self.full_clean()
-            super(Course, self).save(*args, **kwargs)
-        except:
-            print("Error saving model")
