@@ -18,6 +18,7 @@
             <li id="regPage"><a class="inactive" href="/register">REGISTER</a></li>
             <li id="userPage"><a class="inactive" href="/user">USER</a></li>
             <li id="courseCat"><a class="inactive" href="/courses">COURSE CATALOG</a></li>
+            <li id="mycourses"><a class="inactive" href="/mycourses">MY COURSES</a></li>
             <li id="logoPage"><a class="inactive" href="/logout">LOGOUT</a></li>
         </ul>
         <br/>
@@ -32,6 +33,7 @@
                 let logo = document.getElementById('logoPage');
                 let user = document.getElementById('userPage');
                 let courses = document.getElementById('courseCat');
+                let mycourses = document.getElementById('mycourses');
                 let id = {{ sessionID }};
                 let curPage = window.location.href.split("/")[3];
                 console.log(curPage);
@@ -46,8 +48,10 @@
                     user.className = "active";
                 } else if (curPage == 'registerloggedin') {
                     reg.className = "active";
-                } else if (curPage == 'courses' || curPage == 'courseview') {
+                } else if (curPage == 'courses' || curPage == 'courseview' || curPage == 'sectionview') {
                     courses.className = "active";
+                } else if (curPage == 'mycourses') {
+                    mycourses.className = "active";
                 } else {
                     logo.className = "active";
                 }
@@ -57,6 +61,13 @@
                     reg.style.display = "block";
                 } else {
                     reg.style.display = "none";
+                }
+
+                // Hide the my courses page if a user is not logged in, or a supervisor or admin is logged in
+                if (id == -1 || id == 1 || id == 2){
+                    mycourses.style.display = "none";
+                } else {
+                    mycourses.style.display = "block";
                 }
 
                 // Hide the login page if a user is logged in, and the logout/user page if a user is not
