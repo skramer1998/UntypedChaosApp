@@ -21,6 +21,7 @@ class Account(models.Model):
     Overwrite the generic Account str() function for printing
     """
 
+
     def __str__(self):
         return str(self.SignInName)
 
@@ -106,3 +107,10 @@ class Account(models.Model):
     @classmethod
     def get(self, name):
         return Account.objects.all().filter(SignInName=name).first()
+
+    def save(self, *args, **kwargs):
+        try:
+            self.full_clean()
+            super(Account, self).save(*args, **kwargs)
+        except:
+            print("Error saving model")
