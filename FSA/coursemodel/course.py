@@ -108,7 +108,7 @@ class Lab(models.Model):
     def save(self, *args, **kwargs):
         try:
             self.full_clean()
-            super(Course, self).save(*args, **kwargs)
+            super(Lab, self).save(*args, **kwargs)
         except:
             print("Error saving model")
 
@@ -229,7 +229,7 @@ class Section(models.Model):
     def save(self, *args, **kwargs):
         try:
             self.full_clean()
-            super(Course, self).save(*args, **kwargs)
+            super(Section, self).save(*args, **kwargs)
         except:
             print("Error saving model")
 
