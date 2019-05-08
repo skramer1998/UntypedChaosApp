@@ -87,8 +87,8 @@ class Account(models.Model):
 
         if hours is not "":
             self.userHours = hours
-        self.save()
-        return "Account information updated."
+
+        return self.save()
 
     # Method used to update user password, mostly used for instructors and TAs
     def updatePass(self, oldPass, newPass1, newPass2):
@@ -112,4 +112,4 @@ class Account(models.Model):
             self.full_clean()
             super(Account, self).save(*args, **kwargs)
         except:
-            print("Error saving model")
+            return False

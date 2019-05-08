@@ -1,6 +1,7 @@
 {% extends "main/base.html" %}
 
 {% block content %}
+
     {% csrf_token %}
 
     <table width=100%>
@@ -59,7 +60,12 @@
                     </table>
                     <br>
                     <input type="submit" name="update_account" value="Update Account Information" />
+                    {% if error_messages %}
+                        <br/>
+                      {{ error_messages }}
+                    {% endif %}
                 </form>
+
             </td>
         </tr>
         <tr>
@@ -83,6 +89,10 @@
                     </table>
                     <br>
                     <input type="submit" name="update_password" value="Update Password" />
+                    {% if pass_error_messages %}
+                        <br/>
+                      {{ pass_error_messages }}
+                    {% endif %}
                 </form>
             </td>
         </tr>

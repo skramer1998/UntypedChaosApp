@@ -46,6 +46,8 @@ class UserView(View):
     # Used to update user information from account page
     def post(self, request):
 
+        request.session.pop("error_messages", None)
+
         # This is a dual-post function
         # It checks to see if it is updating the account or updating the password from the request, and then
         # calls the necessary functions / generates variables from there
@@ -58,7 +60,20 @@ class UserView(View):
             username = request.session["SignInName"]
             user = (Account.objects.all().filter(SignInName=username))[0]
 
-            Account.updateUser(user, email, phone, address, hours)
+            if Account.updateUser(user, email, phone, address, hours) is False:
+               error_messages = "Some fields did not meet requirements. Try again"
+               username = request.session["SignInName"]
+               user = Account.get(username)
+               allUsers = Account.objects.all()
+
+               return render(request, "main/user.html", {"error_messages": error_messages,
+                                                              "SignInName": user.SignInName, "email": user.userEmail,
+                                                              "password": user.userPass,
+                                                              "name": user.userName, "phone": user.userPhone,
+                                                              "address": user.userAddress,
+                                                              "groupid": user.groupid, "hours": user.userHours,
+                                                              "allusers": allUsers,
+                                                              "currentUser": user})
 
         if 'update_password' in request.POST:
             oldPass = request.POST["oldPass"]
@@ -68,6 +83,16 @@ class UserView(View):
             username = request.session["SignInName"]
             user = (Account.objects.all().filter(SignInName=username))[0]
 
-            Account.updatePass(user, oldPass, newPass1, newPass2)
+            username = request.session["SignInName"]
+            user = Account.get(username)
+            allUsers = Account.objects.all()
+            return render(request, "main/user.html", {"pass_error_messages": Account.updatePass(user, oldPass, newPass1, newPass2),
+                                                          "SignInName": user.SignInName, "email": user.userEmail,
+                                                          "password": user.userPass,
+                                                          "name": user.userName, "phone": user.userPhone,
+                                                          "address": user.userAddress,
+                                                          "groupid": user.groupid, "hours": user.userHours,
+                                                          "allusers": allUsers,
+                                                          "currentUser": user})
 
         return redirect("user")
