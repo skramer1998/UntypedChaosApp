@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.views import View
 from FSA.accountmodel.account import Account
-from FSA.coursemodel.course import Course
+from FSA.coursemodel.course import Course, Section
 
 
 class Courses(View):
@@ -84,5 +84,30 @@ class CourseView(View):
             course = Course.get(currentCourse)
             listSection = course.sections.all()
 
-        return render(request, "main/courseview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
+            return render(request, "main/courseview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
                                                         "listSection": listSection})
+
+        # pressed on Update instructor
+        if 'update_instructor' in request.POST:
+            # get values
+            currentCourse = request.POST["currentCourse"]
+            newInstructor = request.POST["newInstructor"]
+            sectionNumber = request.POST["number"]
+
+            #Get Instructor
+            newIns = Account.objects.all().filter(SignInName=newInstructor)[0]
+
+            # Update instructor
+            Section.changein(currentCourse, sectionNumber, newIns)
+
+            # Get user
+            username = request.session.get("SignInName")
+            user = Account.objects.all().filter(SignInName=username).first()
+
+            # Get updated sections
+            course = Course.get(currentCourse)
+            listSection = course.sections.all()
+
+            return render(request, "main/courseview.html",
+                          {"currentCourse": Course.get(currentCourse), "currentUser": user,
+                           "listSection": listSection})

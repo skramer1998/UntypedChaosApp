@@ -17,47 +17,51 @@
 
         </tr>
 
-        <td align="center" width="50%">
-            <table>
-                <tr>
-                    {% if currentUser.groupid < 3 %}
-                        <td>
-                            <form action="{% url 'courses' %}" method="post">
-                                {% csrf_token %}
-                                <table>
-                                    <tr>
-                                        <td>Name:</td>
-                                        <td><input type="text" name="name" required/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Number:</td>
-                                        <td><input type="text" name="number" required/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Semester:</td>
-                                        <td><input type="text" name="semester" required/></td>
-                                    </tr>
-                                </table>
-                                <br>
-                                <input type="submit" name="create_course" value="Create New Course" />
-                            </form>
-                        </td>
-                    {% endif %}
-                </tr>
-            </table>
-        </td>
+        <tr>
 
-        <td id="courseData">
-
-            <table>
-                {% for course in allClasses %}
+            <td align="center"; width="33%"; valign="top">
+                <table>
                     <tr>
-                        <a class="courseLinks" href="/courseview?coursename={{ course.name }}">CS{{ course.number }} : {{ course.name }}</a>
+                        {% if currentUser.groupid < 3 %}
+                            <td>
+                                <form action="{% url 'courses' %}" method="post">
+                                    {% csrf_token %}
+                                    <table>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td><input type="text" name="name" required/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Number:</td>
+                                            <td><input type="text" name="number" required/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Semester:</td>
+                                            <td><input type="text" name="semester" required/></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <input type="submit" name="create_course" value="Create New Course" />
+                                </form>
+                            </td>
+                        {% endif %}
                     </tr>
-                    <br>
-                {% endfor %}
-            </table>
-        </td>
+                </table>
+            </td>
+
+            <td id="courseData">
+
+                <table>
+                    {% for course in allClasses %}
+                        <tr>
+                            <a class="courseLinks" href="/courseview?coursename={{ course.name }}">CS{{ course.number }} : {{ course.name }}</a>
+                        </tr>
+                        <br>
+                    {% endfor %}
+                </table>
+            </td>
+
+        </tr>
 
     </table>
 
