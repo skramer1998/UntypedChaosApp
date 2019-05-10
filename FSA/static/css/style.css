@@ -38,3 +38,8 @@ li a:hover:not(.active) {
 .active {
   background-color: #4CAF50;
 }
+
+a.courseLinks {
+    text-decoration: none;
+    color: black;
+}

@@ -40,7 +40,7 @@
 
             <td>
                     {% for course in allClasses %}
-                            <a href="/courseview?coursename={{ course.name }}">{{ course.name }}</a>
+                            <a class="courseLinks" href="/courseview?coursename={{ course.name }}">CS{{ course.number }} : {{ course.name }}</a>
                         <br>
                     {% endfor %}
             </td>

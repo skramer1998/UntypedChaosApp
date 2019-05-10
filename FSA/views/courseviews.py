@@ -72,7 +72,17 @@ class CourseView(View):
             currentCourse = request.POST["currentCourse"]
             newInstructor = request.POST["instructor"]
             sectionNumber = request.POST["number"]
+
             # add section to course
             Course.addsection(currentCourse, sectionNumber, newInstructor)
 
-        return redirect("courses")
+            # Get user
+            username = request.session.get("SignInName")
+            user = Account.objects.all().filter(SignInName=username).first()
+
+            # Get updated sections
+            course = Course.get(currentCourse)
+            listSection = course.sections.all()
+
+        return render(request, "main/courseview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
+                                                        "listSection": listSection})
