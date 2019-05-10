@@ -5,12 +5,11 @@
 
     <table id="courseData">
         <tr>
-
-            <td>
-                {% if currentUser.groupid < 3 %}
-                        <h1 align="center">Create Course</h1>
-                {% endif %}
-            </td>
+            {% if currentUser.groupid < 3 %}
+                <td>
+                    <h1 align="center">Create Course</h1>
+                </td>
+            {% endif %}
             <td>
                 <h1 align="center">Course List</h1>
             </td>
@@ -18,36 +17,35 @@
         </tr>
 
         <tr>
-
-            <td align="center"; width="33%"; valign="top">
-                <table>
-                    <tr>
-                        {% if currentUser.groupid < 3 %}
-                            <td>
-                                <form action="{% url 'courses' %}" method="post">
-                                    {% csrf_token %}
-                                    <table>
-                                        <tr>
-                                            <td>Name:</td>
-                                            <td><input type="text" name="name" required/></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Number:</td>
-                                            <td><input type="text" name="number" required/></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Semester:</td>
-                                            <td><input type="text" name="semester" required/></td>
-                                        </tr>
-                                    </table>
-                                    <br>
-                                    <input type="submit" name="create_course" value="Create New Course" />
-                                </form>
-                            </td>
-                        {% endif %}
-                    </tr>
-                </table>
-            </td>
+            {% if currentUser.groupid < 3 %}
+                <td align="center"; width="33%"; valign="top">
+                    <table>
+                        <tr>
+                                <td>
+                                    <form action="{% url 'courses' %}" method="post">
+                                        {% csrf_token %}
+                                        <table>
+                                            <tr>
+                                                <td>Name:</td>
+                                                <td><input type="text" name="name" required/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Number:</td>
+                                                <td><input type="text" name="number" required/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Semester:</td>
+                                                <td><input type="text" name="semester" required/></td>
+                                            </tr>
+                                        </table>
+                                        <br>
+                                        <input type="submit" name="create_course" value="Create New Course" />
+                                    </form>
+                                </td>
+                        </tr>
+                    </table>
+                </td>
+            {% endif %}
 
             <td id="courseData">
 

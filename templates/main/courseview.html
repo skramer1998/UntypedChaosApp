@@ -5,66 +5,63 @@
 
     <table id="courseData">
         <tr>
-
-            <td>
-                {% if currentUser.groupid < 3 %}
-                        <h1 align="center">Section Modification</h1>
-                {% endif %}
-            </td>
+            {% if currentUser.groupid < 3 %}
+                <td>
+                    <h1 align="center">Section Modification</h1>
+                </td>
+            {% endif %}
             <td>
                 <h1 align="center">CS{{ currentCourse.number }}: {{ currentCourse.name }} -- {{ currentCourse.semester }}</h1>
             </td>
 
         </tr>
 
-            <td align="center"; width="33%"; valign="top">
-                <table>
+            {% if currentUser.groupid < 3 %}
+                <td align="center"; width="33%"; valign="top">
+                    <table>
+                        <tr>
+                                <td>
+                                    <form action="{% url 'courseview' %}" method="post">
+                                        {% csrf_token %}
+                                        <table>
+                                            <tr>
+                                                <td>Section Number:</td>
+                                                <td><input type="text" name="number" required/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Instructor:</td>
+                                                <td><input type="text" name="instructor"/></td>
+                                            </tr>
+                                        </table>
+                                        <br>
+                                        <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+                                        <input type="submit" name="create_section" value="Create New Section" />
+                                    </form>
+                                </td>
+                        </tr>
                     <tr>
-                        {% if currentUser.groupid < 3 %}
                             <td>
-                                <form action="{% url 'courseview' %}" method="post">
-                                    {% csrf_token %}
+                                <form action="{%  url 'courseview' %}" method="post">
+                                    {%  csrf_token %}
                                     <table>
                                         <tr>
                                             <td>Section Number:</td>
                                             <td><input type="text" name="number" required/></td>
                                         </tr>
                                         <tr>
-                                            <td>Instructor:</td>
-                                            <td><input type="text" name="instructor"/></td>
+                                            <td>New Instructor:</td>
+                                            <td><input type="text" name="newInstructor" required/></td>
                                         </tr>
                                     </table>
                                     <br>
                                     <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
-                                    <input type="submit" name="create_section" value="Create New Section" />
+                                    <input type="submit" name="update_instructor" value="Update Instructor" />
                                 </form>
                             </td>
-                        {% endif %}
                     </tr>
-                <tr>
-                    {% if currentUser.groupid < 3 %}
-                        <td>
-                            <form action="{%  url 'courseview' %}" method="post">
-                                {%  csrf_token %}
-                                <table>
-                                    <tr>
-                                        <td>Section Number:</td>
-                                        <td><input type="text" name="number" required/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>New Instructor:</td>
-                                        <td><input type="text" name="newInstructor" required/></td>
-                                    </tr>
-                                </table>
-                                <br>
-                                <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
-                                <input type="submit" name="update_instructor" value="Update Instructor" />
-                            </form>
-                        </td>
-                    {% endif %}
-                </tr>
-                </table>
-            </td>
+                    </table>
+                </td>
+            {% endif %}
 
             <td id="courseData">
                 <table>
