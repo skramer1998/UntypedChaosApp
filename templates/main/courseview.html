@@ -3,53 +3,56 @@
 {% block content %}
     {% csrf_token %}
 
-    <table width=100%>
-    <tr>
+    <table id="courseData">
+        <tr>
+
             <td>
-                <table>
-                    <tr>
-                        <td>Name: {{ currentCourse.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>Number: {{ currentCourse.number }}</td>
-                    </tr>
-                    <tr>
-                        <td>Semester: {{ currentCourse.semester }}</td>
-                    </tr>
-                <td>
-                <table>
-                    <tr>
-                        <td> Section(s):
-                        {% for section in listSection %}
-                            <a href="/sectionview?info={{ currentCourse.name }}?{{ section.number }}">[{{ section.number }}, {{ section.instructor }}]</a>
-                        {% endfor %}
-                        </td>
-                    </tr>
-                </table>
+                {% if currentUser.groupid < 3 %}
+                        <h1 align="center">Create Section</h1>
+                {% endif %}
             </td>
-                </table>
+            <td>
+                <h1 align="center">CS{{ currentCourse.number }}: {{ currentCourse.name }} -- {{ currentCourse.semester }}</h1>
             </td>
-            {% if currentUser.groupid < 3 %}
-                <td>
-                <form action="{% url 'courseview' %}" method="post">
-                    {% csrf_token %}
-                        <table>
-                            <tr>
-                                <td>Section Number:</td>
-                             <td><input type="text" name="number" required/></td>
-                         </tr>
-                         <tr>
-                              <td>Instructor:</td>
-                              <td><input type="text" name="instructor"/></td>
-                            </tr>
-                      </table>
-                        <br>
-                        <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
-                        <input type="submit" name="create_section" value="Create New Section" />
-                    </form>
-                </td>
-            {% endif %}
+
         </tr>
+
+        <td align="center" width="50%">
+            <table>
+                <tr>
+                    {% if currentUser.groupid < 3 %}
+                        <td>
+                            <form action="{% url 'courseview' %}" method="post">
+                                {% csrf_token %}
+                                <table>
+                                    <tr>
+                                        <td>Section Number:</td>
+                                        <td><input type="text" name="number" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Instructor:</td>
+                                        <td><input type="text" name="instructor"/></td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+                                <input type="submit" name="create_section" value="Create New Section" />
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+
+        <td id="courseData">
+            <table>
+                {% for section in listSection %}
+                    <tr>
+                        <a class="courseLinks" href="/sectionview?info={{ currentCourse.name }}?{{ section.number }}">Section {{ section.number }} taught by {{ section.instructor }}</a>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
 
     </table>
 

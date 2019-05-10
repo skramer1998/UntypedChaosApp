@@ -3,7 +3,7 @@
 {% block content %}
     {% csrf_token %}
 
-    <table id="courseData" width=100%>
+    <table id="courseData">
         <tr>
 
             <td>
@@ -17,7 +17,7 @@
 
         </tr>
 
-        <td>
+        <td align="center" width="50%">
             <table>
                 <tr>
                     {% if currentUser.groupid < 3 %}
