@@ -46,36 +46,40 @@ class Lab(models.Model):
     def changenumber(cls, parentCourse, sectionNum, labNum, newNum):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
-            lab.number = newNum
-            lab.save()
-            return True
-        return False
+            if newNum is not "":
+                lab.number = newNum
+                lab.save()
+                return newNum
+        return labNum
 
     @classmethod
     def changeplace(cls, parentCourse, sectionNum, labNum, newPlace):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
-            lab.place = newPlace
-            lab.save()
-            return True
+            if newPlace is not "":
+                lab.place = newPlace
+                lab.save()
+                return True
         return False
 
     @classmethod
     def changedays(cls, parentCourse, sectionNum, labNum, newDays):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
-            lab.days = newDays
-            lab.save()
-            return True
+            if newDays is not "":
+                lab.days = newDays
+                lab.save()
+                return True
         return False
 
     @classmethod
     def changetime(cls, parentCourse, sectionNum, labNum, newTime):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
-            lab.time = newTime
-            lab.save()
-            return True
+            if newTime is not "":
+                lab.time = newTime
+                lab.save()
+                return True
         return False
 
     """

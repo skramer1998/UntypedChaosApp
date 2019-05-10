@@ -1,0 +1,64 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <h1> {{ currentCourse.name }}: Section {{ currentSection.number }}: Lab {{ currentLab.number }} </h1>
+    <table width=100%>
+    <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Number: {{ currentLab.number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Place: {{ currentLab.place }}</td>
+                    </tr>
+                    <tr>
+                        <td>Days: {{ currentLab.days }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time: {{ currentLab.time }}</td>
+                    </tr>
+                    <tr>
+                        <td>TA: {{ currentLab.ta }}</td>
+                    </tr>
+                </table>
+            </td>
+    </tr>
+
+     <td>
+         <form action="{% url 'labview' %}" method="post">
+             {% csrf_token %}
+             <table>
+                 <tr>
+                     <td>Number:</td>
+                     <td><input type="text" name="number"/></td>
+                 </tr>
+                 <tr>
+                     <td>Place:</td>
+                     <td><input type="text" name="place"/></td>
+                 </tr>
+                 <tr>
+                     <td>Days:</td>
+                     <td><input type="text" name="days"/></td>
+                 </tr>
+                 <tr>
+                     <td>Lab Time:</td>
+                     <td><input type="text" name="time"/></td>
+                 </tr>
+             </table>
+             <br>
+             <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+             <input type="hidden" name="currentSection" value="{{ currentSection.number }}"/>
+             <input type="hidden" name="currentLab" value="{{ currentLab.number }}"/>
+             <input type="submit" name="update_lab" value="Update Lab Information" />
+             {% if error_messages %}
+                 <br/>
+                 {{ error_messages }}
+             {% endif %}
+         </form>
+     </td>
+    </table>
+
+{% endblock %}

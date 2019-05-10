@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from FSA.views import logviews, registerviews, userviews, courseviews, sectionviews, mycoursesview
+from FSA.views import logviews, registerviews, userviews, courseviews, sectionviews, mycoursesview, labviews
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^courseview/$', courseviews.CourseView.as_view(), name="courseview"),
     url(r'^sectionview/$', sectionviews.SectionView.as_view(), name="sectionview"),
     url(r'^mycourses/$', mycoursesview.MyCourses.as_view(), name="mycoursesview"),
+    url(r'^labview/$', labviews.LabView.as_view(), name="labview"),
 ]

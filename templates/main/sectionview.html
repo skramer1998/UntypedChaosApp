@@ -15,20 +15,20 @@
                         <td>Place: {{ currentSection.place }}</td>
                     </tr>
                     <tr>
-                        <td>Days: {{ currentCourse.days }}</td>
+                        <td>Days: {{ currentSection.days }}</td>
                     </tr>
                     <tr>
-                        <td>Time: {{ currentCourse.days }}</td>
+                        <td>Time: {{ currentSection.time }}</td>
                     </tr>
                     <tr>
-                        <td>Instructor: {{ currentCourse.days }}</td>
+                        <td>Instructor: {{ currentSection.instructor.userName }}</td>
                     </tr>
                 <td>
                 <table>
                     <tr>
                         <td> Labs(s):
                         {% for lab in labList %}
-                            [{{ lab.number}}, {{ lab.ta }}]
+                             <a href="/labview?info={{ currentCourse.name }}?{{ currentSection.number }}?{{ lab.number }}">[{{ lab.number }}, {{ lab.ta }}]</a>
                         {% endfor %}
                         </td>
                     </tr>
