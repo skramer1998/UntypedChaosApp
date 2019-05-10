@@ -101,31 +101,49 @@
 
 
     <h1 align="center">List of Users</h1>
-    <ul>
+    <table id="userTable">
+
+        <tr>
+            <th>Account Type</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Office Hours</th>
+            {% if currentUser.groupid < 3 %}
+                <th>Address</th>
+                <th>Phone Number</th>
+            {%  endif %}
+        </tr>
+
         {% for user in allusers %}
-            <li> {% if user.groupid == 1 %}
-                Supervisor ::
+            <tr>
+
+                <td>
+
+                    {% if user.groupid == 1 %}
+                Supervisor
                 {% endif %}
                 {% if user.groupid == 2 %}
-                Administrator ::
+                Administrator
                 {% endif %}
                 {% if user.groupid == 3 %}
-                Instructor ::
+                Instructor
                 {% endif %}
                 {% if user.groupid == 4 %}
-                TA ::
+                TA
                 {% endif %}
 
-               Name -- [{{ user.userName }}], Email -- [{{ user.userEmail }}], Office Hours -- [{{ user.userHours }}]
-                {% if currentUser.groupid < 3 %}
-                   , Address -- [{{ user.userAddress }}], Phone -- [{{ user.userPhone }}]
-                {% endif %}
+                </td>
+                <td>{{ user.userName }}</td>
+                <td>{{ user.userEmail }}</td>
+                <td>{{ user.userHours }}</td>
+                    {% if currentUser.groupid < 3 %}
+                        <td>{{ user.userAddress }}</td>
+                        <td>{{ user.userPhone }}</td>
+                    {% endif %}
 
-            </li>
-            <br>
+            </tr>
         {% endfor %}
-    </ul>
 
-
+    </table>
 
 {% endblock %}

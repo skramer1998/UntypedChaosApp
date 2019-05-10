@@ -66,3 +66,16 @@ td#courseData a:nth-of-type(even) {
     height:100%;
     padding:10px;
 }
+
+table#userTable {
+    width: 100%;
+}
+
+table#userTable tr:nth-of-type(odd) {
+    background-color: #969696;
+    text-align: center;
+}
+
+table#userTable tr:nth-of-type(even) {
+    text-align:center;
+}
