@@ -47,4 +47,15 @@ class SectionView(View):
             # adding a lab to the section
             Section.addlab(currentCourse, currentSection, labNumber, newTA)
 
-        return redirect("courses")
+            # Get user
+            username = request.session.get("SignInName")
+            user = Account.get(username)
+
+            # Get current section
+            section = Section.get(currentCourse, currentSection)
+
+            # Get updated lablist
+            labList = section.labs.all()
+
+        return render(request, "main/sectionview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
+                                                         "currentSection": section, "labList": labList})
