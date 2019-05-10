@@ -4,14 +4,21 @@
     {% csrf_token %}
 
     <table id="courseData" width=100%>
+        <tr>
+
+            <td>
+                {% if currentUser.groupid < 3 %}
+                        <h1 align="center">Create Course</h1>
+                {% endif %}
+            </td>
+            <td>
+                <h1 align="center">Course List</h1>
+            </td>
+
+        </tr>
 
         <td>
             <table>
-                <tr>
-                    {% if currentUser.groupid < 3 %}
-                        <h1 align="center">Create Course</h1>
-                    {% endif %}
-                </tr>
                 <tr>
                     {% if currentUser.groupid < 3 %}
                         <td>
@@ -43,7 +50,6 @@
         <td id="courseData">
 
             <table>
-                <tr><h1 align="center">Course List</h1></tr>
                 {% for course in allClasses %}
                     <tr>
                         <a class="courseLinks" href="/courseview?coursename={{ course.name }}">CS{{ course.number }} : {{ course.name }}</a>
