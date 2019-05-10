@@ -43,3 +43,26 @@ a.courseLinks {
     text-decoration: none;
     color: black;
 }
+
+table#courseData {
+    width:100%;
+}
+
+td#courseData a:nth-of-type(odd) {
+    text-align: center;
+    background-color: #969696;
+    color: black;
+    display: inline-block;
+    width:95%;
+    height:100%;
+    padding:10px;
+}
+td#courseData a:nth-of-type(even) {
+    text-align: center;
+    background-color: lightgray;
+    color: black;
+    display: inline-block;
+    width:95%;
+    height:100%;
+    padding:10px;
+}
