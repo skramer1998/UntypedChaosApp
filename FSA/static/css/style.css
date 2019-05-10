@@ -67,6 +67,25 @@ td#courseData a:nth-of-type(even) {
     padding: 10px;
 }
 
+tr#courseData a:nth-of-type(odd) {
+    text-align: center;
+    background-color: #969696;
+    color: black;
+    display: inline-block;
+    width:95%;
+    height:100%;
+    padding: 10px;
+}
+tr#courseData a:nth-of-type(even) {
+    text-align: center;
+    background-color: lightgray;
+    color: black;
+    display: inline-block;
+    width:95%;
+    height:100%;
+    padding: 10px;
+}
+
 table#userTable {
     width: 100%;
 }
