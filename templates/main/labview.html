@@ -3,10 +3,69 @@
 {% block content %}
     {% csrf_token %}
 
-    <h1> {{ currentCourse.name }}: Section {{ currentSection.number }}: Lab {{ currentLab.number }} </h1>
-    <table width=100%>
-    <tr>
+
+    <table id="courseData">
+        <tr>
+            {% if currentUser.groupid < 3 %}
+                <td>
+                    <h1 align="center">Lab Modification</h1>
+                </td>
+            {% endif %}
             <td>
+                <h1 align="center">CS{{ currentCourse.number }}: {{ currentCourse.name }}</h1><h2 align="center">Section: {{ currentSection.number }}</h2>
+            </td>
+        </tr>
+        <tr>
+
+            {% if currentUser.groupid < 3 %}
+                <td align="center"; width="33%"; valign="top">
+                    <table>
+                        <tr>
+                            <td>
+                                <form action="{% url 'labview' %}" method="post">
+                                    {% csrf_token %}
+                                    <table>
+                                        <tr>
+                                            <td>Lab Number:</td>
+                                            <td><input type="text" name="number"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Place:</td>
+                                            <td><input type="text" name="place"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Days:</td>
+                                            <td><input type="text" name="days"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lab Time:</td>
+                                            <td><input type="text" name="time"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TA:</td>
+                                            <td>
+                                                <select name="ta">
+                                                    <option value="" selected>Remove TA</option>
+                                                    {% for ta in taList %}
+                                                        <option value="{{ ta.userName }}">{{ ta.userName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+                                    <input type="hidden" name="currentSection" value="{{ currentSection.number }}"/>
+                                    <input type="hidden" name="currentLab" value="{{ currentLab.number }}"/>
+                                    <input type="submit" name="update_lab" value="Update Lab Information" />
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            {% endif %}
+
+            <td align="center">
                 <table>
                     <tr>
                         <td>Number: {{ currentLab.number }}</td>
@@ -21,44 +80,12 @@
                         <td>Time: {{ currentLab.time }}</td>
                     </tr>
                     <tr>
-                        <td>TA: {{ currentLab.ta }}</td>
+                        <td>TA: {{ currentLab.ta.userName }}</td>
                     </tr>
                 </table>
             </td>
-    </tr>
+        </tr>
 
-     <td>
-         <form action="{% url 'labview' %}" method="post">
-             {% csrf_token %}
-             <table>
-                 <tr>
-                     <td>Number:</td>
-                     <td><input type="text" name="number"/></td>
-                 </tr>
-                 <tr>
-                     <td>Place:</td>
-                     <td><input type="text" name="place"/></td>
-                 </tr>
-                 <tr>
-                     <td>Days:</td>
-                     <td><input type="text" name="days"/></td>
-                 </tr>
-                 <tr>
-                     <td>Lab Time:</td>
-                     <td><input type="text" name="time"/></td>
-                 </tr>
-             </table>
-             <br>
-             <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
-             <input type="hidden" name="currentSection" value="{{ currentSection.number }}"/>
-             <input type="hidden" name="currentLab" value="{{ currentLab.number }}"/>
-             <input type="submit" name="update_lab" value="Update Lab Information" />
-             {% if error_messages %}
-                 <br/>
-                 {{ error_messages }}
-             {% endif %}
-         </form>
-     </td>
     </table>
 
 {% endblock %}

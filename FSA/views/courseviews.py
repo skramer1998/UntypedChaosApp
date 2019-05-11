@@ -29,6 +29,7 @@ class Courses(View):
 
         # Get all classes in DB to display to the HTML page
         allClasses = Course.objects.all()
+        allClasses = allClasses.order_by("number")
 
         # Return all the data to the HTML page
         return render(request, "main/courses.html",
@@ -61,16 +62,18 @@ class CourseView(View):
         user = Account.objects.all().filter(SignInName=username).first()
 
         listSection = course.sections.all()
+        listSection = listSection.order_by("number")
+        instructorList = Account.objects.all().filter(groupid=3)
 
         return render(request, "main/courseview.html", {"currentCourse": course, "currentUser": user,
-                                                        "listSection": listSection})
+                                                        "listSection": listSection, "instructorList": instructorList})
 
     def post(self, request):
         # pressed on create_section
         if 'create_section' in request.POST:
             # get values
             currentCourse = request.POST["currentCourse"]
-            newInstructor = request.POST["instructor"]
+            newInstructor = request.POST.get("instructor")
             sectionNumber = request.POST["number"]
 
             # add section to course
@@ -83,11 +86,11 @@ class CourseView(View):
         if 'update_instructor' in request.POST:
             # get values
             currentCourse = request.POST["currentCourse"]
-            newInstructor = request.POST["newInstructor"]
+            newInstructor = request.POST.get("instructor")
             sectionNumber = request.POST["number"]
 
             #Get Instructor
-            newIns = Account.objects.all().filter(SignInName=newInstructor)[0]
+            newIns = Account.objects.all().filter(SignInName=newInstructor).first()
 
             # Update instructor
             Section.changein(currentCourse, sectionNumber, newIns)
@@ -97,4 +100,17 @@ class CourseView(View):
             if request.POST.get("sectionView") is not None:
                 info = "/sectionview/?info=" + currentCourse + "?" + sectionNumber
 
+            return redirect(info)
+
+        if 'update_course' in request.POST:
+            currentCourse = request.POST["currentCourse"]
+            name = request.POST["name"]
+            number = request.POST["number"]
+            semester = request.POST["semester"]
+
+            name = Course.changename(currentCourse, name)
+            Course.changenumber(name, number)
+            Course.changesemester(name, semester)
+
+            info = "/courseview/?coursename=" + name
             return redirect(info)

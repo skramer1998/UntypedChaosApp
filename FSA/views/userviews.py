@@ -34,6 +34,7 @@ class UserView(View):
 
         # Get all users in DB to display to the HTML page
         allUsers = Account.objects.all()
+        allUsers = allUsers.order_by("userName")
         currentUser = allUsers.filter(SignInName=username)
         currentUser = currentUser[0]
 

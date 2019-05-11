@@ -28,10 +28,17 @@
                                                 <td>Section Number:</td>
                                                 <td><input type="text" name="number" required/></td>
                                             </tr>
-                                            <tr>
-                                                <td>Instructor:</td>
-                                                <td><input type="text" name="instructor"/></td>
-                                            </tr>
+                                        <tr>
+                                            <td>Instructor:</td>
+                                            <td>
+                                                <select name="instructor">
+                                                <option value="" selected>No Instructor</option>
+                                                    {% for instructor in instructorList %}
+                                                        <option value="{{ instructor.userName }}">{{ instructor.userName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
                                         </table>
                                         <br>
                                         <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
@@ -50,7 +57,14 @@
                                         </tr>
                                         <tr>
                                             <td>New Instructor:</td>
-                                            <td><input type="text" name="newInstructor" required/></td>
+                                            <td>
+                                                <select name="instructor">
+                                                <option value="" selected>Remove Instructor</option>
+                                                    {% for instructor in instructorList %}
+                                                        <option value="{{ instructor.userName }}">{{ instructor.userName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                     <br>
@@ -58,6 +72,32 @@
                                     <input type="submit" name="update_instructor" value="Update Instructor" />
                                 </form>
                             </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h1 align="center">Change Current Course</h1>
+                            <form action="{%  url 'courseview' %}" method="post">
+                                {%  csrf_token %}
+                                <table>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td><input type="text" name="name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number:</td>
+                                        <td><input type="text" name="number"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Semester:</td>
+                                        <td><input type="text" name="semester"/></td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+                                <input type="submit" name="update_course" value="Update Course" />
+                            </form>
+                        </td>
                     </tr>
                     </table>
                 </td>

@@ -3,7 +3,6 @@ from FSA.accountmodel.account import Account
 
 
 class Lab(models.Model):
-    parentSection = models.CharField(max_length=60)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)
@@ -20,7 +19,7 @@ class Lab(models.Model):
             lab = Lab.search(parentCourse, parentSection, labNumber)
             if lab is False:
                 foundTA = Account.get(ta)
-                lab = cls(parentSection=parentCourse, number=labNumber, ta=foundTA)
+                lab = cls(number=labNumber, ta=foundTA)
                 lab.save()
                 section = Section.get(parentCourse, parentSection)
                 section.labs.add(lab)
@@ -37,7 +36,8 @@ class Lab(models.Model):
     def changeta(cls, parentCourse, sectionNum, labNum, newTA):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
-            lab.ta = newTA
+            ta = Account.get(newTA)
+            lab.ta = ta
             lab.save()
             return True
         return False
@@ -47,9 +47,11 @@ class Lab(models.Model):
         lab = Lab.get(parentCourse, sectionNum, labNum)
         if lab is not None:
             if newNum is not "":
-                lab.number = newNum
-                lab.save()
-                return newNum
+                check = Lab.objects.all().filter(number=newNum)
+                if not check:
+                    lab.number = newNum
+                    lab.save()
+                    return newNum
         return labNum
 
     @classmethod
@@ -111,7 +113,6 @@ class Lab(models.Model):
 
 
 class Section(models.Model):
-    parentCourse = models.CharField(max_length=60)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)
@@ -133,7 +134,7 @@ class Section(models.Model):
                 # get instructor (can be null)
                 foundInstructor = Account.get(instructor)
                 # create section object
-                section = cls(parentCourse=parentCourse, number=number, instructor=foundInstructor)
+                section = cls(number=number, instructor=foundInstructor)
                 # save section object in database
                 section.save()
                 # get course
@@ -160,30 +161,45 @@ class Section(models.Model):
         return False
 
     @classmethod
+    def changenumber(cls, parentCourse, sectionNum, newNum):
+        section = Section.get(parentCourse, sectionNum)
+        if section is not None:
+            if newNum is not "":
+                check = Section.objects.all().filter(number=newNum)
+                if not check:
+                    section.number = newNum
+                    section.save()
+                    return newNum
+        return sectionNum
+
+    @classmethod
     def changeplace(cls, currentCourse, currentSectionNum, newPlace):
         section = Section.get(currentCourse, currentSectionNum)
         if section is not None:
-            section.place = newPlace
-            section.save()
-            return True
+            if newPlace is not "":
+                section.place = newPlace
+                section.save()
+                return True
         return False
 
     @classmethod
     def changedays(cls, currentCourse, currentSectionNum, newDays):
         section = Section.get(currentCourse, currentSectionNum)
         if section is not None:
-            section.days = newDays
-            section.save()
-            return True
+            if newDays is not "":
+                section.days = newDays
+                section.save()
+                return True
         return False
 
     @classmethod
     def changetime(cls, currentCourse, currentSectionNum, newTime):
         section = Section.get(currentCourse, currentSectionNum)
         if section is not None:
-            section.time = newTime
-            section.save()
-            return True
+            if newTime is not "":
+                section.time = newTime
+                section.save()
+                return True
         return False
 
     """
@@ -254,27 +270,34 @@ class Course(models.Model):
     def changename(cls, currentCourse, newName):
         course = Course.get(currentCourse)
         if course is not None:
-            course.name = newName
-            course.save()
-            return True
-        return False
+            if newName is not "":
+                check = Course.objects.all().filter(name=newName)
+                if not check:
+                    course.name = newName
+                    course.save()
+                    return newName
+        return currentCourse
 
     @classmethod
     def changenumber(cls, currentCourse, newNum):
         course = Course.get(currentCourse)
         if course is not None:
-            course.number = newNum
-            course.save()
-            return True
-        return False
+            if newNum is not "":
+                check = Course.objects.all().filter(number=newNum)
+                if not check:
+                    course.number = newNum
+                    course.save()
+                    return newNum
+        return currentCourse
 
     @classmethod
     def changesemester(cls, currentCourse, newSemester):
         course = Course.get(currentCourse)
         if course is not None:
-            course.name = newSemester
-            course.save()
-            return True
+            if newSemester is not "":
+                course.semester = newSemester
+                course.save()
+                return True
         return False
 
     """

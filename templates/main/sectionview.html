@@ -14,9 +14,7 @@
             <td>
                 <h1 align="center">CS{{ currentCourse.number }}: {{ currentCourse.name }}</h1><h2 align="center">Section: {{ currentSection.number }}</h2>
             </td>
-
         </tr>
-
         <tr>
 
             {% if currentUser.groupid < 3 %}
@@ -31,9 +29,15 @@
                                             <td>Lab Number:</td>
                                             <td><input type="text" name="number" required/></td>
                                         </tr>
-                                        <tr>
-                                            <td>TA:</td>
-                                            <td><input type="text" name="ta"/></td>
+                                       <tr>
+                                            <td>TA:
+                                                <select name="ta">
+                                                    <option value="" selected>No TA</option>
+                                                    {% for ta in taList %}
+                                                        <option value="{{ ta.userName }}">{{ ta.userName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                     <br>
@@ -50,7 +54,14 @@
                                     <table>
                                         <tr>
                                             <td>New Instructor:</td>
-                                            <td><input type="text" name="newInstructor" required/></td>
+                                            <td>
+                                                <select name="instructor">
+                                                    <option value="" selected>Remove Instructor</option>
+                                                    {% for instructor in instructorList %}
+                                                        <option value="{{ instructor.userName }}">{{ instructor.userName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                     <br>
@@ -58,6 +69,35 @@
                                     <input type="hidden" name="number" value="{{ currentSection.number }}"/>
                                     <input type="hidden" name="sectionView" value="sectionView"/>
                                     <input type="submit" name="update_instructor" value="Update Instructor" />
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form action="{%  url 'sectionview' %}" method="post">
+                                    {%  csrf_token %}
+                                    <table>
+                                        <tr>
+                                            <td>Number:</td>
+                                            <td><input type="text" name="number"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Place:</td>
+                                            <td><input type="text" name="place"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Days:</td>
+                                            <td><input type="text" name="days"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Section Time:</td>
+                                            <td><input type="text" name="time"/></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <input type="hidden" name="currentCourse" value="{{ currentCourse.name }}"/>
+                                    <input type="hidden" name="currentSection" value="{{ currentSection.number }}"/>
+                                    <input type="submit" name="update_section" value="Update Section" />
                                 </form>
                             </td>
                         </tr>
@@ -77,7 +117,7 @@
                         <td>Days: {{ currentSection.days }}</td>
                     </tr>
                     <tr>
-                        <td>Time: {{ currentSection.time }}</td>
+                        <td>Section Time: {{ currentSection.time }}</td>
                     </tr>
                     <tr>
                         <td>Instructor: {{ currentSection.instructor.userName }}</td>
