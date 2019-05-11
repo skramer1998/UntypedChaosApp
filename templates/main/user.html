@@ -118,7 +118,6 @@
             <tr>
 
                 <td>
-
                     {% if user.groupid == 1 %}
                 Supervisor
                 {% endif %}
@@ -134,7 +133,15 @@
 
                 </td>
 
-                <td><a class="courseLinks" href="/edituser?info={{ user.userName }}">{{ user.userName }}</a></td>
+                <td>
+                    {% if groupid <= 2 %}
+                        <a class="courseLinks" href="/edituser?info={{ user.userName }}">{{ user.userName }}</a>
+                    {% endif %}
+                    {% if groupid >= 3 %}
+                        {{ user.userName }}
+                    {% endif %}
+
+                </td>
                 <td>{{ user.userEmail }}</td>
                 <td>{{ user.userHours }}</td>
                     {% if currentUser.groupid < 3 %}
