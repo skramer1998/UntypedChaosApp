@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-from FSA.accountmodel.account import Account
 from FSA.coursemodel.course import Course
 
 """

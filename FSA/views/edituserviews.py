@@ -3,11 +3,17 @@ from django.shortcuts import render, redirect
 from django.views import View
 from FSA.accountmodel.account import Account
 
+
 class EditUserView(View):
 
     def get(self, request):
         if not request.session.get("SignInName"):
             return redirect("login")
+
+        currentUser = Account.get(request.session.get("SignInName"))
+        if currentUser is not None:
+            if currentUser.groupid > 2:
+                return redirect("user")
 
         info = request.GET.get("info")
         info = info.split('?')
@@ -24,8 +30,7 @@ class EditUserView(View):
             currentUser = request.POST["currentUser"]
             currentUser = Account.get(currentUser)
 
-            if Account.updateUser(currentUser, email, phone, address, hours) is False:
-                username = request.session["SignInName"]
+            Account.updateUser(currentUser, email, phone, address, hours)
 
             info = "/edituser/?info=" + currentUser.userName
             return redirect(info)
