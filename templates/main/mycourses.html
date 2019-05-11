@@ -12,8 +12,7 @@
         <tr>
             <td id ="courseDATA">
                     {% for course in allClasses %}
-                            <a class="courseLinks" href="/mysections?info={{ course.name }}">{{ course.name }}
-                                {{ course.number }}</a>
+                            <a class="courseLinks" href="/mysections?info={{ course.name }}">CS{{ course.number }}: {{ course.name }}</a>
                         <br>
                     {% endfor %}
             </td>

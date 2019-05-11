@@ -12,7 +12,8 @@
         <tr>
             <td id ="courseDATA">
                     {% for lab in allLabs %}
-                            <a class="courseLinks" href="/courseinfo?info={{ currentCourse }}?{{ currentSection }}?{{ lab.number }}">{{ currentCourse }} Section:{{ currentSection }} Lab:{{ lab.number }}</a>
+                            <a class="courseLinks" href="/courseinfo?info={{ currentCourse }}?{{ currentSection }}?{{ lab.number }}">
+                                {{ currentCourse }} Section #{{ currentSection }} -- Lab #{{ lab.number }}</a>
                         <br>
                     {% endfor %}
             </td>
