@@ -135,7 +135,7 @@
             <table>
                 {% for lab in labList %}
                     <tr>
-                        <a class="courseLinks" href="/labview?info={{ currentCourse.name }}?{{ currentSection.number }}?{{ lab.number }}">[{{ lab.number }}, {{ lab.ta }}]</a>
+                        <a class="courseLinks" href="/labview?info={{ currentCourse.name }}?{{ currentSection.number }}?{{ lab.number }}">Section {{ lab.number }} held by {{ lab.ta.userName }}</a>
                     </tr>
                 {% endfor %}
             </table>

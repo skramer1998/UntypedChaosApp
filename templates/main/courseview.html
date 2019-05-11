@@ -107,7 +107,7 @@
                 <table>
                     {% for section in listSection %}
                         <tr>
-                            <a class="courseLinks" href="/sectionview?info={{ currentCourse.name }}?{{ section.number }}">Section {{ section.number }} taught by {{ section.instructor }}</a>
+                            <a class="courseLinks" href="/sectionview?info={{ currentCourse.name }}?{{ section.number }}">Section {{ section.number }} taught by {{ section.instructor.userName }}</a>
                         </tr>
                     {% endfor %}
                 </table>
