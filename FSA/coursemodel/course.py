@@ -3,7 +3,7 @@ from FSA.accountmodel.account import Account
 
 
 class Lab(models.Model):
-    parentCourse = models.CharField(max_length=30)
+    parentCourse = models.CharField(max_length=30, null=True)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)
@@ -114,7 +114,7 @@ class Lab(models.Model):
 
 
 class Section(models.Model):
-    parentCourse = models.CharField(max_length=30)
+    parentCourse = models.CharField(max_length=30, null=True)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)

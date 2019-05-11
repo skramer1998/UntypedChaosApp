@@ -25,7 +25,8 @@ class CourseInfoView(View):
             taList.append(lab.ta)
 
         taList = list(OrderedDict.fromkeys(taList))
-        taList.remove(None)
+        if None in taList:
+            taList.remove(None)
 
         return render(request, "main/courseinfo.html", {"course": course, "section": section, "lab": lab, "user": user,
                                                         "taList": taList})

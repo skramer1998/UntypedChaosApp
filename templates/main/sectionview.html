@@ -58,7 +58,7 @@
                                                 <select name="instructor">
                                                     <option value="" selected>Remove Instructor</option>
                                                     {% for instructor in instructorList %}
-                                                        <option value="{{ instructor.userName }}">{{ instructor.userName }}</option>
+                                                        <option value="{{ instructor.SignInName }}">{{ instructor.userName }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </td>
