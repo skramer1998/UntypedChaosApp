@@ -49,7 +49,7 @@ class SectionView(View):
             # getting values
             currentCourse = request.POST["currentCourse"]
             currentSection = request.POST["currentSection"]
-            newTA = request.POST.get("ta")
+            newTA = request.POST["ta"]
             labNumber = request.POST["number"]
             # adding a lab to the section
             Section.addlab(currentCourse, currentSection, labNumber, newTA)

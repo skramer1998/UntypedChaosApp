@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from FSA.accountmodel.account import Account
 from FSA.coursemodel.course import Course, Section
+from django.shortcuts import get_object_or_404
 
 
 class Courses(View):
@@ -73,7 +74,7 @@ class CourseView(View):
         if 'create_section' in request.POST:
             # get values
             currentCourse = request.POST["currentCourse"]
-            newInstructor = request.POST.get("instructor")
+            newInstructor = request.POST["instructor"]
             sectionNumber = request.POST["number"]
 
             # add section to course
@@ -86,7 +87,7 @@ class CourseView(View):
         if 'update_instructor' in request.POST:
             # get values
             currentCourse = request.POST["currentCourse"]
-            newInstructor = request.POST.get("instructor")
+            newInstructor = request.POST["instructor"]
             sectionNumber = request.POST["number"]
 
             #Get Instructor
