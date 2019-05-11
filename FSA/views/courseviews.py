@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.views import View
 from FSA.accountmodel.account import Account
 from FSA.coursemodel.course import Course, Section
-from django.shortcuts import get_object_or_404
 
 
 class Courses(View):
