@@ -1,11 +1,12 @@
 from django.test import TestCase
 from FSA.accountmodel.account import Account
-from FSA.coursemodel.course import Course
+from FSA.coursemodel.course import Course, Section, Lab
 
 
 class TestCourse(TestCase):
 
     def setUp(self):
+        # create 4 accounts for assign functions
         self.a1 = Account.create(username="Nate4", name="Nate Z", email="glasses@gmail.com",
                                  phone=1234567890, address="22 Middleton rd", password1="password",
                                  password2="password", id=4, hours="10-11")
@@ -19,27 +20,79 @@ class TestCourse(TestCase):
                                  phone=4207106969, address="11 Bledsoe ct", password1="password",
                                  password2="password", id=1, hours="1-2")
 
-        # create 4 accounts for assign functions
+        # Create Courses
+        self.c1 = Course.create("History of Math", 200, "FALL")
+        self.c2 = Course.create("History of Baths", 500, "FALL")
 
-        self.c1 = Course.create("History of Math", 200, "EMS", "MWF", "01:00 - 01:50", "FALL", "Andres3", "Nate4")
-        self.c2 = Course.create("History of Baths", 500, "EBS", "F", "20:00 - 20:50", "FALL", "Andres3", "Nate4")
-        # create our test courses
+        # Create Sections
+        Section.create(self.c1.name, 401, self.a3)
+        self.s1 = Section.get(self.c1.name, 401)
+        Section.create(self.c1.name, 402, self.a3)
+        self.s2 = Section.get(self.c1.name, 402)
+        Section.create(self.c2.name, 501, self.a3)
+        self.s3 = Section.get(self.c2.name, 501)
+        Section.create(self.c2.name, 502, self.a3)
+        self.s4 = Section.get(self.c2.name, 502)
+
+        # Create Labs
+        Lab.create(self.c1.name, self.s1.number, 801, self.a4)
+        self.l1 = Lab.get(self.c1.name, self.s1.number, 801)
+        Lab.create(self.c2.name, self.s3.number, 901, self.a4)
+        self.l2 = Lab.get(self.c2.name, self.s3.number, 901)
 
     def testCreate(self):
+        # Check Course Creation
         self.assertEqual(self.c1.name, "History of Math")
         self.assertEqual(self.c1.number, 200)
-        self.assertEqual(self.c1.place, "EMS")
-        self.assertEqual(self.c1.days, "MWF")
-        self.assertEqual(self.c1.time, "01:00 - 01:50")
         self.assertEqual(self.c1.semester, "FALL")
-        self.assertEqual(self.c1.professor.SignInName, "Andres3")
-        self.assertEqual(self.c1.ta.SignInName, "Nate4")
-        # checks course c1 was created properly
 
-        self.assertEqual(
-            Course.create(self.c1.name, self.c1.number, self.c1.place, self.c1.days, self.c1.time, self.c1.semester,
-                          self.c1.professor, self.c1.ta), "That course already exists.")
-        # should return this if already exists
+        self.assertEqual(self.c2.name, "History of Baths")
+        self.assertEqual(self.c2.number, 500)
+        self.assertEqual(self.c2.semester, "FALL")
+
+        # Check Section Creation
+        self.assertEqual(self.s1.parentCourse, "History of Math")
+        self.assertEqual(self.s1.number, 401)
+        self.assertEqual(self.s1.place, "")
+        self.assertEqual(self.s1.days, "")
+        self.assertEqual(self.s1.time, "")
+        self.assertEqual(self.s1.instructor, self.a3)
+
+        self.assertEqual(self.s2.parentCourse, "History of Math")
+        self.assertEqual(self.s2.number, 402)
+        self.assertEqual(self.s2.place, "")
+        self.assertEqual(self.s2.days, "")
+        self.assertEqual(self.s2.time, "")
+        self.assertEqual(self.s2.instructor, self.a3)
+
+        self.assertEqual(self.s3.parentCourse, "History of Baths")
+        self.assertEqual(self.s3.number, 501)
+        self.assertEqual(self.s3.place, "")
+        self.assertEqual(self.s3.days, "")
+        self.assertEqual(self.s3.time, "")
+        self.assertEqual(self.s3.instructor, self.a3)
+
+        self.assertEqual(self.s4.parentCourse, "History of Baths")
+        self.assertEqual(self.s4.number, 502)
+        self.assertEqual(self.s4.place, "")
+        self.assertEqual(self.s4.days, "")
+        self.assertEqual(self.s4.time, "")
+        self.assertEqual(self.s4.instructor, self.a3)
+
+        # Check Lab Creation
+        self.assertEqual(self.l1.parentCourse, "401")
+        self.assertEqual(self.l1.number, 801)
+        self.assertEqual(self.l1.place, "")
+        self.assertEqual(self.l1.days, "")
+        self.assertEqual(self.l1.time, "")
+        self.assertEqual(self.l1.ta, self.a4)
+
+        self.assertEqual(self.l2.parentCourse, "501")
+        self.assertEqual(self.l2.number, 901)
+        self.assertEqual(self.l2.place, "")
+        self.assertEqual(self.l2.days, "")
+        self.assertEqual(self.l2.time, "")
+        self.assertEqual(self.l2.ta, self.a4)
 
     def testSearch(self):
         self.assertTrue(self.c1.search("History of Baths"))
@@ -74,7 +127,7 @@ class TestCourse(TestCase):
         # checks parameters exist
 
     def test__str__(self):
-        self.assertEqual(self.c2.__str__(), "History of Baths 500 EBS F 20:00 - 20:50 FALL Andres3 Nate4")
+        self.assertEqual(self.c2.__str__(), "History of Baths 500 FALL")
         # asserts toStr has correct format
 
     def test_not_enough_information(self):
