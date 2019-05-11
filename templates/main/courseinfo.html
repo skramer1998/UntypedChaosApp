@@ -1,0 +1,54 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <table width=100%>
+
+        <tr>
+            <td><h1 align="center">Course Information</h1></td>
+        </tr>
+
+        <tr>
+            <td>Course: {{ course }}</td>
+        </tr>
+        <tr>
+            <td>Section: {{ section }} Days: {{ section.days }} Time: {{ section.time }}</td>
+        </tr>
+        <tr>
+            <td>Lab: {{ lab }} Days: {{ lab.days }} Time: {{ lab.time }}</td>
+        </tr>
+
+    {% if user.groupid == 3 %}
+        <tr>
+            <td><h1 align="center">Assign TA</h1></td>
+        </tr>
+        <tr>
+            <form action="{%  url 'courseinfo' %}" method="post">
+                {%  csrf_token %}
+                <table>
+                    <tr>
+                        <td>New TA:</td>
+                        <td>
+                            <select name="ta">
+                                <option value="" selected>Remove TA</option>
+                                {% for ta in taList %}
+                                    <option value="{{ ta.userName }}">{{ ta.userName }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <input type="hidden" name="currentCourse" value="{{ course.name }}"/>
+                <input type="hidden" name="currentSection" value="{{ section.number }}"/>
+                <input type="hidden" name="currentLab" value="{{ lab.number }}"/>
+                <input type="submit" name="update_ta" value="Update TA" />
+            </form>
+        </tr>
+
+    {% endif %}
+
+    </table>
+
+{% endblock %}

@@ -45,8 +45,8 @@ class MyCourses(View):
         CoursesUserIn = list(OrderedDict.fromkeys(CoursesUserIn))
 
         # Return all the data to the HTML page
-        return render(request, "main/courses.html",
-                      {"SignInName": username, "allClasses": CoursesUserIn, "currentUser": user})
+        return render(request, "main/mycourses.html",
+                      {"allClasses": CoursesUserIn})
 
     # Post Method:
     # Work in Progress

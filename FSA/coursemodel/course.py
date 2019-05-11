@@ -3,6 +3,7 @@ from FSA.accountmodel.account import Account
 
 
 class Lab(models.Model):
+    parentCourse = models.CharField(max_length=30)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)
@@ -19,7 +20,7 @@ class Lab(models.Model):
             lab = Lab.search(parentCourse, parentSection, labNumber)
             if lab is False:
                 foundTA = Account.get(ta)
-                lab = cls(number=labNumber, ta=foundTA)
+                lab = cls(parentCourse=parentSection, number=labNumber, ta=foundTA)
                 lab.save()
                 section = Section.get(parentCourse, parentSection)
                 section.labs.add(lab)
@@ -109,10 +110,11 @@ class Lab(models.Model):
             return False
 
     def __str__(self):
-        return str(self.parentSection) + " Lab: " + str(self.number) + " TA: " + str(self.ta)
+        return str(self.number) + " TA: " + str(self.ta)
 
 
 class Section(models.Model):
+    parentCourse = models.CharField(max_length=30)
     number = models.IntegerField(default=0)
     place = models.CharField(max_length=30)
     days = models.CharField(max_length=30)
@@ -134,7 +136,7 @@ class Section(models.Model):
                 # get instructor (can be null)
                 foundInstructor = Account.get(instructor)
                 # create section object
-                section = cls(number=number, instructor=foundInstructor)
+                section = cls(parentCourse=parentCourse, number=number, instructor=foundInstructor)
                 # save section object in database
                 section.save()
                 # get course
@@ -238,7 +240,7 @@ class Section(models.Model):
             return False
 
     def __str__(self):
-        return str(self.parentCourse) + ": " + str(self.number) + " Instructor: " + str(self.instructor)
+        return str(self.number) + " Instructor: " + str(self.instructor)
 
 
 class Course(models.Model):

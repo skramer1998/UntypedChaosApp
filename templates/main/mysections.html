@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <table width=100%>
+
+        <tr>
+            <td><h1 align="center">Section List</h1></td>
+        </tr>
+
+        <tr>
+            <td id ="courseDATA">
+                    {% for section in allSections %}
+                            <a class="courseLinks" href="/mylabs?info={{ currentCourse }}?{{ section.number }}">
+                                {{ currentCourse }} Section:{{ section.number }}</a>
+                        <br>
+                    {% endfor %}
+            </td>
+        </tr>
+
+    </table>
+
+{% endblock %}
