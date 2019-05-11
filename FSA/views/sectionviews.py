@@ -11,6 +11,9 @@ class SectionView(View):
         if not request.session.get("SignInName"):
             return redirect("login")
 
+        if request.GET.get("info") is None:
+            return redirect("courses")
+
         # get the information passed in ur
         info = request.GET.get("info")
         # split it using '?'
@@ -47,15 +50,5 @@ class SectionView(View):
             # adding a lab to the section
             Section.addlab(currentCourse, currentSection, labNumber, newTA)
 
-            # Get user
-            username = request.session.get("SignInName")
-            user = Account.get(username)
-
-            # Get current section
-            section = Section.get(currentCourse, currentSection)
-
-            # Get updated lablist
-            labList = section.labs.all()
-
-        return render(request, "main/sectionview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
-                                                         "currentSection": section, "labList": labList})
+        info = "/sectionview/?info=" + currentCourse + "?" + currentSection
+        return redirect(info)

@@ -25,12 +25,11 @@ class LabView(View):
         labnumber = info[2]
         lab = Lab.get(coursename, sectionnumber, labnumber)
 
-        print(coursename + sectionnumber + labnumber)
-
         return render(request, "main/labview.html", {"currentCourse": course, "currentUser": user,
                                                      "currentSection": section, "currentLab": lab})
 
     def post(self, request):
+
         if 'update_lab' in request.POST:
             number = request.POST["number"]
             place = request.POST["place"]
@@ -46,11 +45,6 @@ class LabView(View):
             Lab.changeplace(coursename, sectionnumber, labnumber, place)
             Lab.changetime(coursename, sectionnumber, labnumber, time)
 
-            username = request.POST.get("SignInName")
-            user = Account.get(username)
-            course = Course.get(coursename)
-            section = Section.get(coursename, sectionnumber)
-            lab = Lab.get(coursename, sectionnumber, number)
+            info = "/labview/?info="+coursename+"?"+sectionnumber+"?"+number
 
-            return render(request, "main/labview.html", {"currentCourse": course, "currentUser": user,
-                                                         "currentSection": section, "currentLab": lab})
+            return redirect(info)

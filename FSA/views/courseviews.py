@@ -76,16 +76,8 @@ class CourseView(View):
             # add section to course
             Course.addsection(currentCourse, sectionNumber, newInstructor)
 
-            # Get user
-            username = request.session.get("SignInName")
-            user = Account.objects.all().filter(SignInName=username).first()
-
-            # Get updated sections
-            course = Course.get(currentCourse)
-            listSection = course.sections.all()
-
-            return render(request, "main/courseview.html", {"currentCourse": Course.get(currentCourse), "currentUser": user,
-                                                        "listSection": listSection})
+            info = "/courseview/?coursename=" + currentCourse
+            return redirect(info)
 
         # pressed on Update instructor
         if 'update_instructor' in request.POST:
@@ -100,14 +92,9 @@ class CourseView(View):
             # Update instructor
             Section.changein(currentCourse, sectionNumber, newIns)
 
-            # Get user
-            username = request.session.get("SignInName")
-            user = Account.objects.all().filter(SignInName=username).first()
+            info = "/courseview/?coursename=" + currentCourse
 
-            # Get updated sections
-            course = Course.get(currentCourse)
-            listSection = course.sections.all()
+            if request.POST.get("sectionView") is not None:
+                info = "/sectionview/?info=" + currentCourse + "?" + sectionNumber
 
-            return render(request, "main/courseview.html",
-                          {"currentCourse": Course.get(currentCourse), "currentUser": user,
-                           "listSection": listSection})
+            return redirect(info)
