@@ -12,16 +12,16 @@ class TestAccount(TestCase):
         # 4 ID's
 
         self.a1 = Account.create(username="Nate4", name="Nate Z", email="glasses@gmail.com",
-                                 phone=1234567890, address="22 Middleton rd", password1="password",
+                                 phone="1234567890", address="22 Middleton rd", password1="password",
                                  password2="password", id=self.t, hours="10-11")
         self.a2 = Account.create(username="Andres3", name="Andres Z", email="sweatshirt@gmail.com",
-                                 phone=2121212121, address="34 Giannis rd", password1="password",
+                                 phone="2121212121", address="34 Giannis rd", password1="password",
                                  password2="password", id=self.i, hours="11-12")
         self.a3 = Account.create(username="Sean2", name="Sean Z", email="tshirt@gmail.com",
-                                 phone=4145554444, address="13 Brogdon ave", password1="password",
+                                 phone="4145554444", address="13 Brogdon ave", password1="password",
                                  password2="password", id=self.a, hours="12-1")
         self.a4 = Account.create(username="Tyler1", name="Tyler Z", email="jersey@gmail.com",
-                                 phone=4207106969, address="11 Bledsoe ct", password1="password",
+                                 phone="4207106969", address="11 Bledsoe ct", password1="password",
                                  password2="password", id=self.s, hours="1-2")
         # creates 4 accounts with each level of ID
 
@@ -56,7 +56,7 @@ class TestAccount(TestCase):
         self.assertEqual(self.a2.SignInName, "Andres3")
         self.assertEqual(self.a2.userName, "Andres Z")
         self.assertEqual(self.a2.userEmail, "sweatshirt@gmail.com")
-        self.assertEqual(self.a2.userPhone, 2121212121)
+        self.assertEqual(self.a2.userPhone, "2121212121")
         self.assertEqual(self.a2.userAddress, "34 Giannis rd")
         self.assertEqual(self.a2.userHours, "11-12")
         # Cannot check password values from account object
@@ -138,3 +138,15 @@ class TestAccount(TestCase):
         self.assertEqual(Account.updatePass(self.a1, oldPass="abc123", newPass1="abc1234", newPass2="cba4321"),
                          "New passwords do not match.")
         self.assertEqual(self.a1.userPass, "abc123")
+
+    def test_get(self):
+        # Test if get works for users, should all work
+        self.assertEqual(Account.get(name="Nate4"), self.a1)
+        self.assertEqual(Account.get(name="Andres3"), self.a2)
+        self.assertEqual(Account.get(name="Sean2"), self.a3)
+        self.assertEqual(Account.get(name="Tyler1"), self.a4)
+
+        # Test that passing an unknown name doesn't return a user
+        self.assertEqual(Account.get(name="nonexistant"), None)
+        self.assertEqual(Account.get(name=""), None)
+

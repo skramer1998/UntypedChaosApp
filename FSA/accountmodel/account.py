@@ -36,41 +36,6 @@ class Account(models.Model):
         newAccount.save()
         return newAccount
 
-    def editPassword(self):
-        # Validate permissions before being able to call this function
-        print("type new password: ")
-        newPassword = getpass.getpass()
-        print("confirm new password: ")
-        if newPassword == getpass.getpass():
-            if not self.user.has_usable_password():
-                self.user.set_password(newPassword)
-                self.user.save()
-                print("new password set")
-            else:
-                print("type current password for " + self.user.userid)
-                if self.user.check_password(getpass.getpass()):
-                    self.user.set_password(newPassword)
-                    self.user.save()
-                    print("new password set")
-                else:
-                    print("wrong password for " + self.user.username)
-        else:
-            print("the new passwords don't match, start again from the beginning.")
-
-    def editSelf(self, userid, username, email, phone, address, password1, password2, id):
-
-        """self.user.userid = id
-        self.user.username = name
-        self.user.userEmail = email
-        self.userName = name
-        self.userID = id
-        self.userEmail = email
-        self.userPhone = phone
-        self.userAddress = address
-        self.user.save()"""
-        return "did not set for this reason: "
-        # not updated for working with latest version of account-- will be split up and made to work in next sprint
-
     def getid(self, account):
         return account.groupid
 
@@ -88,7 +53,8 @@ class Account(models.Model):
         if hours is not "":
             self.userHours = hours
 
-        return self.save()
+        self.save()
+        return 'Account information updated.'
 
     # Method used to update user password, mostly used for instructors and TAs
     def updatePass(self, oldPass, newPass1, newPass2):
