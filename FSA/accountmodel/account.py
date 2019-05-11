@@ -99,7 +99,8 @@ class Account(models.Model):
                 return "New passwords do not match."
         else:
             return "Old password is not correct."
-
+        if len(newPass1) > 30:
+            return "New Password is too long. Must be under 30 characters."
         self.save()
         return "Password updated successfully."
 
