@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from FSA.accountmodel.account import Account
 from FSA.coursemodel.course import Course
+from collections import OrderedDict
 
 
 class MyCourses(View):
@@ -41,6 +42,7 @@ class MyCourses(View):
                     if lab.ta == user:
                         CoursesUserIn.append(course)
 
+        CoursesUserIn = list(OrderedDict.fromkeys(CoursesUserIn))
 
         # Return all the data to the HTML page
         return render(request, "main/courses.html",

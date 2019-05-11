@@ -133,7 +133,8 @@
                 {% endif %}
 
                 </td>
-                <td>{{ user.userName }}</td>
+
+                <td><a class="courseLinks" href="/edituser?info={{ user.userName }}">{{ user.userName }}</a></td>
                 <td>{{ user.userEmail }}</td>
                 <td>{{ user.userHours }}</td>
                     {% if currentUser.groupid < 3 %}

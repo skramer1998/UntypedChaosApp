@@ -59,7 +59,7 @@ class UserView(View):
             hours = request.POST["hours"]
 
             username = request.session["SignInName"]
-            user = (Account.objects.all().filter(SignInName=username))[0]
+            user = (Account.objects.all().filter(SignInName=username)).first()
 
             if Account.updateUser(user, email, phone, address, hours) is False:
                error_messages = "Some fields did not meet requirements. Try again"

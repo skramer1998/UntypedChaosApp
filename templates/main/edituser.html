@@ -1,0 +1,76 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% csrf_token %}
+
+    <table width=100%>
+
+        <tr>
+            <td><h1 align="center">Account Information</h1></td>
+            <td><h1 align="center">Edit Information</h1></td>
+        </tr>
+
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>Name: {{ user.userName }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email: {{ user.userEmail }}</td>
+                    </tr>
+                    <tr>
+                        <td>Username: {{ user.SignInName }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone: {{ user.userPhone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address: {{ user.userAddress }}</td>
+                    </tr>
+                    <tr>
+                        <td>Office Hours: {{ user.userHours }}</td>
+                    </tr>
+                    <tr>
+                        <td>ID: {{ user.groupid }}</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <form action="{% url 'edituser' %}" method="post">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td>Email:</td>
+                            <td><input type="email" name="email"/></td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td><input type="text" name="phone"/></td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td><input type="text" name="address"/></td>
+                        </tr>
+                        <tr>
+                            <td>Office Hours:</td>
+                            <td><input type="text" name="hours"/></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <input type="hidden" name="currentUser" value="{{ user.SignInName }}"/>
+                    <input type="submit" name="update_account" value="Update Account Information" />
+                    {% if error_messages %}
+                        <br/>
+                      {{ error_messages }}
+                    {% endif %}
+                </form>
+
+            </td>
+        </tr>
+
+    </table>
+
+
+{% endblock %}
