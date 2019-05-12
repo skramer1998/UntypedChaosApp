@@ -39,3 +39,11 @@ class TestCourseView(TestCase):
                                                          'currentCourse': 'memology', 'instructor': 'instructor',
                                                         'number': '400'})
         self.assertEqual(Section.get('memology', '400').instructor, Account.get('instructor'))
+
+    def test_updatecourse(self):
+        self.c.post('/courseview/?coursename=memology', {'create_section': 'create_section',
+                                                         'currentCourse': 'memology', 'instructor': 'instructor',
+                                                         'number': '400'})
+
+        self.assertEqual(Section.get('memology', '400').instructor, Account.get('instructor'))
+        self.assertEqual(Section.get('memology', '400').number, 400)
