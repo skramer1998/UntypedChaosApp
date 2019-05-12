@@ -102,29 +102,24 @@ class TestCourse(TestCase):
         self.assertFalse(self.c2.search("Chinese Horse Energy"))
         # should both be false.
 
-    def test_assignin(self):
-        self.assertEqual(Course.assignin("History of Math", self.a4.SignInName),
-                         "Administrators and Supervisors cannot be assigned to a course.")
-        self.assertEqual(Course.assignin("History of Math", self.a3.SignInName),
-                         "Administrators and Supervisors cannot be assigned to a course.")
-        # attempts to set a supervisor/admin to a course
+    def test_changein(self):
+        self.assertEqual(Section.changein(self.c1.name, self.s2.number, self.a1),
+                         False)
+        self.assertEqual(Section.changein(self.c1.name, self.s2.number, self.a2),
+                         False)
+        self.assertEqual(Section.changein(self.c1.name, self.s2.number, self.a4),
+                         False)
+        self.assertEqual(Section.changein(self.c1.name, self.s2.number, None),
+                         True)
+        self.assertEqual(Section.changein(self.c1.name, self.s2.number, self.a3),
+                         True)
 
-        self.assertEqual(Course.assignin("Clown Class", self.a1.SignInName), "There is no course named Clown Class")
-        self.assertEqual(Course.assignin("History of Math", "Rick Flair"), "There is no account named Rick Flair")
-        # checks parameters exist
-
-    def test_assignta(self):
-        self.assertEqual(Course.assignta("History of Math", self.a2),
-                         "Administrators and Supervisors cannot be assigned to a course.")
-        self.assertEqual(Course.assignta("History of Math", self.a2),
-                         "Administrators and Supervisors cannot be assigned to a course.")
-        self.assertEqual(Course.assignta("History of Math", self.a2),
-                         "Administrators and Supervisors cannot be assigned to a course.")
-        # attempts setting non TA to a lab
-
-        self.assertEqual(Course.assignta("Clown Class", self.a1.userName), "There is no course named Clown Class")
-        self.assertEqual(Course.assignta("History of Math", "Rick Flair"), "There is no account named Rick Flair")
-        # checks parameters exist
+    def test_changeta(self):
+        self.assertEqual(Lab.changeta(self.c1.name, self.s2.number, self.l1.number, self.a1), False)
+        self.assertEqual(Lab.changeta(self.c1.name, self.s2.number, self.l1.number, self.a2), False)
+        self.assertEqual(Lab.changeta(self.c1.name, self.s2.number, self.l1.number, self.a3), False)
+        self.assertEqual(Lab.changeta(self.c1.name, self.s2.number, self.l1.number, None), True)
+        self.assertEqual(Lab.changeta(self.c1.name, self.s2.number, self.l1.number, self.a4), True)
 
     def test__str__(self):
         self.assertEqual(self.c2.__str__(), "History of Baths 500 FALL")
