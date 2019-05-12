@@ -34,7 +34,7 @@ class EditUserTest(TestCase):
                                               'hours': '10am-11am', 'currentUser': 'admin',
                                               'update_account': 'update_account'})
 
-        user: Account = Account.objects.all().filter(SignInName='admin').first()
+        user = Account.objects.all().filter(SignInName='admin').first()
         self.assertEqual(user.userEmail, 'and@and.com')
         self.assertEqual(user.userPhone, '1234567890')
         self.assertEqual(user.userAddress, 'milwaukee')
@@ -48,7 +48,7 @@ class EditUserTest(TestCase):
                      'hours': '10am-11am', 'currentUser': 'instructor',
                      'update_account': 'update_account'})
 
-        user: Account = Account.objects.all().filter(SignInName='instructor').first()
+        user = Account.objects.all().filter(SignInName='instructor').first()
         self.assertEqual(user.userEmail, 'and@and.com')
         self.assertEqual(user.userPhone, '1234567890')
         self.assertEqual(user.userAddress, 'milwaukee')
@@ -62,7 +62,7 @@ class EditUserTest(TestCase):
                      'hours': '10am-11am', 'currentUser': 'instructor',
                      'update_account': 'update_account'})
 
-        user: Account = Account.objects.all().filter(SignInName='instructor').first()
+        user = Account.objects.all().filter(SignInName='instructor').first()
         self.assertEqual(user.userEmail, 'and@and.com')
         self.assertEqual(user.userPhone, '1234567890')
         self.assertEqual(user.userAddress, 'milwaukee')
